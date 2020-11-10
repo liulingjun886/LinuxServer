@@ -43,6 +43,11 @@ void CConnSerNetSink::Init(UINT nIp)
 	//m_pNet->SetTimer(TIME_CONN_IS_LINK, 200, -1);
 }
 
+void CConnSerNetSink::Init(const char* szIp)
+{
+	m_szIp = szIp;
+}
+
 void CConnSerNetSink::Connect()
 {
 	//m_pNet->SetTimer(TIME_CONN_IS_LINK, 100*60, -1);

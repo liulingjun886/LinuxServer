@@ -20,6 +20,7 @@ public:
 	bool HandTimeMsg(TIMEERID uTimeID);
 	bool DisConnect();
 	void Init(UINT nIp);
+	void Init(const char* szIp);
 	void Close();
 	void Connect();
 	void Accepted();

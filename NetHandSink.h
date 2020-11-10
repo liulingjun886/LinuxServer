@@ -15,6 +15,7 @@ public:
 	virtual bool HandDataBaseRet(UINT uType,void* pData,USHORT uDataSize){return true;}
 	virtual bool HandMemDataRet(UINT uType, void* pData, USHORT uDataSize){return true;}
 	virtual void Init(UINT nIp){}
+	virtual void Init(const char* szIp){}
 	virtual void Close(){}
 	virtual void Connect(){}
 	virtual bool DisConnect(){ return false;}

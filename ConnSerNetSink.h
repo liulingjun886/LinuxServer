@@ -32,6 +32,7 @@ class CConnSerNetSink : public CNetHandSink
 	SERVICE_TYPE m_nNetType;
 	int m_nTestLink;
 	UINT m_nIp;
+	char* m_szIp;
 	CTimerNode m_timerConnTest;
 public:
 	CConnSerNetSink(CServices* m_pNetSer);
@@ -44,6 +45,7 @@ public:
 	bool HandUserMsg(int nEvent, void * pData, USHORT uDataSize);
 	void Close();
 	void Init(UINT nIp);
+	void Init(const char* szIp);
 	void Connect();
 	bool DisConnect();
 private:

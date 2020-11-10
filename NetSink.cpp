@@ -113,6 +113,11 @@ void CNetSink::Init(UINT nIp)
 	return m_pSink->Init(nIp);
 }
 
+void CNetSink::Init(const char* szIp)
+{
+	return m_pSink->Init(szIp);
+}
+
 void CNetSink::Close()
 {
 	m_pSink->Close();
