@@ -1,0 +1,58 @@
+#pragma once
+
+#include "NetGameSerManager.h"
+#include "NetHandSink.h"
+#include "UserInfo.h"
+#include "TimerNode.h"
+
+class CServices;
+
+enum SERVICE_TYPE
+{
+	TYPE_GAME,
+	TYPE_USER,
+};
+
+typedef struct tagGameSerInfo
+{
+	UINT nSerNo;
+	UINT nGameId;
+}GameSerInfo;
+
+union KEY
+{
+	CUserInfo* pUserInfo;
+	GameSerInfo* pSerInfo;
+};
+
+class CConnSerNetSink : public CNetHandSink
+{
+	static CGameSerManager m_RemoteSer;
+	KEY m_nKey;
+	SERVICE_TYPE m_nNetType;
+	int m_nTestLink;
+	UINT m_nIp;
+	CTimerNode m_timerConnTest;
+public:
+	CConnSerNetSink(CServices* m_pNetSer);
+	~CConnSerNetSink();
+public:
+	bool HandNetData(USHORT,USHORT, USHORT, void*, USHORT);
+	bool HandTimeMsg(USHORT uTimeId);
+	bool HandDataBaseRet(UINT uType, void * pData, USHORT nDataSize);
+	bool HandMemDataRet(UINT uType, void* pData, USHORT uDataSize);
+	bool HandUserMsg(int nEvent, void * pData, USHORT uDataSize);
+	void Close();
+	void Init(UINT nIp);
+	void Connect();
+	bool DisConnect();
+private:
+	bool TestNetLink();
+	bool SendToGameSer(USHORT, USHORT, USHORT, void*, USHORT);
+	bool HandMainMsgNet(USHORT, USHORT, void*, USHORT);
+	bool HandMainMsgToRoom(USHORT, USHORT, void*, USHORT);
+	bool HandMainMsgToGame(USHORT,USHORT, USHORT, void*, USHORT);
+	bool HandMainMsgFromGame(USHORT,USHORT, USHORT, void*, USHORT);
+	bool HandMainMsgFromConnect(USHORT nIndex,USHORT nSub, void* pData, USHORT nDataSize);
+};
+
