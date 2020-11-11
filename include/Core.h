@@ -25,16 +25,16 @@ public:
 	void SetMaxMsgSize(int nMaxSize);
 	
 	//添加一个listen 套接字接收连接
-	void AddNetSer(unsigned short nPort);
+	void AddNetSer(const char* szIp, unsigned short nPort, bool IsIpV6 = false);
 	
 	//添加普通连接套接字
-	void AddNetCli(char* szIp,unsigned short nPort);
+	void AddNetCli(const char* szIp, unsigned short nPort, bool IsIpV6 = false);
 	
 	//添加Http服务
-	void AddHttpSer(unsigned short nPort);
+	void AddHttpSer(const char* szIp, unsigned short nPort, bool IsIpV6 = false);
 	
 	//添加websocket服务
-	void AddWebSockSer(unsigned short nPort);
+	void AddWebSockSer(const char* szIp, unsigned short nPort, bool IsIpV6 = false);
 
 	//网络引擎添加自定义套接字 自定义套接字必须继承自CSocketService
 	void AddSocket(CSocketService* pSocketService,UINT events);
