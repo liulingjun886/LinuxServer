@@ -10,12 +10,12 @@
 
 extern USHORT g_nSerType;
 
+USHORT nHeadSize = sizeof(NetHead);
+USHORT nCommandSize = sizeof(NetMsgCommand);
+USHORT nMinDataSize = nHeadSize + nCommandSize;
 
-USHORT CNetSink::nHeadSize = sizeof(NetHead);
-USHORT CNetSink::nCommandSize = sizeof(NetMsgCommand);
-USHORT CNetSink::nMinDataSize = CNetSink::nHeadSize + CNetSink::nCommandSize;
 
-CNetSink::CNetSink(CServices* pServices,int nType):m_pSink(NULL)
+CNetSink::CNetSink(CServices* pServices,int nConnType):m_pSink(NULL)
 {
 	switch (g_nSerType)
 	{
@@ -26,7 +26,7 @@ CNetSink::CNetSink(CServices* pServices,int nType):m_pSink(NULL)
 		}
 		case 2:
 		{
-			if(nType == 1)
+			if(nConnType == SOCK_CONN_SER)
 				m_pSink = new CConnSerNetSink(pServices);
 			else
 				m_pSink = new CConnCliNetSink(pServices);

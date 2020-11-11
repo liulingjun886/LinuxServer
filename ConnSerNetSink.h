@@ -32,7 +32,7 @@ class CConnSerNetSink : public CNetHandSink
 	SERVICE_TYPE m_nNetType;
 	int m_nTestLink;
 	UINT m_nIp;
-	char* m_szIp;
+	const char* m_szIp;
 	CTimerNode m_timerConnTest;
 public:
 	CConnSerNetSink(CServices* m_pNetSer);
