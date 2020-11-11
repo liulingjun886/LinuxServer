@@ -37,9 +37,9 @@ void CServer::InitConnServer(char* const pLogFile,USHORT nSerNo,USHORT nPort,USH
 	g_nSerType = 2;
 	InitLogFile(pLogFile);
 	if(nPort > 0)
-		m_pCore->AddNetSer(nPort);
+		m_pCore->AddNetSer("0.0.0.0",nPort);
 	if(nWebSockPort > 0)
-		m_pCore->AddWebSockSer(nWebSockPort);
+		m_pCore->AddWebSockSer("0.0.0.0",nWebSockPort);
 
 	ConnectDataServer();
 }
@@ -71,7 +71,7 @@ void CServer::InitDataServer(char* const pLogFile,USHORT nPort)
 	m_pMem->SetServiceNum(8);
 	m_pDataBase->SetServiceNum(8);
 	if(nPort > 0)
-		m_pCore->AddNetSer(nPort);
+		m_pCore->AddNetSer("0.0.0.0",nPort);
 }
 
 void CServer::InitLogFile(char* const pLogFile)
