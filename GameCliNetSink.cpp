@@ -6,7 +6,7 @@
 #include "Core.h"
 #include "UserInfo.h"
 #include "MemDataDef.h"
-#include "NetSink.h"
+#include "NetSinkObj.h"
 
 extern USHORT g_serno;
 extern UINT g_gameid;
@@ -77,7 +77,7 @@ bool CGameCliNetSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void*
 			{
 				UserDoubleLogin* pDouble = (UserDoubleLogin*)pData;
 				USHORT nIndex = m_RemoteSer.GetConnSerById(pDouble->nCid,m_pNet->GetServiceIndex());
-				CNetSink::SendData(m_pNet, nIndex, MAIN_MSG_CONNECT, SUB_MSG_USER_DOUBLELOGIN,pData,nDataSize);
+				CNetSinkObj::SendData(m_pNet, nIndex, MAIN_MSG_CONNECT, SUB_MSG_USER_DOUBLELOGIN,pData,nDataSize);
 				return true;
 			}
 			case SUB_MSG_USER_RELOGIN:
@@ -95,7 +95,7 @@ bool CGameCliNetSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void*
 					sync.nIndex = pConn->nCsid;
 					sync.nType = EN_RECONNECT_FAIL;
 					USHORT nIndex = m_RemoteSer.GetConnSerById(pConn->nCid,m_pNet->GetServiceIndex());
-					CNetSink::SendData(m_pNet,nIndex, MAIN_MSG_GAMESER, SUB_MSG_GAME2CONN,  &sync, sizeof(InnserSync));
+					CNetSinkObj::SendData(m_pNet,nIndex, MAIN_MSG_GAMESER, SUB_MSG_GAME2CONN,  &sync, sizeof(InnserSync));
 				}
 				return true;	
 			}
@@ -129,7 +129,7 @@ bool CGameCliNetSink::HandTimeMsg(USHORT uTimeID)
 	{
 	case TIME_CONN_IS_LINK:
 	{
-		CNetSink::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_TEST);
+		CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_TEST);
 		m_timerConnTest.StartTimerSec(5);
 		break;
 	}
@@ -161,7 +161,7 @@ bool CGameCliNetSink::HandMainMsgNet(USHORT nIndex, USHORT nSub, void* pData, US
 			RegGameSer reg;
 			reg.nGameID = g_gameid;
 			reg.nSerNo = g_serno;
-			CNetSink::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_REG_GAMESER, &reg, sizeof(RegGameSer));
+			CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_REG_GAMESER, &reg, sizeof(RegGameSer));
 			return true;
 		}
 		case SUB_MSG_REG_CONNSER:
@@ -181,7 +181,7 @@ bool CGameCliNetSink::HandMainMsgNet(USHORT nIndex, USHORT nSub, void* pData, US
 		case SUB_MSG_TEST:
 		{
 			//printf("SUB_MSG_TEST\n");
-			CNetSink::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_TEST);
+			CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_TEST);
 			return true;
 		}
 		default:
@@ -241,7 +241,7 @@ bool CGameCliNetSink::HandMainMsgRoom(USHORT nCsid,USHORT nSub, void* pData, USH
 		pGame->nIndex = nCsid;
 		pGame->nMain = MAIN_MSG_ROOM_MANAGER;
 		pGame->nSub = SUB_MSG_CREATE_FAIL;
-		CNetSink::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_GAMESER, SUB_MSG_GAME4USER, pGame, sizeof(Game2User));
+		CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_GAMESER, SUB_MSG_GAME4USER, pGame, sizeof(Game2User));
 		return true;
 	}
 	case SUB_MSG_ENTER:
@@ -268,7 +268,7 @@ bool CGameCliNetSink::HandMainMsgRoom(USHORT nCsid,USHORT nSub, void* pData, USH
 		pGame->nIndex = nCsid;
 		pGame->nMain = MAIN_MSG_ROOM_MANAGER;
 		pGame->nSub = SUB_MSG_JOIN_FAIL;
-		CNetSink::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_GAMESER, SUB_MSG_GAME4USER, buff, sizeof(Game2User));
+		CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_GAMESER, SUB_MSG_GAME4USER, buff, sizeof(Game2User));
 		return true;
 	}
 	default:

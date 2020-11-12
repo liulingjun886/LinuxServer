@@ -1,5 +1,5 @@
 #include "CliNetSink.h"
-#include "NetSink.h"
+#include "NetSinkObj.h"
 #include "Services.h"
 
 CDataSerManager CCliNetSink::m_sDataSer;
@@ -37,7 +37,7 @@ void CCliNetSink::PostDataBaseReq(CServices* pServices,UINT nType,void* pData, D
 	{
 		memcpy(pType+1,pData,uDataSize);
 	}
-	CNetSink::SendData(pServices,  GetDataSer(pServices->GetServiceIndex()), MAIN_MSG_DATACENTER, SUB_MSG_DATA_BASE_REQ, buff, uDataSize+sizeof(DataCenter)+sizeof(UINT));
+	CNetSinkObj::SendData(pServices,  GetDataSer(pServices->GetServiceIndex()), MAIN_MSG_DATACENTER, SUB_MSG_DATA_BASE_REQ, buff, uDataSize+sizeof(DataCenter)+sizeof(UINT));
 }
 
 void CCliNetSink::PostMemDataBaseReq(CServices* pServices,UINT nType,void* pData, DATASIZE uDataSize)
@@ -51,7 +51,7 @@ void CCliNetSink::PostMemDataBaseReq(CServices* pServices,UINT nType,void* pData
 	{
 		memcpy(pType+1,pData,uDataSize);
 	}
-	CNetSink::SendData(pServices,  GetDataSer(pServices->GetServiceIndex()), MAIN_MSG_DATACENTER, SUB_MSG_MEM_DATA_BASE_REQ, buff, uDataSize+sizeof(DataCenter)+sizeof(UINT));
+	CNetSinkObj::SendData(pServices,  GetDataSer(pServices->GetServiceIndex()), MAIN_MSG_DATACENTER, SUB_MSG_MEM_DATA_BASE_REQ, buff, uDataSize+sizeof(DataCenter)+sizeof(UINT));
 }
 
 

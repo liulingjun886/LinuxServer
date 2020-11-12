@@ -6,7 +6,7 @@
 #include "MemDataBaseService.h"
 #include <unistd.h>
 #include "Core.h"
-#include "NetSink.h"
+#include "NetSinkObj.h"
 
 Single_Init(CMemDataBaseEnginer)
 
@@ -76,7 +76,7 @@ void CMemDataBaseEnginer::PostMemDataBaseRet(CServices* pServices,SERVICEINDEX n
 	{
 		memcpy(pType+1, pData, uDataSize);
 	}
-	CNetSink::SendData(pServices,  nIndex,MAIN_MSG_DATACENTER, SUB_MSG_MEM_DATA_BASE_RET,buff, nHeadSize + uDataSize);
+	CNetSinkObj::SendData(pServices,  nIndex,MAIN_MSG_DATACENTER, SUB_MSG_MEM_DATA_BASE_RET,buff, nHeadSize + uDataSize);
 }
 
 

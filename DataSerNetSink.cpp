@@ -6,7 +6,7 @@
 #include "Services.h"
 #include "MemDataDef.h"
 #include "DataBaseDef.h"
-#include "NetSink.h"
+#include "NetSinkObj.h"
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -28,7 +28,7 @@ CDataSerNetSink::~CDataSerNetSink()
 void CDataSerNetSink::Connect()
 {
 	//m_pNet->SetTimer(TIME_CONN_IS_LINK, 100*60, -1);
-	CNetSink::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_DATA_SUCSS);
+	CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_DATA_SUCSS);
 }
 
 bool CDataSerNetSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void* pData, USHORT nDataSize)
@@ -70,7 +70,7 @@ bool CDataSerNetSink::TestNetLink()
 	  	return DisConnect();
 	}
 	++m_nTestLink;
-	CNetSink::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_TEST);
+	CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_TEST);
 	return true;
 }
 

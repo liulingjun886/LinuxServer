@@ -2,7 +2,6 @@
 #include "types.h"
 
 class CServices;
-class CNetHandSink;
 
 enum SOCK_CONN_TYPE
 {
@@ -12,20 +11,20 @@ enum SOCK_CONN_TYPE
 
 class CNetSink
 {
-	CNetHandSink* m_pSink;
 public:
-	CNetSink(CServices* pServices,int nConnType = SOCK_CONN_SER);
-	 ~CNetSink();
-	static void SendData(CServices* pService,SERVICEINDEX nIndex, USHORT nMain,USHORT nSub,void* pData = NULL,DATASIZE nDataSize = 0);
+	CNetSink();
+	virtual ~CNetSink();
+	static CNetSink* CreateNetSink(CServices* pServices,int nType);
 public:
-	int HandNetMsg(SERVICEINDEX nIndex, void* pData, DATASIZE uDataSize);
-	bool HandTimeMsg(TIMEERID uTimeID);
-	bool HandUserMsg(int nType, void* pData, DATASIZE uDataSize);
-	bool DisConnect();
-	void Init(UINT nIp);
-	void Init(const char* szIp);
-	void Close();
-	void Connect();
-	void Accepted();
+	virtual int HandNetMsg(SERVICEINDEX nIndex, void* pData, DATASIZE uDataSize) = 0;
+	virtual bool HandTimeMsg(TIMEERID uTimeID) = 0;
+	virtual bool DisConnect() = 0;
+	virtual void Init(UINT nIp) = 0;
+	virtual void Init(const char* szIp) = 0;
+	virtual void Close() = 0;
+	virtual void Connect() = 0;
+	virtual void Accepted() = 0;
+	virtual bool HandUserMsg(int nType, void* pData, DATASIZE uDataSize) = 0;
 };
+
 

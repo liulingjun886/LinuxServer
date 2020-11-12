@@ -3,7 +3,7 @@
 #include "commproto.h"
 #include "Core.h"
 #include "MemDataDef.h"
-#include "NetSink.h"
+#include "NetSinkObj.h"
 #include "Services.h"
 
 extern USHORT g_serno;
@@ -72,7 +72,7 @@ bool CConnCliNetSink::HandTimeMsg(USHORT uTimeID)
 	{
 	case TIME_CONN_IS_LINK:
 	{
-		CNetSink::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_TEST);
+		CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_TEST);
 		m_timerConnTest.StartTimerSec(5);
 		break;
 	}
@@ -104,7 +104,7 @@ bool CConnCliNetSink::HandMainMsgNet(USHORT nIndex, USHORT nSub, void* pData, US
 		}
 		case SUB_MSG_TEST:
 		{
-			CNetSink::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_TEST);
+			CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_TEST);
 			return true;
 		}
 		default:
