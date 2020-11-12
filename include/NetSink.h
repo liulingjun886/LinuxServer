@@ -23,7 +23,6 @@ public:
 	virtual void Init(const char* szIp) = 0;
 	virtual void Close() = 0;
 	virtual void Connect() = 0;
-	virtual void Accepted() = 0;
 	virtual bool HandUserMsg(int nType, void* pData, DATASIZE uDataSize) = 0;
 };
 
