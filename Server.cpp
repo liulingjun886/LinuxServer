@@ -38,6 +38,7 @@ void CServer::InitConnServer(char* const pLogFile,USHORT nSerNo,USHORT nPort,USH
 	InitLogFile(pLogFile);
 	if(nPort > 0)
 		m_pCore->AddNetSer("0.0.0.0",nPort);
+	
 	if(nWebSockPort > 0)
 		m_pCore->AddWebSockSer("0.0.0.0",nWebSockPort);
 

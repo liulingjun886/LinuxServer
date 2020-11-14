@@ -8,6 +8,14 @@ public:
 	virtual ~CServices();
 protected:
 	/*
+		Initialized 代表该服务成为一个合法服务
+		注意所有与 GetServiceIndex() 相关的数据设置初始化请在 Initialized 函数中进行
+		定时器不能在构造函数中启动，请在 Initialized 函数中启动 
+		如有需要请在子类重写
+	*/
+	virtual void Initialized();
+	
+	/*
 		消息处理函数,如果pData有值，默认处理完后会释放掉
 		如果不需要释放，在处理函数中加上 nSize=0 则不会释放
 
@@ -19,18 +27,12 @@ protected:
 		nSize : 消息体大小
 	*/
 	virtual bool HandData(int nType, SERVICEINDEX nSrcIndex, void *pData, DATASIZE& nSize) = 0;
+	
 	/*
 		服务退出处理，默认是释放该服务内存
 		如果改用内存池请在子类重写此函数
 	*/
 	virtual void ExitSelf();
-	/*
-		Initialized 代表该服务成为一个合法服务
-		注意所有与 GetServiceIndex() 相关的数据设置初始化请在 Initialized 函数中进行
-		定时器不能在构造函数中启动，请在 Initialized 函数中启动 
-		如有需要请在子类重写
-	*/
-	virtual void Initialized();
 public:
 	//获取当前服务索引函数
 	SERVICEINDEX GetServiceIndex() const;

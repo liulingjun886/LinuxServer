@@ -19,7 +19,6 @@ public:
 	virtual int HandNetMsg(SERVICEINDEX nIndex, void* pData, DATASIZE uDataSize) = 0;
 	virtual bool HandTimeMsg(TIMEERID uTimeID) = 0;
 	virtual bool DisConnect() = 0;
-	virtual void Init(UINT nIp) = 0;
 	virtual void Init(const char* szIp) = 0;
 	virtual void Close() = 0;
 	virtual void Connect() = 0;

@@ -111,11 +111,6 @@ bool CNetSinkObj::DisConnect()
 	return m_pSink->DisConnect();
 }
 
-void CNetSinkObj::Init(UINT nIp)
-{
-	return m_pSink->Init(nIp);
-}
-
 void CNetSinkObj::Init(const char* szIp)
 {
 	return m_pSink->Init(szIp);

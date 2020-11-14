@@ -37,15 +37,10 @@ CConnSerNetSink::~CConnSerNetSink()
 	m_nKey.pUserInfo = NULL;
 }
 
-void CConnSerNetSink::Init(UINT nIp)
-{
-	m_nIp = nIp;
-	//m_pNet->SetTimer(TIME_CONN_IS_LINK, 200, -1);
-}
-
 void CConnSerNetSink::Init(const char* szIp)
 {
 	m_szIp = szIp;
+	//m_pNet->SetTimer(TIME_CONN_IS_LINK, 200, -1);
 }
 
 void CConnSerNetSink::Connect()
