@@ -16,7 +16,8 @@ USHORT nCommandSize = sizeof(NetMsgCommand);
 USHORT nMinDataSize = nHeadSize + nCommandSize;
 
 
-CNetSinkObj::CNetSinkObj(CServices* pServices,int nConnType):m_pSink(NULL)
+CNetSinkObj::CNetSinkObj(CServices* pServices,int nConnType):
+	m_pSink(NULL)
 {
 	switch (g_nSerType)
 	{
@@ -62,11 +63,14 @@ void CNetSinkObj::SendData(CServices* pService,SERVICEINDEX nIndex, USHORT nMain
 	NetMsgCommand* pCom = (NetMsgCommand*)(pHead+1);
 	pCom->uMain = nMain;
 	pCom->uSub = nSub;
+	
 	if (nDataSize > 0)
 	{
 		memcpy(pCom + 1, pData, nDataSize);
 	}
-	pService->PostData(nIndex, SEND_DATA_REQ, buff,nPacketSize);
+	
+	pService->PostData(nIndex, SEND_DATA_REQ, buff, nPacketSize);
+	
 }
 
 /*
@@ -74,31 +78,24 @@ void CNetSinkObj::SendData(CServices* pService,SERVICEINDEX nIndex, USHORT nMain
 	0	没有处理继续接收
 	int 处理了多少字节
 */
-int CNetSinkObj::HandNetMsg(SERVICEINDEX nIndex, void* pData, DATASIZE nDataSize)
+int CNetSinkObj::HandNetMsg(SERVICEINDEX nIndex, const char* pData, unsigned nDataCount)
 {
-	if(nDataSize <= nHeadSize)
+	if(nDataCount <= nMinDataSize)
 		return 0;
-	
-	NetHead* pNetHead = (NetHead*)pData;
-	DATASIZE uPacketSize = pNetHead->uDataSize;
-	
-	if (uPacketSize > MAX_MSG_SIZE)
+
+	NetHead* pHead = (NetHead*)pData;
+	DATASIZE nPacketSize = pHead->uDataSize;
+	if(nDataCount < nPacketSize)
+		return 0;
+
+	NetMsgCommand* pCom = (NetMsgCommand*)(pHead + 1);
+	DATASIZE nDataSize = nPacketSize - nMinDataSize;
+
+	if(!m_pSink->HandNetData(nIndex, pCom->uMain, pCom->uSub, pCom + 1, nDataSize))
 	{
-		printf("uPacketSize = %d\n",uPacketSize);
 		return -1;
 	}
-	if (nDataSize < uPacketSize)
-		return 0;
-	
-	NetMsgCommand * pCom = (NetMsgCommand *)(pNetHead+1);
-	DATASIZE nDataCount = uPacketSize - nMinDataSize;
-	
-	if(!m_pSink->HandNetData(nIndex, pCom->uMain, pCom->uSub, pCom+1, nDataCount))
-	{
-		printf("nMain = %d,nSub = %d\n",pCom->uMain, pCom->uSub);
-		return -1;
-	}
-	return uPacketSize;
+	return nPacketSize;
 }
 
 
@@ -106,6 +103,7 @@ bool CNetSinkObj::HandTimeMsg(TIMEERID uTimeID)
 {
 	return m_pSink->HandTimeMsg(uTimeID);
 }
+
 bool CNetSinkObj::DisConnect()
 {
 	return m_pSink->DisConnect();

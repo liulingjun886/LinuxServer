@@ -10,7 +10,7 @@ typedef unsigned int UID;
 
 typedef unsigned short TIMEERID;
 typedef unsigned short SERVICEINDEX;
-typedef unsigned short DATASIZE;
+typedef unsigned DATASIZE;
 #define MAX_SERVICE_NUM 0xFFFF
 #define INVALID_SERIVCE_INDEX 0
 

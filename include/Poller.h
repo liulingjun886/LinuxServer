@@ -6,15 +6,15 @@
 
 
 
-class CSocketService:
+class CPoller:
 	public CServices
 {
 public:
-	CSocketService();
-	~CSocketService();
+	CPoller();
+	~CPoller();
 public:
-	static void SetNoBlock(int fd);
+	void SetNoBlock();
 	int GetFd() const;
 protected:
-	int m_sockfd;
+	int m_nPollId;
 };

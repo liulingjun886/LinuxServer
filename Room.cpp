@@ -100,7 +100,7 @@ bool CRoom::InitRoomData(UID uid,int nRoomId,CreateRoom* pData, USHORT uDataSize
 	return false;
 }
 
-bool CRoom::HandData(int e, SERVICEINDEX uFromSerId, void *pData, DATASIZE& nDataSize)
+bool CRoom::HandData(int e, SERVICEINDEX uFromSerId, void *pData, DATASIZE nDataSize)
 {
 	switch (e)
 	{

@@ -3,7 +3,7 @@
 #include <assert.h>
 
 class CServices;
-class CSocketService;
+class CPoller;
 
 class CCore
 {
@@ -20,30 +20,24 @@ public:
 
 	//添加一个服务 服务必须继承自 CServices
 	bool AddService(CServices* pServices);
-
-	//设置最大的消息包 不设置的话系统默认为2048
-	void SetMaxMsgSize(int nMaxSize);
 	
 	//添加一个listen 套接字接收连接
-	void AddNetSer(const char* szIp, unsigned short nPort, bool IsIpV6 = false);
+	SERVICEINDEX AddTcpNetSer(const char* szIp, unsigned short nPort, bool IsIpV6 = false);
 	
 	//添加普通连接套接字
-	void AddNetCli(const char* szIp, unsigned short nPort, bool IsIpV6 = false);
-	
-	//添加Http服务
-	void AddHttpSer(const char* szIp, unsigned short nPort, bool IsIpV6 = false);
-	
-	//添加websocket服务
-	void AddWebSockSer(const char* szIp, unsigned short nPort, bool IsIpV6 = false);
+	SERVICEINDEX AddTcpNetCli(const char* szIp, unsigned short nPort, bool IsIpV6 = false);
+
+	//添加websocket服务器
+	SERVICEINDEX AddWebSockSer(const char* szIp, unsigned short nPort, bool IsIpV6 = false);
 
 	//网络引擎添加自定义套接字 自定义套接字必须继承自CSocketService
-	void AddSocket(CSocketService* pSocketService,UINT events);
+	void AddPoller(CPoller* pPollerService,UINT events);
 	
 	//网络引擎修改自定义套接字
-	void ModSocketWrite(CSocketService* pSocketService, UINT events);
+	void ModPoller(CPoller* pPollerService, UINT events);
 	
 	//网络引擎删除自定义套接字
-	void CloseSocket(CSocketService* pSocketService);
+	void DelPoller(CPoller* pPollerService);
 	
 	//设置日志输入文件，如果不设置则默认输出到标准输出
 	void InitLogFileName(char* const pFileName);

@@ -3,7 +3,7 @@ serobj = main.o Server.o NetSink.o DataBaseEnginer.o DataBaseService.o \
 DataBaseSink.o MySql.o MemDataBaseEnger.o MemDataBaseService.o MemSink.o MyRedis.o \
 DataSerNetSink.o ConnSerNetSink.o CliNetSink.o DataSerManager.o ConnCliNetSink.o \
 GameCliNetSink.o NetGameSerManager.o NetConnSerManager.o \
-RoomManager.o Room.o UserInfo.o NetSinkObj.o\
+RoomManager.o Room.o UserInfo.o NetSinkObj.o \
 
 
 %.o:%.cpp

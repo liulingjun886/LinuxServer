@@ -10,7 +10,7 @@ class CDataBaseService :
 	CDataBaseSink* m_pSink;
 	public:
 		bool Init();
-		bool HandData(int e, SERVICEINDEX uFromSerId, void *pData, DATASIZE& size);
+		bool HandData(int e, SERVICEINDEX uFromSerId, void *pData, DATASIZE size);
 	private:
 		CDataBaseService();
 		~CDataBaseService();

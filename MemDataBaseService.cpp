@@ -19,7 +19,7 @@ bool CMemDataBaseService::Init()
 	return m_Sink->Init();
 }
 
-bool CMemDataBaseService::HandData(int e, SERVICEINDEX uFromSerId, void *pData, DATASIZE& uDataSize)
+bool CMemDataBaseService::HandData(int e, SERVICEINDEX uFromSerId, void *pData, DATASIZE uDataSize)
 {
 	switch (e)
 	{

@@ -2,6 +2,8 @@
 #include "Services.h"
 #include "NetSinkObj.h"
 
+extern int g_nSerType;
+
 CNetSink::CNetSink()
 {
 	

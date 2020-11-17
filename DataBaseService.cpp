@@ -16,7 +16,7 @@ bool CDataBaseService::Init()
 }
 
 
-bool CDataBaseService::HandData(int e, SERVICEINDEX uFromSerId, void *pData, DATASIZE& size)
+bool CDataBaseService::HandData(int e, SERVICEINDEX uFromSerId, void *pData, DATASIZE size)
 {
 	switch (e)
 	{

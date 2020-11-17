@@ -57,7 +57,7 @@ public:
 	CUserInfo* GetUsers(USHORT nSeatNo);
 
 private:
-	virtual bool HandData(int e, SERVICEINDEX uFromSerId, void *pData, DATASIZE& size);
+	virtual bool HandData(int e, SERVICEINDEX uFromSerId, void *pData, DATASIZE size);
 	void PreExitSelf();
 	
 private:

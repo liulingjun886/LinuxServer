@@ -26,7 +26,7 @@ protected:
 		pData : 消息体数据指针
 		nSize : 消息体大小
 	*/
-	virtual bool HandData(int nType, SERVICEINDEX nSrcIndex, void *pData, DATASIZE& nSize) = 0;
+	virtual bool HandData(int nType, SERVICEINDEX nSrcIndex, void *pData, DATASIZE nSize) = 0;
 	
 	/*
 		服务退出处理，默认是释放该服务内存

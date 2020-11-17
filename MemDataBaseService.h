@@ -14,6 +14,6 @@ public:
 	~CMemDataBaseService();
 	bool Init();
 protected:
-	virtual bool HandData(int e, SERVICEINDEX uFromSerId, void *pData, DATASIZE& size);
+	virtual bool HandData(int e, SERVICEINDEX uFromSerId, void *pData, DATASIZE size);
 };
 
