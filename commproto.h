@@ -5,7 +5,8 @@ struct RegGameSer
 {
 	USHORT nSerNo;
 	UINT nGameID;
-
+	char szIp[16];
+	USHORT nPort;
 	RegGameSer()
 	{
 		memset(this,0,sizeof(RegGameSer));

@@ -1,19 +1,24 @@
 #pragma once
+#include <string>
 class CCore;
 class CServer
 {
-	CCore* m_pCore;
-	int m_nDeamon;
 public:
 	CServer();
-	~CServer();
-	void InitConnServer(char* const pLogFile,USHORT nSerNo,USHORT nPort,USHORT nWebSockPort);
-	void InitGameServer(char* const pLogFile,USHORT nSerNo,UINT nGameId);
-	void InitDataServer(char* const pLogFile,USHORT nPort);
-	
+	virtual ~CServer();
+	int	 Init(unsigned short nSerType,unsigned short nSerNo);
 	void Run();
-private:
+public:
+	const char* GetIP() const;
+	unsigned short GetPort() const;
+	USHORT GetSerType() const;
+	USHORT GetSerNo() const;
+protected:
 	void InitLogFile(char* const pLogFile);
-	void ConnectDataServer();
-	void ConnectConnServer();
+	virtual int Initialize() = 0;
+protected:
+	CCore* m_pCore;
+	int m_nDeamon;
+	unsigned short m_nSerType;
+	unsigned short m_nSerNo;
 };

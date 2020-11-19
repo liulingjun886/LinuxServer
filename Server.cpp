@@ -16,10 +16,6 @@
 #include "MemDataBaseEnger.h"
 #include "DataBaseEnginer.h"
 
-USHORT g_serno = -1;
-USHORT g_nSerType = 1;
-UINT g_gameid = 0;
-
 static CRoomManager* m_pRoomManager = NULL;
 static CMemDataBaseEnginer* m_pMem = NULL;
 static CDataBaseEnginer* m_pDataBase = NULL;
@@ -29,6 +25,15 @@ CServer::CServer():m_nDeamon(0)
 	m_pCore = CCore::CreateSingle();
 	int nCpuNum = sysconf(_SC_NPROCESSORS_ONLN);
 	m_pCore->SetThreadNum(nCpuNum*2);
+}
+
+int	 CServer::Init(unsigned short nSerType,unsigned short nSerNo)
+{
+	if(nSerNo >= 500 || nSerNo < 0)
+		return -1;
+	m_nSerType = nSerType;
+	m_nSerNo = nSerNo;
+	return Initialize();
 }
 
 void CServer::InitConnServer(char* const pLogFile,USHORT nSerNo,USHORT nPort,USHORT nWebSockPort)
@@ -181,4 +186,14 @@ void CServer::Run()
 	}
 	
 	m_pCore->Run();
+}
+
+USHORT CServer::GetSerType() const
+{
+	return m_nSerType;
+}
+
+USHORT CServer::GetSerNo() const
+{
+	return m_nSerNo;
 }

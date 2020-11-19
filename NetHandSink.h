@@ -19,7 +19,7 @@ public:
 	virtual void Connect(){}
 	virtual bool DisConnect(){ return false;}
 	virtual bool HandUserMsg(int nEvent, void* pData, USHORT uDataSize) {return false;}
-	virtual bool HandNetData(USHORT, USHORT, USHORT, void*, USHORT){return true;}
+	virtual bool HandNetData(USHORT, USHORT, USHORT, void*, UINT){return true;}
 };
 
 

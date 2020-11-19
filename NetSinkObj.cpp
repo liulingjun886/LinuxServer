@@ -8,8 +8,12 @@
 #include <stdlib.h>
 #include <assert.h>
 
+#include "./CenterServer/CenSerSink.h"
+#include "./UserServer/UserCliSink.h"
+#include "./UserServer/UserSerSink.h"
+extern CServer* g_pSer
 
-extern USHORT g_nSerType;
+
 
 USHORT nHeadSize = sizeof(NetHead);
 USHORT nCommandSize = sizeof(NetMsgCommand);
@@ -19,27 +23,51 @@ USHORT nMinDataSize = nHeadSize + nCommandSize;
 CNetSinkObj::CNetSinkObj(CServices* pServices,int nConnType):
 	m_pSink(NULL)
 {
-	switch (g_nSerType)
+	switch (g_pSer->GetSerType())
 	{
-		case 1:
+		case 1: //中心服
 		{
-			m_pSink = new CDataSerNetSink(pServices);
+			m_pSink = new CCenSerSink(pServices);
 			break;
 		}
-		case 2:
+		case 2: //玩家服务器
+		{
+			if(nConnType == SOCK_CONN_SER)
+				m_pSink = new CUserSerSink(pServices);
+			else
+				m_pSink = new CUserCliSink(pServices);
+			
+			break;
+		}
+		case 3: //数据服务器
+		{
+			if(nConnType == SOCK_CONN_SER)
+				m_pSink = new CDataSerNetSink(pServices);
+			else
+				m_pSink = new CDataCliNetSink(pServices);
+			
+			break;
+		}
+		case 4: //游戏服务器
+		{
+			if(nConnType == SOCK_CONN_SER)
+				m_pSink = new CGameSerNetSink(pServices);
+			else
+				m_pSink = new CGameCliNetSink(pServices);
+			
+			break;
+		}
+		case 5: //连接服务器
 		{
 			if(nConnType == SOCK_CONN_SER)
 				m_pSink = new CConnSerNetSink(pServices);
 			else
 				m_pSink = new CConnCliNetSink(pServices);
-			break;
-		}
-		case 3:
-		{
-			m_pSink = new CGameCliNetSink(pServices);
+			
 			break;
 		}
 	}
+	
 	assert(m_pSink != NULL);
 }
 

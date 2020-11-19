@@ -2,16 +2,70 @@
 #include <stdio.h>
 #include "types.h"
 #include "Server.h"
+#include <iostream>
+#include "./CenterServer/CenterServer.h"
+
+CServer* g_pSer = NULL;
 
 
 int main(int argc,char* argv[])
 {
-	if (argc != 5 && argc != 6)
+	if (argc != 3 && argc != 6)
 	{
-		printf("use ./server nSerType nSerNo pLogFileName [nPort/nGameId] [nWebSockPort]!\n");
+		printf("use ./server nSerType nSerNo");
 		return 0;
 	}
 
+	char option[] = ":s:t::";
+    int result;
+	int num = 0;
+    while((result = getopt(argc, argv, option)) != -1)
+    {
+        switch(result)
+        {
+
+            case 's':       //server Id
+                g_nSerNo = (unsigned short)atoi(optarg);
+                if (g_nSerNo <= 0)
+                {
+                    printf("sid=%d\n", g_nSerNo);
+                    return -1;
+                }
+				num++;
+                break;
+	     	case 't':       //server type
+                g_nSerType= (unsigned short)atoi(optarg);
+                if (g_nSerType <= 0)
+                {
+                    printf("m_nLevel=%d\n", g_nSerType);
+                    return -1;
+                }
+				num++;
+                break;
+            case '?':
+                printf("Invalid option.\r\n");
+                return -1;
+            case ':':
+                printf("Lack of option argument.\r\n");
+                return -1;
+        }
+    };
+
+	switch(nSerType)
+	{
+		case 1:
+			g_pSer = new CCenterServer;
+			break;
+		
+	}
+
+	if(0 != g_pSer->Init(g_nSerType, g_nSerNo))
+		return 0;
+
+	g_pSer->Run();
+	delete g_pSer;
+	return 0;
+	
 	CServer* pSer =  new CServer;
 	USHORT nSerType = (USHORT)atoi(argv[1]);
 	USHORT nSerNo = (USHORT)atoi(argv[2]);

@@ -6,8 +6,11 @@
 #include "types.h"
 #include "MemDataDef.h"
 #include "MemDataDef.h"
+#include "../UserServer/UserServer.h"
 using namespace std;
 using namespace Mem;
+
+extern CServer* g_pSer;
 
 CMyRedis::CMyRedis() : m_pConn(NULL),m_pReply(NULL)
 {
@@ -24,7 +27,7 @@ CMyRedis::~CMyRedis()
 
 bool CMyRedis::Init()
 {
-	ifstream in("./config/redis.config");
+	/*ifstream in("./config/redis.config");
 	if(in.is_open())
 	{
 		char szConfig[64] = { 0 };
@@ -49,6 +52,19 @@ bool CMyRedis::Init()
 	{
 		printf("redis.config not found\n");
 		return false;
+	}*/
+
+	if(2 == g_pSer->GetSerType())
+	{
+		CUserServer* pSer = dynamic_cat<CUserServer*>(g_pSer);
+		if(NULL == pSer)
+			return false;
+
+		
+	}
+	else if(3 == g_pSer->GetSerType())
+	{
+		
 	}
 	
 	return OpenConnect();
