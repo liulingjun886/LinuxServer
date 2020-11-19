@@ -1,21 +1,24 @@
 #pragma once
 #include "NetHandSink.h"
 #include "MemDataBaseEnger.h"
+#include "DataServer.h"
 
 class CServices;
 
-class CDataSerNetSink : public CNetHandSink
+class CDataSerSink : public CNetHandSink
 {
-	int m_nTestLink;
 public:
-	CDataSerNetSink(CServices* m_pNetSer);
-	~CDataSerNetSink();
+	CDataSerSink(CServices* m_pNetSer);
+	~CDataSerSink();
 public:
 	void Connect();
 	bool HandNetData(USHORT,USHORT, USHORT, void*, USHORT);
 	bool HandTimeMsg(USHORT uTimeId);
 private:
 	bool TestNetLink();
-	bool HandMainMsgCenter(USHORT,USHORT,void*,USHORT);
+	bool HandMainMsgGameSer(USHORT,USHORT,void*,USHORT);
 	bool HandMainMsgNet(USHORT,USHORT, void*, USHORT);
+private:
+	int m_nTestLink;
+	CDataServer* m_pServer;
 };

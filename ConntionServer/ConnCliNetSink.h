@@ -6,10 +6,7 @@ class CServices;
 
 class CConnCliNetSink : public CCliNetSink
 {
-	USHORT m_nTestLink;
-	char m_nReConnectCount;
-	CTimerNode m_timerConnTest;
-	CTimerNode m_timerReConn;
+	
 public:
 	CConnCliNetSink(CServices* pNet);
 	~CConnCliNetSink();
@@ -20,5 +17,15 @@ public:
 	bool HandTimeMsg(USHORT uTimeID);
 private:
 	bool HandMainMsgNet(USHORT nIndex, USHORT nSub, void* pData, USHORT nDataSize);
+	
+	bool HandMsgFromCenter(USHORT,USHORT, USHORT, void*, USHORT);
+	bool HandMsgFromGame(USHORT,USHORT, USHORT, void*, USHORT);
+	bool HandMsgFromUser(USHORT,USHORT, USHORT, void*, USHORT);
+private:
+	USHORT m_nTestLink;
+	char m_nReConnectCount;
+	CTimerNode m_timerConnTest;
+	CTimerNode m_timerReConn;
+	bool (CConnCliNetSink::*m_HandFun)(USHORT,USHORT, USHORT, void*, USHORT);
 };
 

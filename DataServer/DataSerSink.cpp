@@ -10,28 +10,28 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include "DataBaseEnginer.h"
-#include "MemDataBaseEnger.h"
+#include "../DataBaseEnginer/DataBaseEnginer.h"
+#include "../MemDataBaseEnginer/MemDataBaseEnger.h"
 
 
-CDataSerNetSink::CDataSerNetSink(CServices* pNet) :CNetHandSink(pNet),m_nTestLink(0)
+CDataSerSink::CDataSerSink(CServices* pNet) :CNetHandSink(pNet),m_nTestLink(0)
 {
 
 }
 
 
-CDataSerNetSink::~CDataSerNetSink()
+CDataSerSink::~CDataSerSink()
 {
 	
 }
 
-void CDataSerNetSink::Connect()
+void CDataSerSink::Connect()
 {
 	//m_pNet->SetTimer(TIME_CONN_IS_LINK, 100*60, -1);
-	CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_DATA_SUCSS);
+	CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_DATASER, DS_SUB_MSG_CONN_SUCSS);
 }
 
-bool CDataSerNetSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void* pData, USHORT nDataSize)
+bool CDataSerSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void* pData, USHORT nDataSize)
 {
 	switch (nMain)
 	{
@@ -39,9 +39,9 @@ bool CDataSerNetSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void*
 	{
 		return HandMainMsgNet(nIndex,nSub,pData,nDataSize);
 	}
-	case MAIN_MSG_DATACENTER:
+	case MAIN_MSG_GAMESER:
 	{
-		return HandMainMsgCenter(nIndex,nSub,pData,nDataSize);
+		return HandMainMsgGameSer(nIndex,nSub,pData,nDataSize);
 	}
 	default:
 		break;
@@ -49,7 +49,7 @@ bool CDataSerNetSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void*
 	return false;
 }
 
-bool CDataSerNetSink::HandTimeMsg(USHORT uTimeId)
+bool CDataSerSink::HandTimeMsg(USHORT uTimeId)
 {
 	switch (uTimeId)
 	{
@@ -63,7 +63,7 @@ bool CDataSerNetSink::HandTimeMsg(USHORT uTimeId)
 	return true;
 }
 
-bool CDataSerNetSink::TestNetLink()
+bool CDataSerSink::TestNetLink()
 {
 	if (m_nTestLink > 0)
 	{
@@ -74,7 +74,7 @@ bool CDataSerNetSink::TestNetLink()
 	return true;
 }
 
-bool CDataSerNetSink::HandMainMsgNet(USHORT nIndex,USHORT nSub, void* pData, USHORT nDataSize)
+bool CDataSerSink::HandMainMsgNet(USHORT nIndex,USHORT nSub, void* pData, USHORT nDataSize)
 {
 	switch (nSub)
 	{
@@ -90,7 +90,7 @@ bool CDataSerNetSink::HandMainMsgNet(USHORT nIndex,USHORT nSub, void* pData, USH
 }
 
 
-bool CDataSerNetSink::HandMainMsgCenter(USHORT nIndex,USHORT nSub,void* pData,USHORT nDataSize)
+bool CDataSerSink::HandMainMsgGameSer(USHORT nIndex,USHORT nSub,void* pData,USHORT nDataSize)
 {
 	switch (nSub)
 	{

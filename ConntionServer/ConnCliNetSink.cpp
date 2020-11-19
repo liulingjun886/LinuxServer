@@ -9,7 +9,7 @@
 extern USHORT g_serno;
 extern UINT g_gameid;
 
-CConnCliNetSink::CConnCliNetSink(CServices* pNet) :CCliNetSink(pNet),m_nReConnectCount(0)
+CConnCliNetSink::CConnCliNetSink(CServices* pNet) :CCliNetSink(pNet),m_nReConnectCount(0),m_HandFun(NULL)
 {
 	m_timerConnTest.InitTimerObj(m_pNet, TIME_CONN_IS_LINK);
 	m_timerReConn.InitTimerObj(m_pNet, TIME_CONN_RECONNECT);
@@ -36,12 +36,25 @@ bool CConnCliNetSink::DisConnect()
 
 bool CConnCliNetSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void* pData, USHORT nDataSize)
 {
+	//return (this->*m_HandFun)(nIndex,nMain,nSub,pData,nDataSize);
 	m_nTestLink = 0;
+	
+	
 	switch (nMain)
 	{
-	case MAIN_MSG_NET:
+	case MAIN_MSG_CENTERSER:
 	{
-		return HandMainMsgNet(nIndex,nSub,pData,nDataSize);
+		switch(nSub)
+		{
+			case CEN_SUB_MSG_CONN_SUCSS:
+			{
+				m_HandFun = &CConnCliNetSink::HandMsgFromCenter;
+				return true;
+			}
+			default:
+				break;
+		}
+		break;
 	} 
 	case MAIN_MSG_CONNECT:
 	{
@@ -63,7 +76,9 @@ bool CConnCliNetSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void*
 	default:
 		break;
 	}
-	return true;
+	if(m_HandFun)
+		return (this->*m_HandFun)();
+	return false;
 }
 
 bool CConnCliNetSink::HandTimeMsg(USHORT uTimeID)

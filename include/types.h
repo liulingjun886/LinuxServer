@@ -175,13 +175,17 @@ enum Sub_Msg_Center
 {
 	CEN_SUB_MSG_CONN_SUCSS = 1,
 	CEN_SUB_MSG_NEWGAMESER = 2,
-}
+};
 
 enum Sub_Msg_UserServer
 {
 	US_SUB_MSG_CONN_SUCSS = 1,
-}
+};
 
+enum Sub_Msg_DataSer
+{
+	DS_SUB_MSG_CONN_SUCSS = 1,
+};
 
 //MAIN_MSG_CONNECT
 #define SUB_MSG_USER4ROOM 1

@@ -1,24 +1,18 @@
-#include "UserCliSink.h"
+#include "DataCliSink.h"
+#include "../include/types.h"
 
-extern CServer* g_pSer;
-
-enum TIME_ID
+CDataCliSink::CDataCliSink(CServices* pNetSer):CNetHandSink(pNetSer)
 {
-	TIME_TEST_CONN=1,
-};
-
-CUserCliSink::CUserCliSink(CServices* pServices):CNetHandSink(pServices)
-{
-	m_pServer = dynamic_cast<CUserServer*>(g_pSer);
-	m_timer_Link.InitTimerObj(m_pNet, TIME_TEST_CONN);
+	m_timer_Link.InitTimerObj(m_pNet, 1);
 }
 
-CUserCliSink::~CUserCliSink()
+CDataCliSink::~CDataCliSink()
 {
 	
 }
 
-bool CUserCliSink::HandTimeMsg(USHORT nTimeID)
+
+bool CDataCliSink::HandTimeMsg(USHORT nTimeID)
 {
 	switch(nTimeID)
 	{
@@ -36,7 +30,7 @@ bool CUserCliSink::HandTimeMsg(USHORT nTimeID)
 	return false;
 }
 
-bool CUserCliSink::HandNetData(USHORT nSrcIndex, USHORT nMain, USHORT nSub, void* pData, UINT nDataSize)
+bool CDataCliSink::HandNetData(USHORT nSrcIndex, USHORT nMain, USHORT nSub, void* pData, UINT nDataSize)
 {
 	switch(nMain)
 	{
@@ -50,7 +44,7 @@ bool CUserCliSink::HandNetData(USHORT nSrcIndex, USHORT nMain, USHORT nSub, void
 	return false;
 }
 
-bool CUserCliSink::HandMainMsgCenter(USHORT nSrcIndex, USHORT nSub, void* pData, UINT nDataSize)
+bool CDataCliSink::HandMainMsgCenter(USHORT nSrcIndex, USHORT nSub, void* pData, UINT nDataSize)
 {
 	switch(nSub)
 	{
@@ -59,7 +53,7 @@ bool CUserCliSink::HandMainMsgCenter(USHORT nSrcIndex, USHORT nSub, void* pData,
 			m_timer_Link.StartTimerSec(300);
 			RegConnSer ser;
 			ser.nSerNo = m_pServer->GetSerNo();
-			CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_REG_USERSER, &ser, sizeof(ser));
+			CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_REG_DATASER, &ser, sizeof(ser));
 			return true;
 		}
 		case SUB_MSG_TEST:

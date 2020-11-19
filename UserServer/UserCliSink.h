@@ -5,7 +5,7 @@
 class CUserCliSink : public CNetHandSink
 {
 public:
-	CUserCliSink();
+	CUserCliSink(CServices* pServices);
 	~CUserCliSink();
 public:
 	virtual bool HandTimeMsg(USHORT nTimeID);
