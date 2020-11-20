@@ -20,5 +20,4 @@ private:
 	bool HandMainMsgNet(USHORT,USHORT, void*, USHORT);
 private:
 	int m_nTestLink;
-	CDataServer* m_pServer;
 };

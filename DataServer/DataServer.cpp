@@ -1,9 +1,11 @@
 #include "DataServer.h"
 #include "../include/IniFile.h"
 
+CDataServer* g_pDataServer = NULL;
+
 CDataServer::CDataServer(CServices* pServices):CNetHandSink(pServices)
 {
-	
+	g_pDataServer = this;
 }
 
 CDataServer::~CDataServer()

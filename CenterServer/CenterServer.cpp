@@ -1,12 +1,22 @@
 #include "CenterServer.h"
 #include "IniFile.h"
 
-extern unsigned short g_nSerType;
-extern unsigned short g_nSerNo;
+
+CCenterServer* g_pCenterServer = NULL;
+
 
 CCenterServer::CCenterServer()
 {
+	g_pCenterServer = this;
 	
+	m_mapGameInfo.clear();
+	
+	memset(s_szConnSer,0,sizeof(s_szConnSer));
+	memset(s_szGameSer,0,sizeof(s_szGameSer));
+	memset(s_szUserSer,0,sizeof(s_szUserSer));
+	memset(s_szDataSer,0,sizeof(s_szDataSer));
+
+	m_mapLinkInfo.clear();
 }
 
 CCenterServer::~CCenterServer()

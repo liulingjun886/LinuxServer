@@ -27,12 +27,6 @@ union KEY
 
 class CConnSerNetSink : public CNetHandSink
 {
-	static CGameSerManager m_RemoteSer;
-	KEY m_nKey;
-	SERVICE_TYPE m_nNetType;
-	int m_nTestLink;
-	const char* m_szIp;
-	CTimerNode m_timerConnTest;
 public:
 	CConnSerNetSink(CServices* m_pNetSer);
 	~CConnSerNetSink();
@@ -49,10 +43,18 @@ public:
 private:
 	bool TestNetLink();
 	bool SendToGameSer(USHORT, USHORT, USHORT, void*, USHORT);
+	bool SendToCenterSer(USHORT, USHORT, USHORT, void*, USHORT);
+	bool SendToUserSer(UINT, USHORT, USHORT, void*, USHORT);
 	bool HandMainMsgNet(USHORT, USHORT, void*, USHORT);
+	
 	bool HandMainMsgToRoom(USHORT, USHORT, void*, USHORT);
 	bool HandMainMsgToGame(USHORT,USHORT, USHORT, void*, USHORT);
-	bool HandMainMsgFromGame(USHORT,USHORT, USHORT, void*, USHORT);
+	
 	bool HandMainMsgFromConnect(USHORT nIndex,USHORT nSub, void* pData, USHORT nDataSize);
+private:
+	CUserInfo* m_pUserInfo;
+	int m_nTestLink;
+	const char* m_szIp;
+	CTimerNode m_timerConnTest;
 };
 

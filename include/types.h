@@ -141,7 +141,7 @@ typedef struct tagUser
 enum Main_MSG
 {
 	MAIN_MSG_MIN = 0,
-	MAIN_MSG_NET,
+	
 	MAIN_MSG_LOGIN,
 	MAIN_MSG_LOBBY,
 	
@@ -162,7 +162,8 @@ enum Main_MSG
 
 enum MAIN_MSG
 {
-	MAIN_MSG_CENTERSER=1,
+	MAIN_MSG_NET = 1,
+	MAIN_MSG_CENTERSER,
 	MAIN_MSG_USERSER,
 	MAIN_MSG_DATASER,
 	MAIN_MSG_GAMESER,
@@ -171,20 +172,39 @@ enum MAIN_MSG
 	MAIN_MSG_MAX,
 };
 
+enum Sub_Msg_Net
+{
+	NT_SUB_MSG_TEST = 1,
+};
+
 enum Sub_Msg_Center
 {
-	CEN_SUB_MSG_CONN_SUCSS = 1,
-	CEN_SUB_MSG_NEWGAMESER = 2,
+	CT_SUB_MSG_CONN_SUCSS = 1,
+	CT_SUB_MSG_NEWGAMESER = 2,
 };
 
 enum Sub_Msg_UserServer
 {
 	US_SUB_MSG_CONN_SUCSS = 1,
+	US_SUB_MSG_DATA_BASE_RET,
 };
 
 enum Sub_Msg_DataSer
 {
 	DS_SUB_MSG_CONN_SUCSS = 1,
+};
+
+enum Sub_Msg_GameSer
+{
+	GS_SUB_MSG_CONN_SUCSS = 1,
+	GS_SUB_MSG_GAME4USER,
+	GS_SUB_MSG_GAME2CONN,
+};
+
+enum Sub_Msg_ConnSer
+{
+	CS_SUB_MSG_CONN_SUCSS = 1,
+	CS_SUB_MSG_REG_CONN,
 };
 
 //MAIN_MSG_CONNECT

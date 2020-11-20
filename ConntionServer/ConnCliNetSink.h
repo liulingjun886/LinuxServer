@@ -6,7 +6,6 @@ class CServices;
 
 class CConnCliNetSink : public CCliNetSink
 {
-	
 public:
 	CConnCliNetSink(CServices* pNet);
 	~CConnCliNetSink();
@@ -18,9 +17,11 @@ public:
 private:
 	bool HandMainMsgNet(USHORT nIndex, USHORT nSub, void* pData, USHORT nDataSize);
 	
-	bool HandMsgFromCenter(USHORT,USHORT, USHORT, void*, USHORT);
-	bool HandMsgFromGame(USHORT,USHORT, USHORT, void*, USHORT);
-	bool HandMsgFromUser(USHORT,USHORT, USHORT, void*, USHORT);
+	bool HandMsgFromCenterSrv(USHORT,USHORT, USHORT, void*, USHORT);
+	bool HandMsgFromGameSrv(USHORT,USHORT, USHORT, void*, USHORT);
+	bool HandMsgFromUserSrv(USHORT,USHORT, USHORT, void*, USHORT);
+
+	bool HandMainMsgCenterSrv(USHORT, USHORT, void*, USHORT);
 private:
 	USHORT m_nTestLink;
 	char m_nReConnectCount;

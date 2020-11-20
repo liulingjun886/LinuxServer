@@ -6,8 +6,6 @@
 #include "types.h"
 using namespace std;
 
-extern USHORT g_serno;
-
 class CRoomManager
 {
 	Single(CRoomManager)

@@ -15,7 +15,6 @@ private:
 	bool HandMainMSgGameSer(USHORT, USHORT, void*, UINT);
 	bool HandMainMsgConnSer(USHORT, USHORT, void*, UINT);
 private:
-	CUserServer* m_pServer;
 	CTimer m_timer_TestLink;
 	USHORT m_nNum;
 };

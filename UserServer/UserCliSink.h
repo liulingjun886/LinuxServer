@@ -13,7 +13,6 @@ public:
 private:
 	bool HandMainMsgCenter(USHORT,    USHORT, void*, UINT);
 private:
-	CUserServer* m_pServer;
 	CTimer m_timer_Link;
 	USHORT m_nTestNum;
 };

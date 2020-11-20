@@ -13,6 +13,7 @@
 #include "../DataBaseEnginer/DataBaseEnginer.h"
 #include "../MemDataBaseEnginer/MemDataBaseEnger.h"
 
+extern CDataServer* g_pDataServer;
 
 CDataSerSink::CDataSerSink(CServices* pNet) :CNetHandSink(pNet),m_nTestLink(0)
 {

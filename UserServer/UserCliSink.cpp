@@ -1,6 +1,7 @@
 #include "UserCliSink.h"
 
-extern CServer* g_pSer;
+extern CUserServer* g_pUserServer;
+
 
 enum TIME_ID
 {
@@ -9,7 +10,6 @@ enum TIME_ID
 
 CUserCliSink::CUserCliSink(CServices* pServices):CNetHandSink(pServices)
 {
-	m_pServer = dynamic_cast<CUserServer*>(g_pSer);
 	m_timer_Link.InitTimerObj(m_pNet, TIME_TEST_CONN);
 }
 
@@ -58,7 +58,7 @@ bool CUserCliSink::HandMainMsgCenter(USHORT nSrcIndex, USHORT nSub, void* pData,
 		{
 			m_timer_Link.StartTimerSec(300);
 			RegConnSer ser;
-			ser.nSerNo = m_pServer->GetSerNo();
+			ser.nSerNo = g_pUserServer->GetSerNo();
 			CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_REG_USERSER, &ser, sizeof(ser));
 			return true;
 		}

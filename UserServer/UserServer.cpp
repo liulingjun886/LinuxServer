@@ -2,9 +2,12 @@
 #include "../include/IniFile.h"
 #include "../MemDataBaseEnginer/MemDataBaseEnger.h"
 
+CUserServer* g_pUserServer = NULL;
+
+
 CUserServer::CUserServer():m_pMem(NULL)
 {
-	
+	g_pUserServer = this;
 }
 CUserServer::~CUserServer()
 {

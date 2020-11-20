@@ -3,8 +3,6 @@
 #include <stdio.h>
 
 
-extern const int g_serno;
-
 CGameSerManager::CGameSerManager()
 {
 	m_pGameSer = new CGameSerInfo[MAX_GAME_SER_NUM];

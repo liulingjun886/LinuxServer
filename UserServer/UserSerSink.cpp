@@ -1,10 +1,11 @@
 #include "UserSerSink.h"
 
-extern CServer* g_pSer;
+
+extern CUserServer* g_pUserServer;
 
 CUserSerSink::CUserSerSink(CServices* pServices):CNetHandSink(pServices)
 {
-	m_pServer = dynamic_cast<CUserServer*>(g_pSer);
+	
 }
 
 CUserSerSink::~CUserSerSink()
