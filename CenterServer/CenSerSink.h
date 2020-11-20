@@ -31,5 +31,5 @@ private:
 private:
 	CTimer m_timerTestLink;
 	unsigned m_nTestNum;
-	CCenterServer* m_pServer;
+	
 };
