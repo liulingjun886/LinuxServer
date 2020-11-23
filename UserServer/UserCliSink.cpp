@@ -54,7 +54,7 @@ bool CUserCliSink::HandMainMsgCenter(USHORT nSrcIndex, USHORT nSub, void* pData,
 {
 	switch(nSub)
 	{
-		case SUB_MSG_CONN_SUCSS:
+		case CT_SUB_MSG_CONN_SUCSS:
 		{
 			m_timer_Link.StartTimerSec(300);
 			RegConnSer ser;
@@ -62,7 +62,7 @@ bool CUserCliSink::HandMainMsgCenter(USHORT nSrcIndex, USHORT nSub, void* pData,
 			CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_REG_USERSER, &ser, sizeof(ser));
 			return true;
 		}
-		case SUB_MSG_TEST:
+		case CT_SUB_MSG_TEST:
 		{
 			m_nTestNum = 0;
 			return true;

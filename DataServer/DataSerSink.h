@@ -16,8 +16,7 @@ public:
 	bool HandTimeMsg(USHORT uTimeId);
 private:
 	bool TestNetLink();
-	bool HandMainMsgGameSer(USHORT,USHORT,void*,USHORT);
-	bool HandMainMsgNet(USHORT,USHORT, void*, USHORT);
+	bool HandMainMsgFromGameSer(USHORT,USHORT,void*,USHORT);
 private:
 	int m_nTestLink;
 };

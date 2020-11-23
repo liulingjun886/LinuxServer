@@ -22,12 +22,6 @@ bool CUserSerSink::HandNetData(USHORT nSrcIndex, USHORT nMain, USHORT nSub, void
 {
 	switch(nMain)
 	{
-		case MAIN_MSG_NET:
-			{
-				m_nNum = 0;
-				CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_TEST);
-				return true;
-			}
 		case MAIN_MSG_GAMESER:
 			return HandMainMSgGameSer(nSrcIndex,nSub,pData,nDataSize);
 		case MAIN_MSG_CONNECT:
@@ -38,6 +32,14 @@ bool CUserSerSink::HandNetData(USHORT nSrcIndex, USHORT nMain, USHORT nSub, void
 	return false;
 }
 
+bool CUserSerSink::HandTestNetConn()
+{
+	m_nNum = 0;
+	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_USERSER, US_SUB_MSG_TEST);
+	return true;
+}
+
+
 void CUserSerSink::Connect()
 {
 	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_USERSER, US_SUB_MSG_CONN_SUCSS);
@@ -45,12 +47,25 @@ void CUserSerSink::Connect()
 
 bool CUserSerSink::HandMainMSgGameSer(USHORT nSrcIndex, USHORT nSub, void* pData, UINT nDataSize)
 {
-	
+	switch(nSub)
+	{
+		case GS_SUB_MSG_TEST:
+		{
+			return HandTestNetConn();
+		}
+	}
 	return true;
 }
 
 bool CUserSerSink::HandMainMsgConnSer(USHORT nSrcIndex, USHORT nSub, void* pData, UINT nDataSize)
 {
+	switch(nSub)
+	{
+		case CS_SUB_MSG_TEST:
+		{
+			return HandTestNetConn();
+		}
+	}
 	return true;
 }
 

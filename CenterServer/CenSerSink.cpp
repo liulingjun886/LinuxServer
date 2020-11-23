@@ -45,10 +45,6 @@ bool CCenSerSink::HandNetData(USHORT nSrcIndex, USHORT nMain, USHORT nSub, void*
 {
 	switch(nMain)
 	{
-		case MAIN_MSG_NET:
-		{
-			return HandMainNetMsg(nSrcIndex, nSub, pData, nDataSize);
-		}
 		case MAIN_MSG_CONNSER:
 		{
 			return HandMainMsgFromConnSrv(nSrcIndex, nSub, pData, nDataSize);
@@ -90,24 +86,22 @@ bool CCenSerSink::HandTimeMsg(USHORT nTimeID)
 	return false;
 }
 
-bool CCenSerSink::HandMainNetMsg(USHORT nSrcIndex, USHORT nSub, void* pData, UINT nDataSize)
+bool CCenSerSink::HandTestNetConn()
 {
-	switch(nSub)
-	{
-		case NT_SUB_MSG_TEST:
-		{
-			m_nTestNum = 0;
-			CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_NET, nSub);
-			return true;
-		}
-	}
-	return false;
+	m_nTestNum = 0;
+	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_CENTERSER, CT_SUB_MSG_TEST);
+	return true;
 }
+
 
 bool CCenSerSink::HandMainMsgFromUserSrv(USHORT nSrcIndex, USHORT nSub, void* pData, UINT nDataSize)
 {
 	switch(nSub)
 	{
+		case US_SUB_MSG_TEST:
+		{
+			return HandTestNetConn();
+		}
 		case US_SUB_MSG_CONN_SUCSS:
 		{
 			RegConnSer* pSer = (RegConnSer*)pData;
@@ -125,7 +119,11 @@ bool CCenSerSink::HandMainMsgFromDataSrv(USHORT nSrcIndex, USHORT nSub, void* pD
 {
 	switch(nSub)
 	{
-		case US_SUB_MSG_CONN_SUCSS:
+		case DS_SUB_MSG_TEST:
+		{
+			return HandTestNetConn();
+		}
+		case DS_SUB_MSG_CONN_SUCSS:
 		{
 			RegConnSer* pSer = (RegConnSer*)pData;
 			if(0 != g_pCenterServer->s_szDataSer[pSer->nSerNo])
@@ -143,7 +141,11 @@ bool CCenSerSink::HandMainMsgFromGameSrv(USHORT nSrcIndex, USHORT nSub, void* pD
 {
 	switch(nSub)
 	{
-		case US_SUB_MSG_CONN_SUCSS:
+		case GS_SUB_MSG_TEST:
+		{
+			return HandTestNetConn();
+		}
+		case GS_SUB_MSG_CONN_SUCSS:
 		{
 			RegGameSer* pGameSer = (RegGameSer*)pData;
 			if(0 != g_pCenterServer->s_szGameSer[pGameSer->nSerNo])
@@ -170,6 +172,10 @@ bool CCenSerSink::HandMainMsgFromConnSrv(USHORT nSrcIndex, USHORT nSub, void* pD
 {
 	switch(nSub)
 	{
+		case CS_SUB_MSG_TEST:
+		{
+			return HandTestNetConn();
+		}
 		case CS_SUB_MSG_CONN_SUCSS:
 		{
 			RegConnSer* pSer = (RegConnSer*)pData;

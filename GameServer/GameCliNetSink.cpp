@@ -8,11 +8,9 @@
 #include "MemDataDef.h"
 #include "NetSinkObj.h"
 
-extern USHORT g_serno;
-extern UINT g_gameid;
 
 CConnSerManager CGameCliNetSink::m_RemoteSer;
-CGameCliNetSink::CGameCliNetSink(CServices* pNet) :CCliNetSink(pNet),m_nReConnectCount(0),m_nType(DATA_SER)
+CGameCliNetSink::CGameCliNetSink(CServices* pNet) :CNetHandSink(pNet),m_nReConnectCount(0),m_nType(DATA_SER)
 {
 	m_timerConnTest.InitTimerObj(m_pNet, TIME_CONN_IS_LINK);
 	m_timerReConn.InitTimerObj(m_pNet, TIME_CONN_RECONNECT);
@@ -31,26 +29,18 @@ void CGameCliNetSink::Init(UINT nIp)
 
 bool CGameCliNetSink::DisConnect()
 {
-	//printf("conn disconnect\n");
-	//Single_Get(CCore)->Stop();
-
-	if(m_nType == DATA_SER)
-	{
-		Single_Get(CCore)->Stop();
-		DelDataSer();
-	}
-	else
-	{
-		m_RemoteSer.DelRemoteSer(g_serno, m_pNet->GetServiceIndex());
-	}
 	m_timerConnTest.StopTimer();
-	m_timerReConn.StartTimerSec(5);
+	m_timerReConn.StartTimerSec(30);
 	return true;
 }
 
 bool CGameCliNetSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void* pData, USHORT nDataSize)
 {
 	m_nTestLink = 0;
+
+	if(NULL != m_pHandFun)
+		return (this->*m_pHandFun)(nIndex,nMain,nSub,pData,nDataSize);
+	
 	switch (nMain)
 	{
 	case MAIN_MSG_NET:
@@ -277,7 +267,36 @@ bool CGameCliNetSink::HandMainMsgRoom(USHORT nCsid,USHORT nSub, void* pData, USH
 	return true;
 }
 
-USHORT CGameCliNetSink::GetConnSerById(USHORT nCid,USHORT nIndex)
+bool CGameCliNetSink::HandMsgFromCenterSrv(USHORT nIndex,USHORT nMain,USHORT nSub, void* pData, USHORT nDataSize)
 {
-	return m_RemoteSer.GetConnSerById(nCid,nIndex);
+	switch(nMain)
+	{
+		case MAIN_MSG_NET:
+		{
+			return HandMainMsgNet(nIndex, nSub, pData, nDataSize);
+		}
+	}
 }
+
+bool CGameCliNetSink::HandMsgFromUserSrv(USHORT nIndex,USHORT nMain,USHORT nSub, void* pData, USHORT nDataSize)
+{
+	switch(nMain)
+	{
+		case MAIN_MSG_NET:
+		{
+			return HandMainMsgNet(nIndex, nSub, pData, nDataSize);
+		}
+	}
+}
+
+bool CGameCliNetSink::HandMsgFromDataSrv(USHORT nIndex,USHORT nMain,USHORT nSub, void* pData, USHORT nDataSize)
+{
+	switch(nMain)
+	{
+		case MAIN_MSG_NET:
+		{
+			return HandMainMsgNet(nIndex, nSub, pData, nDataSize);
+		}
+	}
+}
+

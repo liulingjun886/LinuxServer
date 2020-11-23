@@ -42,14 +42,16 @@ public:
 	bool DisConnect();
 private:
 	bool TestNetLink();
+
+	bool SendToMySelf(USHORT, USHORT, void* pData = NULL, USHORT nDataSize = 0);
 	bool SendToGameSer(USHORT, USHORT, USHORT, void*, USHORT);
 	bool SendToCenterSer(USHORT, USHORT, USHORT, void*, USHORT);
 	bool SendToUserSer(UINT, USHORT, USHORT, void*, USHORT);
-	bool HandMainMsgNet(USHORT, USHORT, void*, USHORT);
+	bool SendToConnectSer(USHORT, USHORT, USHORT, void*, USHORT);
 	
+	bool HandMainMsgNet(USHORT, USHORT, void*, USHORT);
 	bool HandMainMsgToRoom(USHORT, USHORT, void*, USHORT);
 	bool HandMainMsgToGame(USHORT,USHORT, USHORT, void*, USHORT);
-	
 	bool HandMainMsgFromConnect(USHORT nIndex,USHORT nSub, void* pData, USHORT nDataSize);
 private:
 	CUserInfo* m_pUserInfo;

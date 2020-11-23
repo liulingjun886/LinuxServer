@@ -29,13 +29,14 @@ public:
 	int	 ConnectToGameServer(const GameInfo& info);
 	USHORT  GetGameSerIndexByNo(USHORT nGameSrvNo);
 	USHORT 	GetGameSerNoByGameId(int nGameId);
+	USHORT 	GetARandGameSer();
 	USHORT 	GetCenterServerIndex() const;
 	USHORT 	GetUserServerIndex(UINT nRand) const;
 private:
 	int  ReadConfig(const char* szConfigFile);
 private:
 	//std::vector<GameInfo> m_vecConfigGameInfo;			//存储游戏服相关配置
-	std::vector<USHORT> m_vecGameConnIndex[500];			//存储游戏服连接按游戏服serid
+	std::vector<USHORT> m_vecGameConnIndex[MAX_CONN_GAME_SRV_NUM];			//存储游戏服连接按游戏服serid
 	std::map<int,std::vector<USHORT> > m_mapGameSerInfo;	//存储游戏关连的游戏服
 
 	//对客户端开发的地址

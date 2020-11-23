@@ -13,7 +13,7 @@ public:
 	virtual bool HandTimeMsg(USHORT nTimeID);
 	virtual bool HandNetData(USHORT, USHORT, USHORT, void*, UINT);
 private:
-	bool HandMainMsgCenter(USHORT,	  USHORT, void*, UINT);
+	bool HandMainMsgFromCenterSrv(USHORT,	  USHORT, void*, UINT);
 private:
 	CTimer m_timer_Link;
 	USHORT m_nTestNum;

@@ -20,11 +20,12 @@ public:
 	virtual void Connect();
 	virtual bool DisConnect();
 private:
-	bool HandMainNetMsg(USHORT, USHORT, void* , UINT);
 	bool HandMainMsgFromUserSrv(USHORT, USHORT, void* , UINT);
 	bool HandMainMsgFromDataSrv(USHORT, USHORT, void* , UINT);
 	bool HandMainMsgFromGameSrv(USHORT, USHORT, void* , UINT);
 	bool HandMainMsgFromConnSrv(USHORT, USHORT, void* , UINT);
+
+	bool HandTestNetConn();
 	
 	void BroadCastGameSerInfo(const GameInfo& gameInfo);
 	void SendAllGameSerInfo();

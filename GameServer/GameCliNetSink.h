@@ -2,22 +2,12 @@
 #include "NetConnSerManager.h"
 #include "CliNetSink.h"
 #include "TimerNode.h"
-enum CONN_TYPE
-{
-	DATA_SER,
-	CONN_SER
-};
+
 
 class CServices;
 
-class CGameCliNetSink : public CCliNetSink
+class CGameCliNetSink : public CNetHandSink
 {
-	static CConnSerManager m_RemoteSer;
-	USHORT m_nTestLink;
-	char m_nReConnectCount;
-	CONN_TYPE m_nType;
-	CTimerNode m_timerConnTest;
-	CTimerNode m_timerReConn;
 public:
 	CGameCliNetSink(CServices* pNet);
 	~CGameCliNetSink();
@@ -29,7 +19,15 @@ public:
 private:
 	bool HandMainMsgRoom(USHORT,USHORT, void*, USHORT);
 	bool HandMainMsgNet(USHORT, USHORT, void*, USHORT);
-public:
-	static USHORT GetConnSerById(USHORT,USHORT);
+
+	bool HandMsgFromCenterSrv(USHORT, USHORT, USHORT, void*, USHORT);
+	bool HandMsgFromUserSrv(USHORT, USHORT, USHORT, void*, USHORT);
+	bool HandMsgFromDataSrv(USHORT, USHORT, USHORT, void*, USHORT);
+private:
+	USHORT 		m_nTestLink;
+	char 		m_nReConnectCount;
+	CTimerNode 	m_timerConnTest;
+	CTimerNode 	m_timerReConn;
+	bool (CGameCliNetSink::*m_pHandFun)(USHORT, USHORT, void*, USHORT);
 };
 

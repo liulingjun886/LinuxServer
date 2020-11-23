@@ -14,6 +14,7 @@ public:
 private:
 	bool HandMainMSgGameSer(USHORT, USHORT, void*, UINT);
 	bool HandMainMsgConnSer(USHORT, USHORT, void*, UINT);
+	bool HandTestNetConn();
 private:
 	CTimer m_timer_TestLink;
 	USHORT m_nNum;

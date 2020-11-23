@@ -25,7 +25,7 @@ bool CDataCliSink::HandTimeMsg(USHORT nTimeID)
 				return false;
 			
 			m_timer_Link.StartTimerSec(300);
-			CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_TEST);
+			CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_DATASER, DS_SUB_MSG_TEST);
 			return true;
 		}
 	}
@@ -38,7 +38,7 @@ bool CDataCliSink::HandNetData(USHORT nSrcIndex, USHORT nMain, USHORT nSub, void
 	{
 		case MAIN_MSG_CENTERSER:
 		{
-			return HandMainMsgCenter();
+			return HandMainMsgFromCenterSrv();
 		}
 		default:
 			break;
@@ -46,11 +46,16 @@ bool CDataCliSink::HandNetData(USHORT nSrcIndex, USHORT nMain, USHORT nSub, void
 	return false;
 }
 
-bool CDataCliSink::HandMainMsgCenter(USHORT nSrcIndex, USHORT nSub, void* pData, UINT nDataSize)
+bool CDataCliSink::HandMainMsgFromCenterSrv(USHORT nSrcIndex, USHORT nSub, void* pData, UINT nDataSize)
 {
 	switch(nSub)
 	{
-		case SUB_MSG_CONN_SUCSS:
+		case CT_SUB_MSG_TEST:
+		{
+			m_nTestNum = 0;
+			return true;
+		}
+		case CT_SUB_MSG_CONN_SUCSS:
 		{
 			m_timer_Link.StartTimerSec(300);
 			RegConnSer ser;
@@ -58,11 +63,8 @@ bool CDataCliSink::HandMainMsgCenter(USHORT nSrcIndex, USHORT nSub, void* pData,
 			CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_REG_DATASER, &ser, sizeof(ser));
 			return true;
 		}
-		case SUB_MSG_TEST:
-		{
-			m_nTestNum = 0;
-			return true;
-		}
+		default:
+			break;
 	}
 	return false;
 }

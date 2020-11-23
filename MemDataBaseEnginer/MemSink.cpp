@@ -46,7 +46,6 @@ bool CMemSink::HandMemDataReq(SERVICEINDEX uFromSerId,SERVICEINDEX nCsid,UINT uT
 		{
 			if(nDataSize != sizeof(Mem::UserJoinGameReq))
 				break;
-
 			Mem::UserJoinGameRet ret;
 			m_pMemData->Exec(Mem::USER_JOIN_GAME_REQ, pData, nDataSize, &ret, sizeof(Mem::UserJoinGameRet));
 			CMemDataBaseEnginer::PostMemDataBaseRet(m_pService,uFromSerId,nCsid,Mem::USER_JOIN_GAME_RET,&ret,sizeof(ret));
@@ -56,7 +55,6 @@ bool CMemSink::HandMemDataReq(SERVICEINDEX uFromSerId,SERVICEINDEX nCsid,UINT uT
 		{
 			if(nDataSize != sizeof(Mem::UserQuitGameReq))
 				break;
-			
 			m_pMemData->Exec(Mem::USER_QUIT_GAME_REQ, pData, nDataSize);
 			break;
 		}

@@ -129,28 +129,33 @@ void CMyRedis::RegRedisScript(int nType,const char* szStr)
 bool CMyRedis::OpenConnect()
 {
 	m_pConn = redisConnect(m_dbConfig.szHost, m_dbConfig.nPort);
+	
 	if(!m_pConn)
 	{
 		printf("redis connect refuse\n");
 		return false;
 	}
+	
 	if(m_pConn->err != 0)
 	{
 		printf("redis connect failer:%s\n",m_pConn->errstr);
 		return false;
 	}
+	
 	redisReply* reply = (redisReply*)redisCommand(m_pConn, "AUTH %s", m_dbConfig.szAuth);
 	if(reply->type == 6)
 	{
 		printf("auth failer\n");
 		return false;
 	}
+	
 	freeReplyObject(reply);
 
 	for (int i = 0; i < PRO_MAX; i++)
 	{
 		m_RedisPro[i] = NULL;
 	}
+	
 	return CreateScript();
 }
 

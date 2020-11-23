@@ -19,10 +19,10 @@ private:
 public:
 	std::map<USHORT,GameInfo> m_mapGameInfo; //游戏服务器号和游戏信息的对应
 	
-	USHORT s_szConnSer[500];
-	USHORT s_szGameSer[500];
-	USHORT s_szUserSer[16];
-	USHORT s_szDataSer[16];
+	USHORT s_szConnSer[MAX_CONN_GAME_SRV_NUM];
+	USHORT s_szGameSer[MAX_CONN_GAME_SRV_NUM];
+	USHORT s_szUserSer[MAX_USER_DATA_SRV_NUM];
+	USHORT s_szDataSer[MAX_USER_DATA_SRV_NUM];
 	
 	std::map<USHORT,USHORT*> m_mapLinkInfo; //服务号和游戏服务器的对应
 };

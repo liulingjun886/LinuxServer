@@ -71,7 +71,7 @@ bool CDataSerSink::TestNetLink()
 	  	return DisConnect();
 	}
 	++m_nTestLink;
-	CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_TEST);
+	
 	return true;
 }
 
@@ -82,6 +82,7 @@ bool CDataSerSink::HandMainMsgNet(USHORT nIndex,USHORT nSub, void* pData, USHORT
 		 case SUB_MSG_TEST:
 		 {
 			m_nTestLink = 0;
+			CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_DATASER, DS_SUB_MSG_TEST);
 			return true;
 		 }
 		 default:
@@ -91,10 +92,15 @@ bool CDataSerSink::HandMainMsgNet(USHORT nIndex,USHORT nSub, void* pData, USHORT
 }
 
 
-bool CDataSerSink::HandMainMsgGameSer(USHORT nIndex,USHORT nSub,void* pData,USHORT nDataSize)
+bool CDataSerSink::HandMainMsgFromGameSer(USHORT nIndex,USHORT nSub,void* pData,USHORT nDataSize)
 {
 	switch (nSub)
 	{
+		case GS_SUB_MSG_TEST:
+		{
+			m_nTestLink = 0;
+			return true;
+		}
 		case SUB_MSG_MEM_DATA_BASE_REQ:
 		{
 			CMemDataBaseEnginer::PostMemDataBaseReq(m_pNet, pData, nDataSize);

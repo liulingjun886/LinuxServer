@@ -20,9 +20,14 @@ typedef unsigned DATASIZE;
 
 #define MAX_MSG_SIZE 2048
 #define MAX_SER_NUM 100
+
 #define MAX_GAME_SER_NUM 100
 #define MAX_LINK_DATA 4
-#define MAX_LINK_CONN 32
+#define MAX_LINK_CONN 31
+
+#define MAX_USER_DATA_SRV_NUM 16
+#define MAX_CONN_GAME_SRV_NUM 500
+#define MAX_CONN_TO_GAME_LINK 31
 
 
 #define Single(T) \
@@ -138,6 +143,57 @@ typedef struct tagUser
 	}
 } Users;
 
+
+enum MAIN_MSG
+{
+	MAIN_MSG_CENTERSER = 1,
+	MAIN_MSG_USERSER,
+	MAIN_MSG_DATASER,
+	MAIN_MSG_GAMESER,
+	MAIN_MSG_CONNSER,
+	MAIN_MSG_HALL,
+	MAIN_MSG_ROOM,
+	MAIN_MSG_GAME,
+	MAIN_MSG_MAX,
+};
+
+enum Sub_Msg_CenterSer
+{
+	CT_SUB_MSG_CONN_SUCSS = 1,
+	CT_SUB_MSG_TEST,
+	CT_SUB_MSG_NEWGAMESER,
+};
+
+enum Sub_Msg_UserSer
+{
+	US_SUB_MSG_CONN_SUCSS = 1,
+	US_SUB_MSG_TEST,
+	US_SUB_MSG_DATA_BASE_RET,
+};
+
+enum Sub_Msg_DataSer
+{
+	DS_SUB_MSG_CONN_SUCSS = 1,
+	DS_SUB_MSG_TEST,
+};
+
+enum Sub_Msg_GameSer
+{
+	GS_SUB_MSG_CONN_SUCSS = 1,
+	GS_SUB_MSG_TEST,
+	GS_SUB_MSG_GAME4USER,
+	GS_SUB_MSG_GAME2CONN,
+};
+
+enum Sub_Msg_ConnSer
+{
+	CS_SUB_MSG_CONN_SUCSS = 1,
+	CS_SUB_MSG_TEST,
+	CS_SUB_MSG_REG_CONN,
+};
+
+
+
 enum Main_MSG
 {
 	MAIN_MSG_MIN = 0,
@@ -160,54 +216,6 @@ enum Main_MSG
 	MAIN_MSG_MAX
 };
 
-enum MAIN_MSG
-{
-	MAIN_MSG_NET = 1,
-	MAIN_MSG_CENTERSER,
-	MAIN_MSG_USERSER,
-	MAIN_MSG_DATASER,
-	MAIN_MSG_GAMESER,
-	MAIN_MSG_CONNSER,
-	MAIN_MSG_HALL,
-	MAIN_MSG_ROOM,
-	MAIN_MSG_GAME,
-	MAIN_MSG_MAX,
-};
-
-enum Sub_Msg_Net
-{
-	NT_SUB_MSG_TEST = 1,
-};
-
-enum Sub_Msg_Center
-{
-	CT_SUB_MSG_CONN_SUCSS = 1,
-	CT_SUB_MSG_NEWGAMESER = 2,
-};
-
-enum Sub_Msg_UserServer
-{
-	US_SUB_MSG_CONN_SUCSS = 1,
-	US_SUB_MSG_DATA_BASE_RET,
-};
-
-enum Sub_Msg_DataSer
-{
-	DS_SUB_MSG_CONN_SUCSS = 1,
-};
-
-enum Sub_Msg_GameSer
-{
-	GS_SUB_MSG_CONN_SUCSS = 1,
-	GS_SUB_MSG_GAME4USER,
-	GS_SUB_MSG_GAME2CONN,
-};
-
-enum Sub_Msg_ConnSer
-{
-	CS_SUB_MSG_CONN_SUCSS = 1,
-	CS_SUB_MSG_REG_CONN,
-};
 
 //MAIN_MSG_CONNECT
 #define SUB_MSG_USER4ROOM 1

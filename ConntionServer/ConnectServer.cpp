@@ -108,10 +108,24 @@ USHORT 	CConnectServer::GetGameSerNoByGameId(int nGameId)
 	if(it == m_mapGameSerInfo.end())
 		return 0;
 
-	std::vector<USHORT> vecGameInfo = it->second;
-	return vecGameInfo[rand()%vecGameInfo.size()];
+	const std::vector<USHORT>& vecGameInfo = it->second;
+
+	if(0 == vecGameInfo.size())
+		return 0;
 	
+	return vecGameInfo[rand()%vecGameInfo.size()];
 }
+
+USHORT 	CConnectServer::GetARandGameSer()
+{
+	std::map<int,std::vector<USHORT> >::iteretor it = m_mapGameSerInfo.begin();
+	if(it == m_mapGameSerInfo.end())
+		return 0;
+
+	const std::vector<USHORT>& vecSerNos = it->second;
+	return vecSerNos[0];
+}
+
 
 USHORT 	CConnectServer::GetCenterServerIndex() const
 {
