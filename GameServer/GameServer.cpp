@@ -59,7 +59,6 @@ int  CGameServer::ReadConfig(const char* szConfigFile)
 	int nDataNum = iniFile.ReadInt("dataserver_count", "num", 0);
 	if(nDataNum <= 0)
 		return -1;
-	
 	memset(szFild,sizeof(szFild),0);
 	for(int i = 0; i < nDataNum; i++)
 	{

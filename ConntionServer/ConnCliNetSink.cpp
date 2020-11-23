@@ -129,7 +129,7 @@ bool CConnCliNetSink::HandMsgFromCenterSrv(USHORT nSrcIndex, USHORT nSub, void* 
 		}
 			
 	}
-	return false;
+	return true;
 }
 
 bool CConnCliNetSink::HandMsgFromGameSrv(USHORT nSrcIndex, USHORT nSub, void* pData, USHORT nDataSize)
@@ -150,13 +150,13 @@ bool CConnCliNetSink::HandMsgFromGameSrv(USHORT nSrcIndex, USHORT nSub, void* pD
 		{
 			Game2User* pBuff = (Game2User*)pData;
 			SendData(pBuff->nIndex, pBuff->nMain, pBuff->nSub, pBuff+1, nDataSize-sizeof(Game2User));
-			break;
+			return true;
 		}
 		case GS_SUB_MSG_GAME2CONN:
 		{
 			InnserSync* pSync = (InnserSync*)pData;
 			m_pNet->PostData(pSync->nIndex, pSync->nType, pSync+1, nDataSize-sizeof(InnserSync));
-			break;
+			return true;
 		}
 		default:
 			break;
@@ -176,5 +176,6 @@ bool CConnCliNetSink::HandMsgFromUserSrv(USHORT nSrcIndex, USHORT nSub, void* pD
 		default:
 			break;
 	}
+	return true;
 }
 
