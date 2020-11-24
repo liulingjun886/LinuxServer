@@ -59,18 +59,18 @@ public:\
 
 enum TYPE_EVENT
 {
-	EXIT_MSG = 0,		//退出消息
-	LOG_MSG,			//写日志
-	NET_MSG,			//网络消息
-	NET_CONNECT,		//连接成功
-	NET_RECONNECT, 		//重连消息
-	SEND_DATA_REQ,		//发送数据请求
-	TIME_MSG,			//时间消息
-	USER_MSG,			//用户消息
-	DATA_BASE_REQ,		//数据库请求
-	DATA_BASE_RET,		//数据库结果
-	MEM_DATA_BASE_REQ,	//缓存请求
-	MEM_DATA_BASE_RET,	//缓存结果
+	EXIT_MSG = 0,			//退出消息
+	LOG_MSG,				//写日志
+	NET_MSG,				//网络消息
+	NET_CONNECT,			//连接成功
+	NET_RECONNECT, 			//重连消息
+	SEND_DATA_REQ,			//发送数据请求
+	TIME_MSG,				//时间消息
+	USER_MSG,				//用户消息
+	DATA_BASE_REQ,			//数据库请求
+	DATA_BASE_RET,			//数据库结果
+	MEM_DATA_BASE_REQ,		//缓存请求
+	MEM_DATA_BASE_RET,		//缓存结果
 	EN_DOUBLE_LOGIN,
 	EN_SYNC_GAME_SER_INFO,
 	EN_RECONNECT_FAIL,
@@ -143,6 +143,15 @@ typedef struct tagUser
 	}
 } Users;
 
+
+enum SERVER_TYPE
+{
+	SRV_TYPE_CENTER = 1,
+	SRV_TYPE_USER,
+	SRV_TYPE_DATA,
+	SRV_TYPE_GAME,
+	SRV_TYPE_CONN,
+};
 
 enum MAIN_MSG
 {

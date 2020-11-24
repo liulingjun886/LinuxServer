@@ -29,7 +29,10 @@ CDataSerSink::~CDataSerSink()
 void CDataSerSink::Connect()
 {
 	//m_pNet->SetTimer(TIME_CONN_IS_LINK, 100*60, -1);
-	CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_DATASER, DS_SUB_MSG_CONN_SUCSS);
+	ConnSucess conn;
+	conn.nSrvNo = g_pCenterServer->GetSerNo();
+	conn.nSrvType = g_pCenterServer->GetSerType();
+	CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_DATASER, DS_SUB_MSG_CONN_SUCSS,&conn,sizeof(conn));
 }
 
 bool CDataSerSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void* pData, USHORT nDataSize)

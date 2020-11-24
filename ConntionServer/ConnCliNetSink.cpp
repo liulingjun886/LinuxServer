@@ -71,6 +71,7 @@ bool CConnCliNetSink::HandTimeMsg(USHORT uTimeID)
 		++m_nReConnectCount;
 		if(m_nReConnectCount == 3)
 		{
+			g_pConnectServer->DisconnectToServer(m_nPeerSerType, m_nPeerSerNo, m_pNet->GetServiceIndex())
 			return false;
 		}
 		m_pNet->PostData(m_pNet->GetServiceIndex(), NET_RECONNECT);
@@ -90,10 +91,10 @@ void CConnCliNetSink::SendData(USHORT nIndex, USHORT nMain, USHORT nSub, void* p
 
 void CConnCliNetSink::RegConnSrv()
 {
+	m_nReConnectCount = 0;
 	RegConnSer ser;
 	ser.nSerNo = g_pConnectServer->GetSerNo();
 	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_CONNSER, CS_SUB_MSG_REG_CONN, &ser, sizeof(ser));
-			
 }
 
 
@@ -126,6 +127,7 @@ bool CConnCliNetSink::HandMsgFromCenterSrv(USHORT nSrcIndex, USHORT nSub, void* 
 				info.nGameNo = pInfo->nSerNo;
 				g_pConnectServer->ConnectToGameServer(info);
 			}
+			return true;
 		}
 			
 	}
@@ -149,13 +151,13 @@ bool CConnCliNetSink::HandMsgFromGameSrv(USHORT nSrcIndex, USHORT nSub, void* pD
 		case GS_SUB_MSG_GAME4USER:
 		{
 			Game2User* pBuff = (Game2User*)pData;
-			SendData(pBuff->nIndex, pBuff->nMain, pBuff->nSub, pBuff+1, nDataSize-sizeof(Game2User));
+			SendData(pBuff->nIndex, pBuff->nMain, pBuff->nSub, pBuff+1, nDataSize - sizeof(Game2User));
 			return true;
 		}
 		case GS_SUB_MSG_GAME2CONN:
 		{
 			InnserSync* pSync = (InnserSync*)pData;
-			m_pNet->PostData(pSync->nIndex, pSync->nType, pSync+1, nDataSize-sizeof(InnserSync));
+			m_pNet->PostData(pSync->nIndex, pSync->nType, pSync+1, nDataSize - sizeof(InnserSync));
 			return true;
 		}
 		default:

@@ -42,7 +42,10 @@ bool CUserSerSink::HandTestNetConn()
 
 void CUserSerSink::Connect()
 {
-	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_USERSER, US_SUB_MSG_CONN_SUCSS);
+	ConnSucess conn;
+	conn.nSrvNo = g_pCenterServer->GetSerNo();
+	conn.nSrvType = g_pCenterServer->GetSerType();
+	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_USERSER, US_SUB_MSG_CONN_SUCSS,&conn,sizeof(conn));
 }
 
 bool CUserSerSink::HandMainMSgGameSer(USHORT nSrcIndex, USHORT nSub, void* pData, UINT nDataSize)

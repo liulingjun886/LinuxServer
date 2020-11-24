@@ -12,8 +12,10 @@ CGameSerSink::~CGameSerSink()
 
 void CGameSerSink::Connect()
 {
-	
-	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_GAMESER, GS_SUB_MSG_CONN_SUCSS, void * pData, DATASIZE nDataSize)
+	ConnSucess conn;
+	conn.nSrvNo = g_pCenterServer->GetSerNo();
+	conn.nSrvType = g_pCenterServer->GetSerType();
+	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_GAMESER, GS_SUB_MSG_CONN_SUCSS, &conn, sizeof(conn));
 }
 
 bool CGameSerSink::DisConnect()

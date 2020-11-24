@@ -5,13 +5,24 @@
 #include "MemDataDef.h"
 #include "MyRedis.h"
 #include "MemDataBaseEnger.h"
+#include "../UserServer/UserRedis.h"
+#include "../DataServer/DataRedis.h"
+#include "../UserServer/UserServer.h"
+#include "../DataServer/DataServer.h"
 
 using namespace std;
 using namespace Mem;
 
+extern CUserServer* g_pUserServer;
+extern CDataServer* g_pDataServer;
+
+
 CMemSink::CMemSink(CServices* pMemData) :m_pService(pMemData),m_pMemData(NULL)
 {
-	m_pMemData  = new CMyRedis;
+	if(NULL != g_pUserServer)
+		m_pMemData  = new CUserRedis;
+	else
+		m_pMemData = new CDataRedis;
 }
 
 CMemSink::~CMemSink()
@@ -21,7 +32,7 @@ CMemSink::~CMemSink()
 
 bool CMemSink::Init()
 {
-	return m_pMemData->Init();
+	return m_pMemData->InitConnection();
 }
 
 bool CMemSink::HandMemDataReq(SERVICEINDEX uFromSerId,SERVICEINDEX nCsid,UINT uTypeId,void *pData, DATASIZE nDataSize)
@@ -46,6 +57,7 @@ bool CMemSink::HandMemDataReq(SERVICEINDEX uFromSerId,SERVICEINDEX nCsid,UINT uT
 		{
 			if(nDataSize != sizeof(Mem::UserJoinGameReq))
 				break;
+			
 			Mem::UserJoinGameRet ret;
 			m_pMemData->Exec(Mem::USER_JOIN_GAME_REQ, pData, nDataSize, &ret, sizeof(Mem::UserJoinGameRet));
 			CMemDataBaseEnginer::PostMemDataBaseRet(m_pService,uFromSerId,nCsid,Mem::USER_JOIN_GAME_RET,&ret,sizeof(ret));

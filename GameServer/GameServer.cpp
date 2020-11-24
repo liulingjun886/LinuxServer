@@ -103,6 +103,7 @@ USHORT 	CGameServer::GetUserServerIndex(UINT nRand) const
 void CGameServer::AddConnInfo(USHORT nSerNo,USHORT nIndex)
 {
 	std::vector<USHORT>& vecSers = m_szConnSerInfo[nSerNo];
+	
 	CToolLock lock(&m_rw_Lock);
 	vecSers.push_back(nIndex);
 }
@@ -122,13 +123,12 @@ USHORT  CGameServer::GetConnSrvIndex(USHORT nSerNo,UINT nRand) const
 
 void CGameServer::DelConnSrvIndex(USHORT nSerNo, USHORT nIndex)
 {
-	
-	size_t nSize = m_szConnSerInfo[nSerNo].size();
+
+	std::vector<USHORT>& vecSers = m_szConnSerInfo[nSerNo];
+	size_t nSize = vecSers.size();
 	if(0 == nSize)
 		return 0;
 	
-	std::vector<USHORT>& vecSers = m_szConnSerInfo[nSerNo];
-
 	CToolLock lock(&m_rw_Lock,0);
 	std::vector<USHORT>::iteretor it = vecSers.begin();
 	for(; it != vecSers.end(); it++)

@@ -3,17 +3,6 @@
 #include "hiredis/hiredis.h"
 #include "types.h"
 
-#define MAX_REDIS_SCRIPT 5
-
-enum Redis_Pro
-{
-	PRO_LOGIN_IN,
-	PRO_LOGIN_OUT,
-	PRO_JOIN_GAME,
-	PRO_QUIT_GAME,
-	PRO_MAX,
-};
-
 struct RedisConfig
 {
 	char szHost[16];
@@ -26,25 +15,23 @@ struct RedisConfig
 	}
 };
 
-class CMyRedis
+class CRedis
 {
 public:
-	CMyRedis();
-	~CMyRedis();
+	CRedis();
+	virtual ~CRedis();
 public:
-	bool Init();
-	bool Exec(UINT nType,void* pData,UINT nDataSize,void *pRet=NULL,UINT nRet=0);
-	void CloseReply();
-private:
+	bool InitConnection();
+	
+protected:
+	virtual int  GetRedisConfig()=0;
+	virtual bool Connected()=0;
+	virtual int  Exec(UINT nType,void* pData,UINT nDataSize,void *pRet=NULL,UINT nRet=0)=0;
+
 	bool OpenConnect();
 	void CloseConnect();
-	
-	bool CreateScript();
-	void RegRedisScript(int nType,const char* szStr);
-	void UserLoginReq(int nUserId,USHORT nSerNo,SERVICEINDEX nSevNo,void* pRet=NULL,UINT nRet=0);
-	void UserJoinGame(int nUserId,USHORT nSerNo,SERVICEINDEX nSevNo,int nSeatNo,void* pRet=NULL,UINT nRet=0);
-private:
-	char* m_RedisPro[MAX_REDIS_SCRIPT];
+	void CloseReply();
+protected:
 	redisContext* m_pConn;
 	redisReply* m_pReply;
 	RedisConfig m_dbConfig;

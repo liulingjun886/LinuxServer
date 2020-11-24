@@ -1,6 +1,12 @@
 #pragma once
 #include "types.h"
 
+struct ConnSucess
+{
+	USHORT nSrvType;
+	USHORT nSrvNo;
+};
+
 struct RegGameSer
 {
 	USHORT nSerNo;

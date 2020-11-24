@@ -20,7 +20,10 @@ CCenSerSink::~CCenSerSink()
 void CCenSerSink::Connect()
 {
 	m_nTestNum = 0;
-	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_CENTERSER, CT_SUB_MSG_CONN_SUCSS);
+	ConnSucess conn;
+	conn.nSrvNo = g_pCenterServer->GetSerNo();
+	conn.nSrvType = g_pCenterServer->GetSerType();
+	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_CENTERSER, CT_SUB_MSG_CONN_SUCSS,&conn,sizeof(conn));
 }
 
 bool CCenSerSink::DisConnect()

@@ -89,8 +89,52 @@ int	 CConnectServer::ConnectToGameServer(const GameInfo& info)
 		m_vecGameConnIndex[info.nGameNo].push_back(nIndex);
 	}
 	m_mapGameSerInfo[info.nGameId].push_back(info.nGameNo);
+	m_mapGameNoToGameId[info.nGameNo] = info.nGameId;
+	
 	return 0;
 }
+
+
+int  CConnectServer::DisconnectToServer(USHORT nSerType, USHORT nSerNo, USHORT nIndex)
+{
+	switch(nSerType)
+	{
+		case SRV_TYPE_CENTER:
+		{
+			
+		}
+		case SRV_TYPE_USER:
+		{
+			
+		}
+		case SRV_TYPE_GAME:
+		{
+			std::vector<USHORT>& vecSerNo = m_vecGameConnIndex[nSerNo];
+			std::vector<USHORT>::iteretor it = vecSerNo.find(nIndex);
+			if(it == vecSerNo.end())
+				return 0;
+			
+			vecSerNo.earse(it);
+			if(0 == vecSerNo.size())
+			{
+				std::map<USHORT, int>::iteretor it_ser_game = m_mapGameNoToGameId.find(nSerNo);
+				if(it_ser_game == m_mapGameNoToGameId.end())
+					return 0;
+				
+				std::map<int,std::vector<USHORT> >::iteretor it_game_ser = m_mapGameSerInfo.find(it_ser_game->second);
+				std::vector<USHORT>& vecGameSers = it_game_ser->second;
+				std::vector<USHORT>::iteretor it_ser = vecGameSers.find(nSerNo);
+				if(it_ser == vecGameSers.end())
+					return 0;
+
+				vecGameSers.erase(it_ser);
+				m_mapGameNoToGameId.erase(it_ser_game);
+			}
+			return 0;
+		}
+	}
+}
+
 
 
 USHORT  CConnectServer::GetGameSerIndexByNo(USHORT nGameSrvNo,UINT nRand)

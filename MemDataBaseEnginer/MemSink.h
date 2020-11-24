@@ -1,12 +1,12 @@
 #pragma once
 #include "Services.h"
 
-class CMyRedis;
+class CRedis;
 
 class CMemSink
 {
 	CServices* const m_pService;
-	CMyRedis* m_pMemData;
+	CRedis* m_pMemData;
 public:
 	CMemSink(CServices* pMemData);
 	~CMemSink();
