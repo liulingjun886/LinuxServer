@@ -1,5 +1,6 @@
 #include "GameServer.h"
 #include "../include/IniFile.h"
+#include <algorithm>
 
 extern CGameServer* g_pGameServer = NULL;
 
@@ -130,7 +131,7 @@ void CGameServer::DelConnSrvIndex(USHORT nSerNo, USHORT nIndex)
 		return 0;
 	
 	CToolLock lock(&m_rw_Lock,0);
-	std::vector<USHORT>::iteretor it = vecSers.begin();
+	std::vector<USHORT>::iterator it = vecSers.begin();
 	for(; it != vecSers.end(); it++)
 	{
 		if(*it == nIndex)
@@ -141,10 +142,45 @@ void CGameServer::DelConnSrvIndex(USHORT nSerNo, USHORT nIndex)
 	}
 }
 
+void CGameServer::DisconnectToRemoteSrv(USHORT nSrvType, USHORT nSrvNo, USHORT nIndex)
+{
+	switch(nSrvType)
+	{
+		case SRV_TYPE_CENTER:
+		{
+			if(m_nCenterIndex == nIndex)
+				m_nCenterIndex = 0;
+			break;
+		}
+		case SRV_TYPE_USER:
+		{
+			std::vector<USHORT>::iterator it = find(m_vecUserSerIndex.begin(), m_vecUserSerIndex.end(),nIndex);
+			if(it != m_vecUserSerIndex.end())
+			{
+				m_vecUserSerIndex.erase(it);
+			}
+			break;
+		}
+		case SRV_TYPE_DATA:
+		{
+			std::vector<USHORT>::iterator it = find(m_vecDataSerIndex.begin(), m_vecDataSerIndex.end(),nIndex);
+			if(it != m_vecDataSerIndex.end())
+			{
+				m_vecDataSerIndex.erase(it);
+			}
+			break;
+		}
+		default:
+			break;
+	}
+}
+
+
 const char* CGameServer::GetIp() const
 {
 	return m_szIp.c_str();
 }
+
 USHORT CGameServer::GetPort() const
 {
 	return m_nPort;
@@ -155,7 +191,7 @@ int	CGameServer::GetGameId() const
 	return m_nGameId;
 }
 
-int 	CGameServer::ConnectToCenterSrv(const char* szIp, USHORT nPort)
+int CGameServer::ConnectToCenterSrv(const char* szIp, USHORT nPort)
 {
 	USHORT nIndex = m_pCore->AddTcpNetCli(szIp, nPort, false);
 
@@ -166,7 +202,7 @@ int 	CGameServer::ConnectToCenterSrv(const char* szIp, USHORT nPort)
 	return 0;
 }
 
-int 	CGameServer::ConnectToUserSrv(const char* szIp, USHORT nPort)
+int CGameServer::ConnectToUserSrv(const char* szIp, USHORT nPort)
 {
 	USHORT nIndex = m_pCore->AddTcpNetCli(szIp, nPort, false);
 
@@ -177,7 +213,7 @@ int 	CGameServer::ConnectToUserSrv(const char* szIp, USHORT nPort)
 	return 0;
 }
 
-int 	CGameServer::ConnectToDataSrv(const char* szIp, USHORT nPort)
+int CGameServer::ConnectToDataSrv(const char* szIp, USHORT nPort)
 {
 	USHORT nIndex = m_pCore->AddTcpNetCli(szIp, nPort, false);
 

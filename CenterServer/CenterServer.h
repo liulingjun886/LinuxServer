@@ -24,5 +24,5 @@ public:
 	USHORT s_szUserSer[MAX_USER_DATA_SRV_NUM];
 	USHORT s_szDataSer[MAX_USER_DATA_SRV_NUM];
 	
-	std::map<USHORT,USHORT*> m_mapLinkInfo; //服务号和游戏服务器的对应
+	std::map<USHORT,USHORT*> m_mapLinkInfo; 	//服务号和游戏服务器的对应
 };

@@ -1,5 +1,6 @@
 #include "ConnectServer.h"
 #include "../include/IniFile.h"
+#include <algorithm>
 
 CConnectServer* g_pConnectServer = NULL;
 
@@ -31,7 +32,7 @@ int	 CConnectServer::Initialize()
 	if(0 == m_nCenterIndex)
 		return -1;
 
-	std::vector<HostConfig>::iteretor it = m_vecUserSerConfig.begin();
+	std::vector<HostConfig>::iterator it = m_vecUserSerConfig.begin();
 	for(; it != m_vecUserSerConfig.end(); it++)
 	{
 		USHORT nIndex = m_pCore->AddTcpNetCli(it->szIp.c_str(), it->nPort, false);
@@ -101,29 +102,34 @@ int  CConnectServer::DisconnectToServer(USHORT nSerType, USHORT nSerNo, USHORT n
 	{
 		case SRV_TYPE_CENTER:
 		{
-			
+			if(m_nCenterIndex == nIndex)
+				m_nCenterIndex = 0;
+			return 0;
 		}
 		case SRV_TYPE_USER:
 		{
-			
+			std::vector<USHORT>::iterator it = find(m_vecUserSerIndex.begin(),m_vecUserSerIndex.end(),nIndex);
+			if(it != m_vecUserSerIndex.end())
+				m_vecUserSerIndex.erase(it);
+			return 0;
 		}
 		case SRV_TYPE_GAME:
 		{
 			std::vector<USHORT>& vecSerNo = m_vecGameConnIndex[nSerNo];
-			std::vector<USHORT>::iteretor it = vecSerNo.find(nIndex);
+			std::vector<USHORT>::iterator it = find(vecSerNo.begin(),vecSerNo.end(),nIndex);
 			if(it == vecSerNo.end())
 				return 0;
 			
 			vecSerNo.earse(it);
 			if(0 == vecSerNo.size())
 			{
-				std::map<USHORT, int>::iteretor it_ser_game = m_mapGameNoToGameId.find(nSerNo);
+				std::map<USHORT, int>::iterator it_ser_game = m_mapGameNoToGameId.find(nSerNo);
 				if(it_ser_game == m_mapGameNoToGameId.end())
 					return 0;
 				
-				std::map<int,std::vector<USHORT> >::iteretor it_game_ser = m_mapGameSerInfo.find(it_ser_game->second);
+				std::map<int,std::vector<USHORT> >::iterator it_game_ser = m_mapGameSerInfo.find(it_ser_game->second);
 				std::vector<USHORT>& vecGameSers = it_game_ser->second;
-				std::vector<USHORT>::iteretor it_ser = vecGameSers.find(nSerNo);
+				std::vector<USHORT>::iterator it_ser = vecGameSers.find(nSerNo);
 				if(it_ser == vecGameSers.end())
 					return 0;
 
@@ -148,7 +154,7 @@ USHORT  CConnectServer::GetGameSerIndexByNo(USHORT nGameSrvNo,UINT nRand)
 
 USHORT 	CConnectServer::GetGameSerNoByGameId(int nGameId)
 {
-	std::map<int,std::vector<USHORT> >::iteretor it = m_mapGameSerInfo.find(nGameId);
+	std::map<int,std::vector<USHORT> >::iterator it = m_mapGameSerInfo.find(nGameId);
 	if(it == m_mapGameSerInfo.end())
 		return 0;
 
@@ -162,7 +168,7 @@ USHORT 	CConnectServer::GetGameSerNoByGameId(int nGameId)
 
 USHORT 	CConnectServer::GetARandGameSer()
 {
-	std::map<int,std::vector<USHORT> >::iteretor it = m_mapGameSerInfo.begin();
+	std::map<int,std::vector<USHORT> >::iterator it = m_mapGameSerInfo.begin();
 	if(it == m_mapGameSerInfo.end())
 		return 0;
 

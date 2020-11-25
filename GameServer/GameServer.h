@@ -25,6 +25,8 @@ public:
 	USHORT  	GetConnSrvIndex(USHORT nSerNo,UINT nRand) const;
 	void 		DelConnSrvIndex(USHORT nSerNo, USHORT nIndex);
 
+	void		DisconnectToRemoteSrv(USHORT nSrvType, USHORT nSrvNo, USHORT nIndex);
+
 private:
 	int  		ReadConfig(const char* szConfigFile);
 	int 		ConnectToCenterSrv(const char* szIp, USHORT nPort);

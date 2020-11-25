@@ -18,7 +18,7 @@ public:
 	virtual bool HandTimeMsg(USHORT uTimeID);
 	virtual bool HandNetData(USHORT, USHORT, USHORT, void*, UINT);
 	virtual void Connect();
-	virtual bool DisConnect();
+	virtual void Close();
 private:
 	bool HandMainMsgFromUserSrv(USHORT, USHORT, void* , UINT);
 	bool HandMainMsgFromDataSrv(USHORT, USHORT, void* , UINT);

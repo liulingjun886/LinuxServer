@@ -20,14 +20,19 @@ private:
 	bool HandMainMsgRoom(USHORT,USHORT, void*, USHORT);
 	bool HandMainMsgNet(USHORT, USHORT, void*, USHORT);
 
-	bool HandMsgFromCenterSrv(USHORT, USHORT, USHORT, void*, USHORT);
-	bool HandMsgFromUserSrv(USHORT, USHORT, USHORT, void*, USHORT);
-	bool HandMsgFromDataSrv(USHORT, USHORT, USHORT, void*, USHORT);
+	bool HandMsgFromCenterSrv(USHORT, USHORT, void*, USHORT);
+	bool HandMsgFromUserSrv(USHORT, USHORT, void*, USHORT);
+	bool HandMsgFromDataSrv(USHORT, USHORT, void*, USHORT);
 private:
-	USHORT 		m_nTestLink;
+	bool HandMsgTestConn();
+	void ConnectSucess(ConnSucess* pConn);
+	void RegGameSrv();
+private:
+	char 		m_nTestLink;
 	char 		m_nReConnectCount;
+	USHORT		m_nPeerSrvType;
+	USHORT 		m_nPeerSrvNo;
 	CTimerNode 	m_timerConnTest;
 	CTimerNode 	m_timerReConn;
-	bool (CGameCliNetSink::*m_pHandFun)(USHORT, USHORT, void*, USHORT);
 };
 

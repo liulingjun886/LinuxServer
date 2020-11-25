@@ -33,6 +33,12 @@ bool CConnCliNetSink::DisConnect()
 	return true;
 }
 
+void CConnCliNetSink::Close()
+{
+	g_pConnectServer->DisconnectToServer(m_nPeerSerType, m_nPeerSerNo, m_pNet->GetServiceIndex())
+}
+
+
 bool CConnCliNetSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void* pData, USHORT nDataSize)
 {
 	m_nTestLink = 0;
@@ -71,7 +77,6 @@ bool CConnCliNetSink::HandTimeMsg(USHORT uTimeID)
 		++m_nReConnectCount;
 		if(m_nReConnectCount == 3)
 		{
-			g_pConnectServer->DisconnectToServer(m_nPeerSerType, m_nPeerSerNo, m_pNet->GetServiceIndex())
 			return false;
 		}
 		m_pNet->PostData(m_pNet->GetServiceIndex(), NET_RECONNECT);
@@ -89,12 +94,18 @@ void CConnCliNetSink::SendData(USHORT nIndex, USHORT nMain, USHORT nSub, void* p
 	CNetSinkObj::SendData(m_pNet, nIndex, nMain, nSub, pData, nDataSize);
 }
 
-void CConnCliNetSink::RegConnSrv()
+void CConnCliNetSink::RegConnSrv(ConnSucess* pConn)
 {
-	m_nReConnectCount = 0;
 	RegConnSer ser;
 	ser.nSerNo = g_pConnectServer->GetSerNo();
 	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_CONNSER, CS_SUB_MSG_REG_CONN, &ser, sizeof(ser));
+}
+
+void CConnCliNetSink::ConnectSucess(ConnSucess* pConn)
+{
+	m_nReConnectCount = 0;
+	m_nPeerSerType = pConn->nSrvType;
+	m_nPeerSerNo = pConn->nSrvNo;
 }
 
 
@@ -104,6 +115,8 @@ bool CConnCliNetSink::HandMsgFromCenterSrv(USHORT nSrcIndex, USHORT nSub, void* 
 	{
 		case CT_SUB_MSG_CONN_SUCSS:
 		{
+			ConnSucess* pConn = (ConnSucess*)pData;
+			ConnectSucess(pConn);
 			RegConnSrv();
 			return true;
 		}
@@ -140,6 +153,8 @@ bool CConnCliNetSink::HandMsgFromGameSrv(USHORT nSrcIndex, USHORT nSub, void* pD
 	{
 		case GS_SUB_MSG_CONN_SUCSS:
 		{
+			ConnSucess* pConn = (ConnSucess*)pData;
+			ConnectSucess(pConn);
 			RegConnSrv();
 			return true;
 		}
@@ -148,7 +163,7 @@ bool CConnCliNetSink::HandMsgFromGameSrv(USHORT nSrcIndex, USHORT nSub, void* pD
 			m_nTestLink = 0;
 			return true;
 		}
-		case GS_SUB_MSG_GAME4USER:
+		case GS_SUB_MSG_GAME2USER:
 		{
 			Game2User* pBuff = (Game2User*)pData;
 			SendData(pBuff->nIndex, pBuff->nMain, pBuff->nSub, pBuff+1, nDataSize - sizeof(Game2User));
@@ -170,6 +185,12 @@ bool CConnCliNetSink::HandMsgFromUserSrv(USHORT nSrcIndex, USHORT nSub, void* pD
 {
 	switch(nSub)
 	{
+		case US_SUB_MSG_CONN_SUCSS:
+		{
+			ConnSucess* pConn = (ConnSucess*)pData;
+			ConnectSucess(pConn);
+			return true;
+		}
 		case US_SUB_MSG_TEST:
 		{
 			m_nTestLink = 0;

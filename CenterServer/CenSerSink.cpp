@@ -26,7 +26,7 @@ void CCenSerSink::Connect()
 	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_CENTERSER, CT_SUB_MSG_CONN_SUCSS,&conn,sizeof(conn));
 }
 
-bool CCenSerSink::DisConnect()
+void CCenSerSink::Close()
 {
 	std::map<USHORT,USHORT*>::iterator it = g_pCenterServer->m_mapLinkInfo.find(m_pNet->GetServiceIndex());
 	if(it == g_pCenterServer->m_mapLinkInfo.end())
@@ -105,7 +105,7 @@ bool CCenSerSink::HandMainMsgFromUserSrv(USHORT nSrcIndex, USHORT nSub, void* pD
 		{
 			return HandTestNetConn();
 		}
-		case US_SUB_MSG_CONN_SUCSS:
+		case US_SUB_MSG_REGUSERSRV:
 		{
 			RegConnSer* pSer = (RegConnSer*)pData;
 			if(0 != g_pCenterServer->s_szUserSer[pSer->nSerNo])
@@ -126,7 +126,7 @@ bool CCenSerSink::HandMainMsgFromDataSrv(USHORT nSrcIndex, USHORT nSub, void* pD
 		{
 			return HandTestNetConn();
 		}
-		case DS_SUB_MSG_CONN_SUCSS:
+		case DS_SUB_MSG_REG_DATASRV:
 		{
 			RegConnSer* pSer = (RegConnSer*)pData;
 			if(0 != g_pCenterServer->s_szDataSer[pSer->nSerNo])
@@ -148,7 +148,7 @@ bool CCenSerSink::HandMainMsgFromGameSrv(USHORT nSrcIndex, USHORT nSub, void* pD
 		{
 			return HandTestNetConn();
 		}
-		case GS_SUB_MSG_CONN_SUCSS:
+		case GS_SUB_MSG_REG_GAMESRV:
 		{
 			RegGameSer* pGameSer = (RegGameSer*)pData;
 			if(0 != g_pCenterServer->s_szGameSer[pGameSer->nSerNo])
@@ -179,7 +179,7 @@ bool CCenSerSink::HandMainMsgFromConnSrv(USHORT nSrcIndex, USHORT nSub, void* pD
 		{
 			return HandTestNetConn();
 		}
-		case CS_SUB_MSG_CONN_SUCSS:
+		case CS_SUB_MSG_REG_CONN:
 		{
 			RegConnSer* pSer = (RegConnSer*)pData;
 			if(0 != g_pCenterServer->s_szConnSer[pSer->nSerNo])
@@ -205,7 +205,7 @@ void CCenSerSink::BroadCastGameSerInfo(const GameInfo& gameInfo)
 	GameInfo* pGame = (GameInfo*)(pData+2);
 	memcpy(pGame->szIp, gameInfo.szIp.c_str(),strlen(gameInfo.szIp.c_str()));
 	pGame->nPort = gameInfo.nPort;
-	pGame->nGameID = gameInfo.nGameID;
+	pGame->nGameId = gameInfo.nGameId;
 
 	for(int i = 0; i < 500; i++)
 	{

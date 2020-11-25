@@ -10,7 +10,7 @@
 
 
 CConnSerManager CGameCliNetSink::m_RemoteSer;
-CGameCliNetSink::CGameCliNetSink(CServices* pNet) :CNetHandSink(pNet),m_nReConnectCount(0),m_nType(DATA_SER)
+CGameCliNetSink::CGameCliNetSink(CServices* pNet) :CNetHandSink(pNet),m_nReConnectCount(0)
 {
 	m_timerConnTest.InitTimerObj(m_pNet, TIME_CONN_IS_LINK);
 	m_timerReConn.InitTimerObj(m_pNet, TIME_CONN_RECONNECT);
@@ -38,15 +38,28 @@ bool CGameCliNetSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void*
 {
 	m_nTestLink = 0;
 
-	if(NULL != m_pHandFun)
-		return (this->*m_pHandFun)(nIndex,nMain,nSub,pData,nDataSize);
+	switch(nMain)
+	{
+		case MAIN_MSG_CENTERSER:
+		{
+			return HandMsgFromCenterSrv(nIndex, nSub, pData, nDataSize);
+		}
+		case MAIN_MSG_USERSER:
+		{
+			return HandMsgFromUserSrv(nIndex, nSub, pData, nDataSize);
+		}
+		case MAIN_MSG_DATASER:
+		{
+			return HandMsgFromDataSrv(nIndex, nSub, pData, nDataSize);
+		}
+		default:
+			break;
+			
+		return true;
+	}
 	
 	switch (nMain)
 	{
-	case MAIN_MSG_NET:
-	{
-		return HandMainMsgNet(nIndex,nSub,pData,nDataSize);
-	} 
 	case MAIN_MSG_CONNECT:
 	{
 		switch (nSub)
@@ -140,46 +153,6 @@ bool CGameCliNetSink::HandTimeMsg(USHORT uTimeID)
 	return true;
 }
 
-bool CGameCliNetSink::HandMainMsgNet(USHORT nIndex, USHORT nSub, void* pData, USHORT nDataSize)
-{
-	switch (nSub)
-	{
-		case SUB_MSG_CONN_SUCSS:
-		{
-			m_timerReConn.StopTimer();
-			m_nReConnectCount = 0;
-			RegGameSer reg;
-			reg.nGameID = g_gameid;
-			reg.nSerNo = g_serno;
-			CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_REG_GAMESER, &reg, sizeof(RegGameSer));
-			return true;
-		}
-		case SUB_MSG_REG_CONNSER:
-		{
-			RegConnSer* pReg = (RegConnSer*)pData;
-			m_nType = CONN_SER;
-			m_RemoteSer.AddRemoteSer(pReg->nSerNo, nIndex);
-			//m_pNet->PriorityService();
-			//m_pNet->SetTimer(TIME_CONN_IS_LINK, 6000, -1);
-			return true;
-		}
-		case SUB_MSG_DATA_SUCSS:
-		{
-			AddDataSer();
-			return true;
-		}
-		case SUB_MSG_TEST:
-		{
-			//printf("SUB_MSG_TEST\n");
-			CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_TEST);
-			return true;
-		}
-		default:
-			break;
-	}
-	return false;
-}
-
 bool CGameCliNetSink::HandMainMsgRoom(USHORT nCsid,USHORT nSub, void* pData, USHORT nDataSize)
 {
 	UserBaseInfo* pUserInfo = (UserBaseInfo*)pData;
@@ -267,36 +240,89 @@ bool CGameCliNetSink::HandMainMsgRoom(USHORT nCsid,USHORT nSub, void* pData, USH
 	return true;
 }
 
-bool CGameCliNetSink::HandMsgFromCenterSrv(USHORT nIndex,USHORT nMain,USHORT nSub, void* pData, USHORT nDataSize)
+bool CGameCliNetSink::HandMsgFromCenterSrv(USHORT nIndex, USHORT nSub, void* pData, USHORT nDataSize)
 {
-	switch(nMain)
+	switch(nSub)
 	{
-		case MAIN_MSG_NET:
+		case CT_SUB_MSG_CONN_SUCSS:
 		{
-			return HandMainMsgNet(nIndex, nSub, pData, nDataSize);
+			ConnSucess * pConn = (ConnSucess * )pData;
+			ConnectSucess(pConn);
+			RegGameSrv();
+			return true;
 		}
+		case CT_SUB_MSG_TEST:
+		{
+			return HandMsgTestConn();
+		}
+		default:
+			break;
 	}
+	return true;
 }
 
-bool CGameCliNetSink::HandMsgFromUserSrv(USHORT nIndex,USHORT nMain,USHORT nSub, void* pData, USHORT nDataSize)
+bool CGameCliNetSink::HandMsgFromUserSrv(USHORT nIndex, USHORT nSub, void* pData, USHORT nDataSize)
 {
-	switch(nMain)
+	switch(nSub)
 	{
-		case MAIN_MSG_NET:
+		case US_SUB_MSG_CONN_SUCSS:
 		{
-			return HandMainMsgNet(nIndex, nSub, pData, nDataSize);
+			ConnSucess * pConn = (ConnSucess * )pData;
+			ConnectSucess(pConn);
+			return true;
 		}
+		case US_SUB_MSG_TEST:
+		{
+			return HandMsgTestConn();
+		}
+		default:
+			break;
 	}
+	return true;
 }
 
-bool CGameCliNetSink::HandMsgFromDataSrv(USHORT nIndex,USHORT nMain,USHORT nSub, void* pData, USHORT nDataSize)
+bool CGameCliNetSink::HandMsgFromDataSrv(USHORT nIndex, USHORT nSub, void* pData, USHORT nDataSize)
 {
-	switch(nMain)
+	switch(nSub)
 	{
-		case MAIN_MSG_NET:
+		case DS_SUB_MSG_CONN_SUCSS:
 		{
-			return HandMainMsgNet(nIndex, nSub, pData, nDataSize);
+			ConnSucess * pConn = (ConnSucess * )pData;
+			ConnectSucess(pConn);
+			return true;
 		}
+		case DS_SUB_MSG_TEST:
+		{
+			return HandMsgTestConn();
+		}
+		default:
+			break;
 	}
+	return true;
+}
+
+bool CGameCliNetSink::HandMsgTestConn()
+{
+	m_nTestLink = 0;
+	CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_GAMESER, GS_SUB_MSG_TEST);
+	return true;
+}
+
+void CGameCliNetSink::ConnectSucess(ConnSucess* pConn)
+{
+	m_nTestLink = 0;
+	m_nPeerSrvType = pConn->nSrvType;
+	m_nPeerSrvNo = pConn->nSrvNo;
+	return true;
+}
+
+void CGameCliNetSink::RegGameSrv()
+{
+	RegGameSer srv;
+	srv.nGameID = g_pGameServer->GetGameId();
+	srv.nSerNo = g_pGameServer->GetSerNo();
+	srv.nPort = g_pGameServer->GetPort();
+	memcpy(srv.szIp,g_pGameServer->GetIp(),strlen(g_pGameServer->GetIp()));
+	CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_GAMESER, GS_SUB_MSG_REG_GAMESRV, &srv, sizeof(srv));
 }
 

@@ -88,7 +88,6 @@ bool CConnSerNetSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void*
 			return false;
 		//DataBase::UserLoginReq* pReq = (DataBase::UserLoginReq*)pData;
 		//CCliNetSink::PostDataBaseReq(m_pNet,DataBase::USER_LOGIN_REQ,pData,nDataSize);
-		
 		return true;
 	}
 	case MAIN_MSG_ROOM_MANAGER:

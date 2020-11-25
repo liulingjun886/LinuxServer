@@ -18,10 +18,9 @@ void CGameSerSink::Connect()
 	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_GAMESER, GS_SUB_MSG_CONN_SUCSS, &conn, sizeof(conn));
 }
 
-bool CGameSerSink::DisConnect()
+void CGameSerSink::Close()
 {
 	g_pGameServer->DelConnSrvIndex(m_nConnNo, m_pNet->GetServiceIndex());
-	return false;
 }
 
 
