@@ -1,4 +1,4 @@
-#include "ConnCliNetSink.h"
+#include "ConnCliSink.h"
 #include <stdio.h>
 #include "commproto.h"
 #include "Core.h"
@@ -10,36 +10,36 @@
 extern CConnectServer* g_pConnectServer;
 
 
-CConnCliNetSink::CConnCliNetSink(CServices* pNet) :CNetHandSink(pNet),m_nReConnectCount(0)
+CConnCliSink::CConnCliSink(CServices* pNet) :CNetHandSink(pNet),m_nReConnectCount(0)
 {
 	m_timerConnTest.InitTimerObj(m_pNet, TIME_CONN_IS_LINK);
 	m_timerReConn.InitTimerObj(m_pNet, TIME_CONN_RECONNECT);
 }
 
 
-CConnCliNetSink::~CConnCliNetSink()
+CConnCliSink::~CConnCliSink()
 {
 	
 }
 
-void CConnCliNetSink::Init(UINT nIp)
+void CConnCliSink::Init(UINT nIp)
 {
 }
 
-bool CConnCliNetSink::DisConnect()
+bool CConnCliSink::DisConnect()
 {	
 	m_timerConnTest.StopTimer();
 	m_timerReConn.StartTimerSec(30);
 	return true;
 }
 
-void CConnCliNetSink::Close()
+void CConnCliSink::Close()
 {
 	g_pConnectServer->DisconnectToServer(m_nPeerSerType, m_nPeerSerNo, m_pNet->GetServiceIndex())
 }
 
 
-bool CConnCliNetSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void* pData, USHORT nDataSize)
+bool CConnCliSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void* pData, USHORT nDataSize)
 {
 	m_nTestLink = 0;
 	switch (nMain)
@@ -62,7 +62,7 @@ bool CConnCliNetSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void*
 	return false;
 }
 
-bool CConnCliNetSink::HandTimeMsg(USHORT uTimeID)
+bool CConnCliSink::HandTimeMsg(USHORT uTimeID)
 {
 	switch (uTimeID)
 	{
@@ -89,19 +89,19 @@ bool CConnCliNetSink::HandTimeMsg(USHORT uTimeID)
 	return true;
 }
 
-void CConnCliNetSink::SendData(USHORT nIndex, USHORT nMain, USHORT nSub, void* pData, USHORT nDataSize)
+void CConnCliSink::SendData(USHORT nIndex, USHORT nMain, USHORT nSub, void* pData, USHORT nDataSize)
 {
 	CNetSinkObj::SendData(m_pNet, nIndex, nMain, nSub, pData, nDataSize);
 }
 
-void CConnCliNetSink::RegConnSrv(ConnSucess* pConn)
+void CConnCliSink::RegConnSrv(ConnSucess* pConn)
 {
 	RegConnSer ser;
 	ser.nSerNo = g_pConnectServer->GetSerNo();
 	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_CONNSER, CS_SUB_MSG_REG_CONN, &ser, sizeof(ser));
 }
 
-void CConnCliNetSink::ConnectSucess(ConnSucess* pConn)
+void CConnCliSink::ConnectSucess(ConnSucess* pConn)
 {
 	m_nReConnectCount = 0;
 	m_nPeerSerType = pConn->nSrvType;
@@ -109,7 +109,7 @@ void CConnCliNetSink::ConnectSucess(ConnSucess* pConn)
 }
 
 
-bool CConnCliNetSink::HandMsgFromCenterSrv(USHORT nSrcIndex, USHORT nSub, void* pData, USHORT nDataSize)
+bool CConnCliSink::HandMsgFromCenterSrv(USHORT nSrcIndex, USHORT nSub, void* pData, USHORT nDataSize)
 {
 	switch(nSub)
 	{
@@ -147,7 +147,7 @@ bool CConnCliNetSink::HandMsgFromCenterSrv(USHORT nSrcIndex, USHORT nSub, void* 
 	return true;
 }
 
-bool CConnCliNetSink::HandMsgFromGameSrv(USHORT nSrcIndex, USHORT nSub, void* pData, USHORT nDataSize)
+bool CConnCliSink::HandMsgFromGameSrv(USHORT nSrcIndex, USHORT nSub, void* pData, USHORT nDataSize)
 {
 	switch (nSub)
 	{
@@ -181,7 +181,7 @@ bool CConnCliNetSink::HandMsgFromGameSrv(USHORT nSrcIndex, USHORT nSub, void* pD
 	return true;
 }
 
-bool CConnCliNetSink::HandMsgFromUserSrv(USHORT nSrcIndex, USHORT nSub, void* pData, USHORT nDataSize)
+bool CConnCliSink::HandMsgFromUserSrv(USHORT nSrcIndex, USHORT nSub, void* pData, USHORT nDataSize)
 {
 	switch(nSub)
 	{

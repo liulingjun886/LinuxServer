@@ -1,5 +1,8 @@
 #include "UserSerSink.h"
-
+#include "../NetSinkObj.h"
+#include "UserServer.h"
+#include "../include/Services.h"
+#include "../commproto.h"
 
 extern CUserServer* g_pUserServer;
 
@@ -15,7 +18,7 @@ CUserSerSink::~CUserSerSink()
 
 bool CUserSerSink::HandTimeMsg(USHORT uTimeID)
 {
-	
+	return true;
 }
 
 bool CUserSerSink::HandNetData(USHORT nSrcIndex, USHORT nMain, USHORT nSub, void* pData, UINT nDataSize)
@@ -24,7 +27,7 @@ bool CUserSerSink::HandNetData(USHORT nSrcIndex, USHORT nMain, USHORT nSub, void
 	{
 		case MAIN_MSG_GAMESER:
 			return HandMainMSgGameSer(nSrcIndex,nSub,pData,nDataSize);
-		case MAIN_MSG_CONNECT:
+		case MAIN_MSG_CONNSER:
 			return HandMainMsgConnSer(nSrcIndex,nSub,pData,nDataSize);
 		default:
 			break;
@@ -43,8 +46,8 @@ bool CUserSerSink::HandTestNetConn()
 void CUserSerSink::Connect()
 {
 	ConnSucess conn;
-	conn.nSrvNo = g_pCenterServer->GetSerNo();
-	conn.nSrvType = g_pCenterServer->GetSerType();
+	conn.nSrvNo = g_pUserServer->GetSerNo();
+	conn.nSrvType = g_pUserServer->GetSerType();
 	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_USERSER, US_SUB_MSG_CONN_SUCSS,&conn,sizeof(conn));
 }
 

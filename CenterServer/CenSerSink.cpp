@@ -1,4 +1,6 @@
 #include "CenSerSink.h"
+#include "../NetSinkObj.h"
+#include "../include/Services.h"
 
 extern CCenterServer* g_pCenterServer;
 
@@ -30,7 +32,7 @@ void CCenSerSink::Close()
 {
 	std::map<USHORT,USHORT*>::iterator it = g_pCenterServer->m_mapLinkInfo.find(m_pNet->GetServiceIndex());
 	if(it == g_pCenterServer->m_mapLinkInfo.end())
-		return false;
+		return;
 
 	*(it->second) = 0;
 	g_pCenterServer->m_mapLinkInfo.erase(it);
@@ -40,7 +42,7 @@ void CCenSerSink::Close()
 	{
 		g_pCenterServer->m_mapGameInfo.erase(it_game);
 	}
-	return false;
+	return;
 }
 
 
@@ -160,7 +162,7 @@ bool CCenSerSink::HandMainMsgFromGameSrv(USHORT nSrcIndex, USHORT nSub, void* pD
 			GameInfo game;
 			game.szIp = pGameSer->szIp;
 			game.nPort = pGameSer->nPort;
-			game.nGameID = pGameSer->nGameID;
+			game.nGameId = pGameSer->nGameID;
 
 			g_pCenterServer->m_mapGameInfo[m_pNet->GetServiceIndex()] = game;
 
@@ -199,7 +201,7 @@ bool CCenSerSink::HandMainMsgFromConnSrv(USHORT nSrcIndex, USHORT nSub, void* pD
 
 void CCenSerSink::BroadCastGameSerInfo(const GameInfo& gameInfo)
 {
-	UINT nSize = sizeof(GameInfo) + sizeof(USHORT);
+	/*UINT nSize = sizeof(GameInfo) + sizeof(USHORT);
 	char* pData = new char[sizeof(GameInfo) + sizeof(USHORT)];
 	*(USHORT*)pData = 1;
 	GameInfo* pGame = (GameInfo*)(pData+2);
@@ -212,7 +214,7 @@ void CCenSerSink::BroadCastGameSerInfo(const GameInfo& gameInfo)
 		if(0 == g_pCenterServer->s_szConnSer[i])
 			continue;
 		CNetSinkObj::SendData(m_pNet, g_pCenterServer->s_szConnSer[i], MAIN_MSG_CENTERSER, CT_SUB_MSG_NEWGAMESER, pData, nSize);
-	}
+	}*/
 }
 
 
@@ -230,7 +232,7 @@ void CCenSerSink::SendAllGameSerInfo()
 	{
 		memcpy(pGame->szIp, it_game->second.szIp.c_str(),strlen(it_game->second.szIp.c_str()));
 		pGame->nPort = it_game->second.nPort;
-		pGame->nGameID = it_game->second.nGameID;
+		pGame->nGameID = it_game->second.nGameId;
 		pGame->nSerNo = it_game->first;
 		pGame += 1;
 	}

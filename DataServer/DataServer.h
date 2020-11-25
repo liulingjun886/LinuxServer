@@ -1,7 +1,10 @@
 #pragma once
 
-#include "Server.h"
+#include "../Server.h"
 #include <string>
+
+class CMemDataBaseEnginer;
+class CDataBaseEnginer;
 
 class CDataServer : public CServer
 {

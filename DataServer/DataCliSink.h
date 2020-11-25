@@ -1,5 +1,5 @@
 #pragma once
-#include "NetHandSink.h"
+#include "../NetHandSink.h"
 #include "DataServer.h"
 
 class CServices;

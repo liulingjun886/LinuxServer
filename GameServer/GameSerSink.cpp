@@ -1,4 +1,4 @@
-#include "GameSerNetSink.h"
+#include "GameSerSink.h"
 
 CGameSerSink::CGameSerSink(CServices* pServices):CNetHandSink(pServices)
 {

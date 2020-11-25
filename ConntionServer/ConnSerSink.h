@@ -1,9 +1,9 @@
 #pragma once
 
-#include "NetGameSerManager.h"
-#include "NetHandSink.h"
-#include "UserInfo.h"
-#include "TimerNode.h"
+
+#include "../NetHandSink.h"
+#include "../UserInfo.h"
+#include "../include/TimerNode.h"
 
 class CServices;
 
@@ -25,11 +25,11 @@ union KEY
 	GameSerInfo* pSerInfo;
 };
 
-class CConnSerNetSink : public CNetHandSink
+class CConnSerSink : public CNetHandSink
 {
 public:
-	CConnSerNetSink(CServices* m_pNetSer);
-	~CConnSerNetSink();
+	CConnSerSink(CServices* m_pNetSer);
+	~CConnSerSink();
 public:
 	bool HandNetData(USHORT,USHORT, USHORT, void*, USHORT);
 	bool HandTimeMsg(USHORT uTimeId);

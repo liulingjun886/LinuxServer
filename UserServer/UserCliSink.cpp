@@ -1,4 +1,7 @@
 #include "UserCliSink.h"
+#include "../NetSinkObj.h"
+#include "../include/Services.h"
+#include "../commproto.h"
 
 extern CUserServer* g_pUserServer;
 
@@ -29,7 +32,7 @@ bool CUserCliSink::HandTimeMsg(USHORT nTimeID)
 				return false;
 			
 			m_timer_Link.StartTimerSec(300);
-			CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_TEST);
+			CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_USERSER, SUB_MSG_TEST);
 			return true;
 		}
 	}
@@ -42,7 +45,7 @@ bool CUserCliSink::HandNetData(USHORT nSrcIndex, USHORT nMain, USHORT nSub, void
 	{
 		case MAIN_MSG_CENTERSER:
 		{
-			return HandMainMsgCenter();
+			return HandMainMsgCenter(nSrcIndex, nSub, pData, nDataSize);
 		}
 		default:
 			break;
@@ -59,7 +62,7 @@ bool CUserCliSink::HandMainMsgCenter(USHORT nSrcIndex, USHORT nSub, void* pData,
 			m_timer_Link.StartTimerSec(300);
 			RegConnSer ser;
 			ser.nSerNo = g_pUserServer->GetSerNo();
-			CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_REG_USERSER, &ser, sizeof(ser));
+			CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_USERSER, US_SUB_MSG_REGUSERSRV, &ser, sizeof(ser));
 			return true;
 		}
 		case CT_SUB_MSG_TEST:

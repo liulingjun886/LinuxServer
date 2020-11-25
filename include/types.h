@@ -1,6 +1,8 @@
 #pragma once
 
+#include <string>
 #include <string.h>
+
 
 typedef unsigned long long UINT64;
 typedef unsigned short USHORT;
@@ -208,24 +210,24 @@ enum Sub_Msg_ConnSer
 
 enum Main_MSG
 {
-	MAIN_MSG_MIN = 0,
+	//MAIN_MSG_MIN = 0,
 	
-	MAIN_MSG_LOGIN,
-	MAIN_MSG_LOBBY,
+	//MAIN_MSG_LOGIN,
+	//MAIN_MSG_LOBBY,
 	
-	MAIN_MSG_ROOM_MANAGER,
-	MAIN_MSG_ROOM,
-	MAIN_MSG_GAME,
+	//MAIN_MSG_ROOM_MANAGER,
+	//MAIN_MSG_ROOM,
+	//MAIN_MSG_GAME,
 
-	MAIN_MSG_GAMESER,
-	MAIN_MSG_CONNECT,
+	//MAIN_MSG_GAMESER,
+	//MAIN_MSG_CONNECT,
 
-	MAIN_MSG_MEM,
-	MAIN_MSG_DATA,
+	//MAIN_MSG_MEM,
+	//MAIN_MSG_DATA,
 
-	MAIN_MSG_DATACENTER, 	//数据中心消息
-	MAIN_ERROR,
-	MAIN_MSG_MAX
+	//MAIN_MSG_DATACENTER, 	//数据中心消息
+	//MAIN_ERROR,
+	//MAIN_MSG_MAX
 };
 
 
@@ -289,3 +291,18 @@ enum MAIN_MSG_NET
 //定时器
 #define TIME_CONN_RECONNECT 1
 #define TIME_CONN_IS_LINK 2
+
+
+struct HostConfig
+{
+	std::string szIp;
+	USHORT nPort;
+};
+
+struct GameInfo : public HostConfig
+{
+	int 	nGameId;
+	int 	nGameNo;
+	
+};
+

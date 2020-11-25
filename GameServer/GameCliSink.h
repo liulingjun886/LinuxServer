@@ -1,16 +1,15 @@
 #pragma once
-#include "NetConnSerManager.h"
-#include "CliNetSink.h"
-#include "TimerNode.h"
+#include "../NetHandSink.h"
+#include "../include/TimerNode.h"
 
 
 class CServices;
 
-class CGameCliNetSink : public CNetHandSink
+class CGameCliSink : public CNetHandSink
 {
 public:
-	CGameCliNetSink(CServices* pNet);
-	~CGameCliNetSink();
+	CGameCliSink(CServices* pNet);
+	~CGameCliSink();
 public:
 	void Init(UINT nIp);
 	bool DisConnect();

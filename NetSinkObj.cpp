@@ -1,9 +1,5 @@
 #include "NetSinkObj.h"
 #include "Services.h"
-#include "ConnSerNetSink.h"
-#include "ConnCliNetSink.h"
-#include "DataSerNetSink.h"
-#include "GameCliNetSink.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -11,7 +7,14 @@
 #include "./CenterServer/CenSerSink.h"
 #include "./UserServer/UserCliSink.h"
 #include "./UserServer/UserSerSink.h"
-extern CServer* g_pSer
+#include "./DataServer/DataSerSink.h"
+#include "./DataServer/DataCliSink.h"
+#include "./GameServer/GameSerSink.h"
+#include "./GameServer/GameCliSink.h"
+#include "./ConntionServer/ConnSerSink.h"
+#include "./ConntionServer/ConnCliSink.h"
+
+extern CServer* g_pSer;
 
 
 
@@ -42,27 +45,27 @@ CNetSinkObj::CNetSinkObj(CServices* pServices,int nConnType):
 		case 3: //数据服务器
 		{
 			if(nConnType == SOCK_CONN_SER)
-				m_pSink = new CDataSerNetSink(pServices);
+				m_pSink = new CDataSerSink(pServices);
 			else
-				m_pSink = new CDataCliNetSink(pServices);
+				m_pSink = new CDataCliSink(pServices);
 			
 			break;
 		}
 		case 4: //游戏服务器
 		{
 			if(nConnType == SOCK_CONN_SER)
-				m_pSink = new CGameSerNetSink(pServices);
+				m_pSink = new CGameSerSink(pServices);
 			else
-				m_pSink = new CGameCliNetSink(pServices);
+				m_pSink = new CGameCliSink(pServices);
 			
 			break;
 		}
 		case 5: //连接服务器
 		{
 			if(nConnType == SOCK_CONN_SER)
-				m_pSink = new CConnSerNetSink(pServices);
+				m_pSink = new CConnSerSink(pServices);
 			else
-				m_pSink = new CConnCliNetSink(pServices);
+				m_pSink = new CConnCliSink(pServices);
 			
 			break;
 		}

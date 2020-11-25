@@ -36,7 +36,7 @@ bool CRedis::InitConnection()
 
 bool CRedis::OpenConnect()
 {
-	m_pConn = redisConnect(m_dbConfig.szHost, m_dbConfig.nPort);
+	m_pConn = redisConnect(m_dbConfig.szHost.c_str(), m_dbConfig.nPort);
 	
 	if(!m_pConn)
 	{
@@ -50,7 +50,7 @@ bool CRedis::OpenConnect()
 		return false;
 	}
 	
-	redisReply* reply = (redisReply*)redisCommand(m_pConn, "AUTH %s", m_dbConfig.szAuth);
+	redisReply* reply = (redisReply*)redisCommand(m_pConn, "AUTH %s", m_dbConfig.szAuth.c_str());
 	if(reply->type == 6)
 	{
 		printf("auth failer\n");

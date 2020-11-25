@@ -1,4 +1,5 @@
 #pragma once
+#include "../include/types.h"
 #include "../Server.h"
 #include <string>
 #include <map>

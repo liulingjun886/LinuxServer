@@ -1,6 +1,7 @@
 #include "UserServer.h"
 #include "../include/IniFile.h"
 #include "../MemDataBaseEnginer/MemDataBaseEnger.h"
+#include <stdio.h>
 
 CUserServer* g_pUserServer = NULL;
 
@@ -23,7 +24,7 @@ int	CUserServer::Initialize()
 	m_pMem->SetServiceNum(8);
 	
 	if(0 == m_pCore->AddTcpNetCli(m_szCenterIp.c_str(),m_nCenterPort,false))
-		return -1
+		return -1;
 
 	if(0 == m_pCore->AddTcpNetSer(m_szIp.c_str(), m_nPort, false))
 		return -1;
@@ -45,10 +46,9 @@ int CUserServer::ReadConfig(const char* szConfigFile)
 	m_nPort = iniFile.ReadInt(szFild, "Port", 0);
 
 	m_szRedisHost = iniFile.ReadString(szFild, "redisHost", "");
-	m_nRedisPort = iniFile.ReadInt(szFild, "redisPort", 0;
+	m_nRedisPort = iniFile.ReadInt(szFild, "redisPort", 0);
 	m_szAuth = iniFile.ReadString(szFild, "redisAuth", "");
 	
-	iniFile.CloseFile();
 	return 0;
 }
 

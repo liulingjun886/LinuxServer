@@ -1,4 +1,4 @@
-#include "GameCliNetSink.h"
+#include "GameCliSink.h"
 #include <stdio.h>
 #include "RoomManager.h"
 #include "commproto.h"
@@ -9,32 +9,32 @@
 #include "NetSinkObj.h"
 
 
-CConnSerManager CGameCliNetSink::m_RemoteSer;
-CGameCliNetSink::CGameCliNetSink(CServices* pNet) :CNetHandSink(pNet),m_nReConnectCount(0)
+CConnSerManager CGameCliSink::m_RemoteSer;
+CGameCliSink::CGameCliSink(CServices* pNet) :CNetHandSink(pNet),m_nReConnectCount(0)
 {
 	m_timerConnTest.InitTimerObj(m_pNet, TIME_CONN_IS_LINK);
 	m_timerReConn.InitTimerObj(m_pNet, TIME_CONN_RECONNECT);
 }
 
 
-CGameCliNetSink::~CGameCliNetSink()
+CGameCliSink::~CGameCliSink()
 {
 	
 }
 
-void CGameCliNetSink::Init(UINT nIp)
+void CGameCliSink::Init(UINT nIp)
 {
 	m_timerConnTest.StartTimerSec(5);
 }
 
-bool CGameCliNetSink::DisConnect()
+bool CGameCliSink::DisConnect()
 {
 	m_timerConnTest.StopTimer();
 	m_timerReConn.StartTimerSec(30);
 	return true;
 }
 
-bool CGameCliNetSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void* pData, USHORT nDataSize)
+bool CGameCliSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void* pData, USHORT nDataSize)
 {
 	m_nTestLink = 0;
 
@@ -126,7 +126,7 @@ bool CGameCliNetSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void*
 	return true;
 }
 
-bool CGameCliNetSink::HandTimeMsg(USHORT uTimeID)
+bool CGameCliSink::HandTimeMsg(USHORT uTimeID)
 {
 	switch (uTimeID)
 	{
@@ -153,7 +153,7 @@ bool CGameCliNetSink::HandTimeMsg(USHORT uTimeID)
 	return true;
 }
 
-bool CGameCliNetSink::HandMainMsgRoom(USHORT nCsid,USHORT nSub, void* pData, USHORT nDataSize)
+bool CGameCliSink::HandMainMsgRoom(USHORT nCsid,USHORT nSub, void* pData, USHORT nDataSize)
 {
 	UserBaseInfo* pUserInfo = (UserBaseInfo*)pData;
 
@@ -240,7 +240,7 @@ bool CGameCliNetSink::HandMainMsgRoom(USHORT nCsid,USHORT nSub, void* pData, USH
 	return true;
 }
 
-bool CGameCliNetSink::HandMsgFromCenterSrv(USHORT nIndex, USHORT nSub, void* pData, USHORT nDataSize)
+bool CGameCliSink::HandMsgFromCenterSrv(USHORT nIndex, USHORT nSub, void* pData, USHORT nDataSize)
 {
 	switch(nSub)
 	{
@@ -261,7 +261,7 @@ bool CGameCliNetSink::HandMsgFromCenterSrv(USHORT nIndex, USHORT nSub, void* pDa
 	return true;
 }
 
-bool CGameCliNetSink::HandMsgFromUserSrv(USHORT nIndex, USHORT nSub, void* pData, USHORT nDataSize)
+bool CGameCliSink::HandMsgFromUserSrv(USHORT nIndex, USHORT nSub, void* pData, USHORT nDataSize)
 {
 	switch(nSub)
 	{
@@ -281,7 +281,7 @@ bool CGameCliNetSink::HandMsgFromUserSrv(USHORT nIndex, USHORT nSub, void* pData
 	return true;
 }
 
-bool CGameCliNetSink::HandMsgFromDataSrv(USHORT nIndex, USHORT nSub, void* pData, USHORT nDataSize)
+bool CGameCliSink::HandMsgFromDataSrv(USHORT nIndex, USHORT nSub, void* pData, USHORT nDataSize)
 {
 	switch(nSub)
 	{
@@ -301,14 +301,14 @@ bool CGameCliNetSink::HandMsgFromDataSrv(USHORT nIndex, USHORT nSub, void* pData
 	return true;
 }
 
-bool CGameCliNetSink::HandMsgTestConn()
+bool CGameCliSink::HandMsgTestConn()
 {
 	m_nTestLink = 0;
 	CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_GAMESER, GS_SUB_MSG_TEST);
 	return true;
 }
 
-void CGameCliNetSink::ConnectSucess(ConnSucess* pConn)
+void CGameCliSink::ConnectSucess(ConnSucess* pConn)
 {
 	m_nTestLink = 0;
 	m_nPeerSrvType = pConn->nSrvType;
@@ -316,7 +316,7 @@ void CGameCliNetSink::ConnectSucess(ConnSucess* pConn)
 	return true;
 }
 
-void CGameCliNetSink::RegGameSrv()
+void CGameCliSink::RegGameSrv()
 {
 	RegGameSer srv;
 	srv.nGameID = g_pGameServer->GetGameId();

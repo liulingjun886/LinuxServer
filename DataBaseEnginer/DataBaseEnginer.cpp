@@ -5,7 +5,7 @@
 #include "Core.h"
 #include <unistd.h>
 #include <stdlib.h>
-#include "NetSinkObj.h"
+#include "../NetSinkObj.h"
 
 Single_Init(CDataBaseEnginer)
 CDataBaseEnginer::CDataBaseEnginer() : m_nServiceNum(0), 
@@ -72,7 +72,7 @@ void CDataBaseEnginer::PostDataBaseRet(CServices* pServices,SERVICEINDEX nToSerI
 	{
 		memcpy(pType+1, pData, uDataSize);
 	}
-	CNetSinkObj::SendData(pServices,  nToSerId, MAIN_MSG_DATACENTER,SUB_MSG_DATA_BASE_RET , buff, uDataSize+sizeof(UINT));
+	CNetSinkObj::SendData(pServices,  nToSerId, MAIN_MSG_USERSER,SUB_MSG_DATA_BASE_RET , buff, uDataSize+sizeof(UINT));
 }
 
 

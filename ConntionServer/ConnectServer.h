@@ -6,19 +6,6 @@
 #include <map>
 #include <string>
 
-struct HostConfig
-{
-	std::string szIp;
-	USHORT nPort;
-};
-
-struct GameInfo : public HostConfig
-{
-	int 	nGameId;
-	int 	nGameNo;
-	
-};
-
 class CConnectServer : public CServer
 {
 public:

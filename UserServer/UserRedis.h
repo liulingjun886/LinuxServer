@@ -2,8 +2,6 @@
 
 #include "../MemDataBaseEnginer/MyRedis.h"
 
-extern CUserServer g_pUserServer;
-
 enum Redis_Pro
 {
 	PRO_LOGIN_IN,

@@ -1,13 +1,14 @@
 #pragma once
 #include <stdlib.h>
-#include "hiredis/hiredis.h"
-#include "types.h"
+#include "../include/hiredis/hiredis.h"
+#include "../include/types.h"
+#include <string>
 
 struct RedisConfig
 {
-	char szHost[16];
+	std::string szHost;
 	unsigned short nPort;
-	char szAuth[16];
+	std::string szAuth;
 
 	RedisConfig()
 	{
@@ -22,12 +23,10 @@ public:
 	virtual ~CRedis();
 public:
 	bool InitConnection();
-	
+	virtual int  Exec(UINT nType,void* pData,UINT nDataSize,void *pRet=NULL,UINT nRet=0)=0;
 protected:
 	virtual int  GetRedisConfig()=0;
 	virtual bool Connected()=0;
-	virtual int  Exec(UINT nType,void* pData,UINT nDataSize,void *pRet=NULL,UINT nRet=0)=0;
-
 	bool OpenConnect();
 	void CloseConnect();
 	void CloseReply();

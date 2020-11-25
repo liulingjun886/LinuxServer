@@ -1,7 +1,7 @@
 #include "DataBaseSink.h"
 #include "MySql.h"
 #include <stdio.h>
-#include "commproto.h"
+#include "../commproto.h"
 #include "Services.h"
 #include "DataBaseDef.h"
 #include "DataBaseEnginer.h"

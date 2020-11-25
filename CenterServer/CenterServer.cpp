@@ -32,7 +32,7 @@ int  CCenterServer::ReadConfig(const char* szConfigFile)
 	m_szIp = iniFile.ReadString("centerserver", "Host", "");
 	m_nPort = iniFile.ReadInt("centerserver", "Port", 0);
 
-	iniFile.CloseFile();
+	//iniFile.CloseFile();
 	return 0;
 }
 

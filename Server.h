@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-class CCore;
+#include "./include/Core.h"
 class CServer
 {
 public:
@@ -14,7 +14,7 @@ public:
 	USHORT GetSerType() const;
 	USHORT GetSerNo() const;
 protected:
-	void InitLogFile(char* const pLogFile);
+	void InitLogFile(const char*   pLogFile);
 	virtual int Initialize() = 0;
 protected:
 	CCore* m_pCore;

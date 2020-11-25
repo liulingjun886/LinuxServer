@@ -1,4 +1,4 @@
-#include "MySql.h"
+#include "./DataBaseEnginer/MySql.h"
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
@@ -37,7 +37,7 @@ int main()
 		printf("execret = %d\n",mysql.ExecPro());
 		while(mysql.HaveNext())
 		{
-			printf("id = %d, name = %s, age = %d, ret = %d\n",mysql.GetNumValue("Id"),mysql.GetStrValue("name"),mysql.GetNumValue("age"),mysql.GetOutNumValue("@ret"));
+			printf("id = %lld, name = %s, age = %lld, ret = %lld\n",mysql.GetNumValue("Id"),mysql.GetStrValue("name"),mysql.GetNumValue("age"),mysql.GetOutNumValue("@ret"));
 			mysql.MoveNext();
 		}
 	}

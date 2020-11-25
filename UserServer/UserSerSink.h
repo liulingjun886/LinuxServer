@@ -1,6 +1,7 @@
 #pragma once
 #include "UserServer.h"
-#include "../include/TimeNode.h"
+#include "../include/TimerNode.h"
+#include "../NetHandSink.h"
 
 class CUserSerSink : public CNetHandSink
 {

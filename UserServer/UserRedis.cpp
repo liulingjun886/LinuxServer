@@ -1,7 +1,10 @@
 #include "UserRedis.h"
 #include "UserServer.h"
+#include "../MemDataBaseEnginer/MemDataDef.h"
 
 extern CUserServer* g_pUserServer;
+
+using namespace Mem;
 
 CUserRedis::CUserRedis()
 {

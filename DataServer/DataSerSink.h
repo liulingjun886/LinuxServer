@@ -1,6 +1,6 @@
 #pragma once
-#include "NetHandSink.h"
-#include "MemDataBaseEnger.h"
+#include "../NetHandSink.h"
+#include "../MemDataBaseEnginer/MemDataBaseEnger.h"
 #include "DataServer.h"
 
 class CServices;
