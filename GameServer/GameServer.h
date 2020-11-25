@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+#include <string>
 #include "../Server.h"
 #include "../include/ToolLock.h"
 
@@ -22,7 +24,7 @@ public:
 	int			GetGameId() const;
 
 	void 		AddConnInfo(USHORT nSerNo,USHORT nIndex);
-	USHORT  	GetConnSrvIndex(USHORT nSerNo,UINT nRand) const;
+	USHORT  	GetConnSrvIndex(USHORT nSerNo,UINT nRand);
 	void 		DelConnSrvIndex(USHORT nSerNo, USHORT nIndex);
 
 	void		DisconnectToRemoteSrv(USHORT nSrvType, USHORT nSrvNo, USHORT nIndex);

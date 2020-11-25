@@ -1,5 +1,5 @@
 #include "NetSinkObj.h"
-#include "Services.h"
+#include "./include/Services.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -39,7 +39,6 @@ CNetSinkObj::CNetSinkObj(CServices* pServices,int nConnType):
 				m_pSink = new CUserSerSink(pServices);
 			else
 				m_pSink = new CUserCliSink(pServices);
-			
 			break;
 		}
 		case 3: //数据服务器
@@ -48,7 +47,6 @@ CNetSinkObj::CNetSinkObj(CServices* pServices,int nConnType):
 				m_pSink = new CDataSerSink(pServices);
 			else
 				m_pSink = new CDataCliSink(pServices);
-			
 			break;
 		}
 		case 4: //游戏服务器
@@ -57,7 +55,6 @@ CNetSinkObj::CNetSinkObj(CServices* pServices,int nConnType):
 				m_pSink = new CGameSerSink(pServices);
 			else
 				m_pSink = new CGameCliSink(pServices);
-			
 			break;
 		}
 		case 5: //连接服务器
@@ -66,7 +63,6 @@ CNetSinkObj::CNetSinkObj(CServices* pServices,int nConnType):
 				m_pSink = new CConnSerSink(pServices);
 			else
 				m_pSink = new CConnCliSink(pServices);
-			
 			break;
 		}
 	}

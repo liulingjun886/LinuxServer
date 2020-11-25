@@ -1,10 +1,10 @@
 #pragma once
 #include <map>
-#include "Services.h"
+#include "../include/Services.h"
 //#include "BaseLogic.h"
-#include "commproto.h"
-#include "SmartPoint.h"
-#include "TimerNode.h"
+#include "../commproto.h"
+#include "../include/SmartPoint.h"
+#include "../include/TimerNode.h"
 
 class CUserInfo;
 class CBaseLogic;

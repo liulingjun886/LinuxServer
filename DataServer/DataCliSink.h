@@ -1,6 +1,7 @@
 #pragma once
 #include "../NetHandSink.h"
 #include "DataServer.h"
+#include "../include/TimerNode.h"
 
 class CServices;
 

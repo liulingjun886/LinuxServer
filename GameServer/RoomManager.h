@@ -1,9 +1,9 @@
 #pragma once
 #include <map>
 #include <vector>
-#include "ToolLock.h"
+#include "../include/ToolLock.h"
 #include <assert.h>
-#include "types.h"
+#include "../include/types.h"
 using namespace std;
 
 class CRoomManager

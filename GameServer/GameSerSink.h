@@ -1,6 +1,9 @@
 #pragma once
 
 #include "../include/types.h"
+#include "../NetHandSink.h"
+
+class ConnSucess;
 
 class CGameSerSink : public CNetHandSink
 {

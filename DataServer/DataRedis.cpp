@@ -32,7 +32,7 @@ void CDataRedis::RegRedisScript(int nType,const char* szStr)
 
 bool CDataRedis::Connected()
 {
-	
+	return true;
 }
 
 int  CDataRedis::Exec(UINT nType,void* pData,UINT nDataSize,void *pRet,UINT nRet)

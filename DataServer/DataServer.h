@@ -9,7 +9,7 @@ class CDataBaseEnginer;
 class CDataServer : public CServer
 {
 public:
-	CDataServer(CServices* pServices);
+	CDataServer();
 	~CDataServer();
 public:
 	int	 Initialize();

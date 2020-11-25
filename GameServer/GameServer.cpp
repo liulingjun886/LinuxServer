@@ -1,8 +1,9 @@
 #include "GameServer.h"
 #include "../include/IniFile.h"
 #include <algorithm>
+#include <stdio.h>
 
-extern CGameServer* g_pGameServer = NULL;
+CGameServer* g_pGameServer = NULL;
 
 CGameServer::CGameServer()
 {
@@ -38,7 +39,7 @@ int  CGameServer::ReadConfig(const char* szConfigFile)
 	std::string szIp = iniFile.ReadString("centerserver", "Host", "");
 	USHORT nPort = iniFile.ReadInt("centerserver", "Port", 0);
 
-	if(0 != ConnectToCenterSrv(szIp.c_str, nPort))
+	if(0 != ConnectToCenterSrv(szIp.c_str(), nPort))
 		return -1;
 	
 	int nUserNum = iniFile.ReadInt("userserver_count", "num", 0);
@@ -72,7 +73,7 @@ int  CGameServer::ReadConfig(const char* szConfigFile)
 			return -1;
 	}
 	
-	iniFile.CloseFile();
+	//iniFile.CloseFile();
 	return 0;
 }
 
@@ -109,7 +110,7 @@ void CGameServer::AddConnInfo(USHORT nSerNo,USHORT nIndex)
 	vecSers.push_back(nIndex);
 }
 
-USHORT  CGameServer::GetConnSrvIndex(USHORT nSerNo,UINT nRand) const
+USHORT  CGameServer::GetConnSrvIndex(USHORT nSerNo,UINT nRand)
 {
 	CToolLock lock(&m_rw_Lock,1);
 	
@@ -128,7 +129,7 @@ void CGameServer::DelConnSrvIndex(USHORT nSerNo, USHORT nIndex)
 	std::vector<USHORT>& vecSers = m_szConnSerInfo[nSerNo];
 	size_t nSize = vecSers.size();
 	if(0 == nSize)
-		return 0;
+		return;
 	
 	CToolLock lock(&m_rw_Lock,0);
 	std::vector<USHORT>::iterator it = vecSers.begin();
@@ -136,7 +137,7 @@ void CGameServer::DelConnSrvIndex(USHORT nSerNo, USHORT nIndex)
 	{
 		if(*it == nIndex)
 		{
-			vecSers.earse(it);
+			vecSers.erase(it);
 			return;
 		}
 	}

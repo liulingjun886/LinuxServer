@@ -1,7 +1,16 @@
 #include "DataCliSink.h"
 #include "../include/types.h"
+#include "../NetSinkObj.h"
+#include "../include/Services.h"
+#include "../commproto.h"
 
 extern CDataServer* g_pDataServer;
+
+enum TIME_ID
+{
+	TIME_TEST_CONN=1,
+};
+
 
 CDataCliSink::CDataCliSink(CServices* pNetSer):CNetHandSink(pNetSer)
 {
@@ -38,7 +47,7 @@ bool CDataCliSink::HandNetData(USHORT nSrcIndex, USHORT nMain, USHORT nSub, void
 	{
 		case MAIN_MSG_CENTERSER:
 		{
-			return HandMainMsgFromCenterSrv();
+			return HandMainMsgFromCenterSrv(nSrcIndex, nSub, pData, nDataSize);
 		}
 		default:
 			break;
@@ -60,7 +69,7 @@ bool CDataCliSink::HandMainMsgFromCenterSrv(USHORT nSrcIndex, USHORT nSub, void*
 			m_timer_Link.StartTimerSec(300);
 			RegConnSer ser;
 			ser.nSerNo = g_pDataServer->GetSerNo();
-			CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_REG_DATASER, &ser, sizeof(ser));
+			CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_DATASER, SUB_MSG_REG_DATASER, &ser, sizeof(ser));
 			return true;
 		}
 		default:

@@ -1,5 +1,5 @@
 #include "CenterServer.h"
-#include "IniFile.h"
+#include "../include/IniFile.h"
 
 
 CCenterServer* g_pCenterServer = NULL;

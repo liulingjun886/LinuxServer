@@ -1,13 +1,13 @@
 #include "Room.h"
 #include <stdio.h>
 #include <dlfcn.h>
-#include "commproto.h"
 #include "RoomManager.h"
-#include "UserInfo.h"
-#include "NetSinkObj.h"
-#include "GameCliNetSink.h"
-#include "MemDataDef.h"
+#include "../UserInfo.h"
+#include "../NetSinkObj.h"
+#include "GameCliSink.h"
+#include "../MemDataBaseEnginer/MemDataDef.h"
 #include "../Game/BaseLogic.h"
+#include "GameServer.h"
 
 
 #define GAME_OVER 1
@@ -15,8 +15,12 @@
 #define GAME_BEGIN 3
 #define GAME_FINISH 4
 
+
+extern CGameServer* g_pGameServer;
+
 void* CRoom::m_pHander = NULL;
 CBaseLogic* (*CRoom::m_sFun)(CRoom*) = NULL;
+
 
 
 bool CRoom::LoadGameLogic(int nGameId)
@@ -181,12 +185,12 @@ bool CRoom::HandNetMsg(USHORT nSeatNo,USHORT nIndex,USHORT uMain, USHORT uSub, v
 
 				Mem::UserQuitGameReq req;
 				req.nUserId = pConn->nUserId;
-				CCliNetSink::PostMemDataBaseReq(this,Mem::USER_QUIT_GAME_REQ, &req, sizeof(Mem::UserQuitGameReq));
+				//CCliNetSink::PostMemDataBaseReq(this,Mem::USER_QUIT_GAME_REQ, &req, sizeof(Mem::UserQuitGameReq));
 				
 				InnserSync sync;
 				sync.nIndex = pConn->nCsid;
 				sync.nType = EN_RECONNECT_FAIL;
-				CNetSinkObj::SendData(this,CGameCliNetSink::GetConnSerById(pConn->nCid,GetServiceIndex()),MAIN_MSG_GAMESER, SUB_MSG_GAME2CONN,  &sync,sizeof(InnserSync));
+				//CNetSinkObj::SendData(this,CGameCliNetSink::GetConnSerById(pConn->nCid,GetServiceIndex()),MAIN_MSG_GAMESER, SUB_MSG_GAME2CONN,  &sync,sizeof(InnserSync));
 				return true;
 			}
 			case SUB_MSG_USER_DISCONNECT:
@@ -300,7 +304,7 @@ void CRoom::SendDataToUser(USHORT nSeatNo, USHORT nMain, USHORT nSub, void* pDat
 	USHORT nCid,nCsid;
 	pUser->GetConnInfo(nCid, nCsid);
 
-	USHORT nIndex = CGameCliNetSink::GetConnSerById(nCid,GetServiceIndex()+nSeatNo);
+	//USHORT nIndex = CGameCliNetSink::GetConnSerById(nCid,GetServiceIndex()+nSeatNo);
 	/*
 	if(nMain == 6 && nSub == 10)
 	{
@@ -320,7 +324,7 @@ void CRoom::SendDataToUser(USHORT nSeatNo, USHORT nMain, USHORT nSub, void* pDat
 	{
 		memcpy(szData+1,pData,nDataSize);
 	}	
-	CNetSinkObj::SendData(this,nIndex, MAIN_MSG_GAMESER, SUB_MSG_GAME4USER, szBuff, nDataSize + sizeof(Game2User));
+	//CNetSinkObj::SendData(this,nIndex, MAIN_MSG_GAMESER, SUB_MSG_GAME4USER, szBuff, nDataSize + sizeof(Game2User));
 }
 
 void CRoom::SendDataToAll(USHORT nMain, USHORT nSub, void* pData, USHORT nDataSize,USHORT nSeatNo)
@@ -372,17 +376,17 @@ bool CRoom::UserJoin(USHORT nCsid, USHORT nIndex, void* pData, USHORT uDataSize)
 		
 		Mem::UserJoinGameReq req;
 		req.nUserId = pInfo->nUserId;
-		req.nGid = g_serno;
+		req.nGid = g_pGameServer->GetSerNo();
 		req.nGsid = GetServiceIndex();
 		req.nSeatNo = nSeatNo;
-		CCliNetSink::PostMemDataBaseReq(this,Mem::USER_JOIN_GAME_REQ, &req, sizeof(Mem::UserJoinGameReq));
+		//CCliNetSink::PostMemDataBaseReq(this,Mem::USER_JOIN_GAME_REQ, &req, sizeof(Mem::UserJoinGameReq));
 	}
 	else
 	{
 		char szBuff[MAX_MSG_SIZE] = { 0 };
 		Game2User *szData = (Game2User*)szBuff;
 		szData->nIndex = nCsid;
-		szData->nMain = MAIN_MSG_ROOM_MANAGER;
+		szData->nMain = 1;//MAIN_MSG_ROOM_MANAGER;
 		szData->nSub = SUB_MSG_JOIN_FAIL;
 		CNetSinkObj::SendData(this,nIndex, MAIN_MSG_GAMESER, SUB_MSG_GAME4USER, szBuff, sizeof(Game2User));
 	}
@@ -405,7 +409,7 @@ bool CRoom::UserQuit(USHORT nSeatNo)
 	req.nUserId = pUser->GetUserId();
 	delete pUser;
 
-	CCliNetSink::PostMemDataBaseReq(this,Mem::USER_QUIT_GAME_REQ, &req, sizeof(Mem::UserQuitGameReq));
+	//CCliNetSink::PostMemDataBaseReq(this,Mem::USER_QUIT_GAME_REQ, &req, sizeof(Mem::UserQuitGameReq));
 	
 	char buf[MAX_MSG_SIZE] = { 0 };
 	InnserSync *pSync = (InnserSync *)buf;
@@ -417,7 +421,7 @@ bool CRoom::UserQuit(USHORT nSeatNo)
 	pGame->nGid = 0;
 	pGame->nGsid = 0;
 	pGame->nSeatNo = 0;
-	CNetSinkObj::SendData(this,CGameCliNetSink::GetConnSerById(nCid,GetServiceIndex()+nSeatNo), MAIN_MSG_GAMESER,SUB_MSG_GAME2CONN,buf,sizeof(InnserSync)+sizeof(UserGameSerInfo));
+	//CNetSinkObj::SendData(this,CGameCliNetSink::GetConnSerById(nCid,GetServiceIndex()+nSeatNo), MAIN_MSG_GAMESER,SUB_MSG_GAME2CONN,buf,sizeof(InnserSync)+sizeof(UserGameSerInfo));
 	return true;
 }
 
@@ -500,10 +504,10 @@ void CRoom::SyncGameSerInfo(USHORT nSeatNo)
 
 	UserGameSerInfo *pGame = (UserGameSerInfo *)(pSync+1);
 	pGame->nUserId = pUser->GetUserId();
-	pGame->nGid = g_serno;
+	pGame->nGid = g_pGameServer->GetSerNo();
 	pGame->nGsid = GetServiceIndex();
 	pGame->nSeatNo = nSeatNo;
-	CNetSinkObj::SendData(this,CGameCliNetSink::GetConnSerById(nCid,GetServiceIndex()+nSeatNo), MAIN_MSG_GAMESER, SUB_MSG_GAME2CONN, buf, 	sizeof(InnserSync)+sizeof(UserGameSerInfo));	
+	//CNetSinkObj::SendData(this,CGameCliNetSink::GetConnSerById(nCid,GetServiceIndex()+nSeatNo), MAIN_MSG_GAMESER, SUB_MSG_GAME2CONN, buf, 	sizeof(InnserSync)+sizeof(UserGameSerInfo));	
 }
 
 void CRoom::UserReady(USHORT nSeatNo)

@@ -1,7 +1,7 @@
 #pragma once
 #include <assert.h>
-#include "types.h"
-#include "../Room.h"
+#include "../include/types.h"
+#include "../GameServer/Room.h"
 
 class CBaseLogic
 {

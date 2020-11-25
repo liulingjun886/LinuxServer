@@ -10,4 +10,5 @@ CRobotManager::CRobotManager()
 
 CRobotManager::~CRobotManager()
 {
+	
 }

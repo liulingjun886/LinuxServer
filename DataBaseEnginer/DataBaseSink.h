@@ -1,5 +1,5 @@
 #pragma once
-#include "types.h"
+#include "../include/types.h"
 
 class IDataBase;
 class CServices;

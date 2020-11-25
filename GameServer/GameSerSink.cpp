@@ -1,4 +1,10 @@
 #include "GameSerSink.h"
+#include "../commproto.h"
+#include "GameServer.h"
+#include "../include/Services.h"
+#include "../NetSinkObj.h"
+
+extern CGameServer* g_pGameServer;
 
 CGameSerSink::CGameSerSink(CServices* pServices):CNetHandSink(pServices)
 {
@@ -13,8 +19,8 @@ CGameSerSink::~CGameSerSink()
 void CGameSerSink::Connect()
 {
 	ConnSucess conn;
-	conn.nSrvNo = g_pCenterServer->GetSerNo();
-	conn.nSrvType = g_pCenterServer->GetSerType();
+	conn.nSrvNo = g_pGameServer->GetSerNo();
+	conn.nSrvType = g_pGameServer->GetSerType();
 	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_GAMESER, GS_SUB_MSG_CONN_SUCSS, &conn, sizeof(conn));
 }
 
@@ -29,7 +35,7 @@ bool CGameSerSink::HandNetData(USHORT nIndex, USHORT nMain, USHORT nSub, void* p
 	switch(nMain)
 	{
 		case MAIN_MSG_CONNSER:
-			return HandMsgFromConnSrv();
+			return HandMsgFromConnSrv(nIndex, nSub, pData, nDataSize);
 		default:
 			break;
 	}

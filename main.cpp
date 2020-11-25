@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "types.h"
+#include "./include/types.h"
 #include "Server.h"
 #include <iostream>
 #include "./CenterServer/CenterServer.h"

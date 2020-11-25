@@ -1,6 +1,6 @@
 #pragma once
 
-#include "NetSink.h"
+#include "./include/NetSink.h"
 
 class CServices;
 class CNetHandSink;

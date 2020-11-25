@@ -1,7 +1,7 @@
 #include <assert.h>
-#include "types.h"
+#include "./include/types.h"
 #include "Server.h"
-#include "Core.h"
+#include "./include/Core.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>

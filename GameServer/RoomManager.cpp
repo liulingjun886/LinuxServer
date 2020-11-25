@@ -1,14 +1,16 @@
 #include "RoomManager.h"
-#include "types.h"
+#include "../include/types.h"
 #include <assert.h>
 #include <time.h>
 //#include "Services.h"
 #include "Room.h"
-#include "commproto.h"
+#include "../commproto.h"
 #include <stdio.h>
-#include "Core.h"
+#include "../include/Core.h"
 
-extern USHORT g_serno;
+#include "GameServer.h"
+
+extern CGameServer* g_pGameServer;
 
 Single_Init(CRoomManager)
 CRoomManager::CRoomManager()
@@ -24,7 +26,7 @@ int CRoomManager::AddRoom(USHORT nIndex)
 {
 	static int sCurRoomid = 0;
 	int i = sCurRoomid;
-	int nRoomPreId = g_serno * 100000;
+	int nRoomPreId = g_pGameServer->GetSerNo() * 100000;
 	int nRoomId = 0;
 	do 
 	{

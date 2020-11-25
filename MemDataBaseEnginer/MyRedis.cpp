@@ -3,7 +3,7 @@
 #include <fstream>
 #include <string>
 #include "MyRedis.h"
-#include "types.h"
+#include "../include/types.h"
 #include "MemDataDef.h"
 #include "MemDataDef.h"
 

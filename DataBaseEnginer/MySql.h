@@ -1,7 +1,7 @@
 #pragma once
-#include "interface.h"
-#include "mysql/mysql.h"
-#include <string>
+#include "../include/interface.h"
+#include "../include/mysql/mysql.h"
+#include <string.h>
 #include <vector>
 #include <map>
 using namespace std;

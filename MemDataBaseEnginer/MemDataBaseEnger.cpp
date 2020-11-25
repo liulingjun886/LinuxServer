@@ -5,7 +5,7 @@
 #include "MemSink.h"
 #include "MemDataBaseService.h"
 #include <unistd.h>
-#include "Core.h"
+#include "../include/Core.h"
 #include "../NetSinkObj.h"
 
 Single_Init(CMemDataBaseEnginer)

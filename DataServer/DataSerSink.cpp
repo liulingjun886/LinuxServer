@@ -1,17 +1,18 @@
 #include <stdio.h>
-#include "DataSerNetSink.h"
-#include "Core.h"
-#include "ToolLock.h"
-#include "commproto.h"
-#include "Services.h"
-#include "MemDataDef.h"
-#include "DataBaseDef.h"
-#include "NetSinkObj.h"
+#include "DataSerSink.h"
+#include "../include/Core.h"
+#include "../include/ToolLock.h"
+#include "../commproto.h"
+#include "../include/Services.h"
+#include "../MemDataBaseEnginer/MemDataDef.h"
+#include "../DataBaseEnginer/DataBaseDef.h"
+#include "../NetSinkObj.h"
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include "../DataBaseEnginer/DataBaseEnginer.h"
 #include "../MemDataBaseEnginer/MemDataBaseEnger.h"
+#include "DataServer.h"
 
 extern CDataServer* g_pDataServer;
 
@@ -30,8 +31,8 @@ void CDataSerSink::Connect()
 {
 	//m_pNet->SetTimer(TIME_CONN_IS_LINK, 100*60, -1);
 	ConnSucess conn;
-	conn.nSrvNo = g_pCenterServer->GetSerNo();
-	conn.nSrvType = g_pCenterServer->GetSerType();
+	conn.nSrvNo = g_pDataServer->GetSerNo();
+	conn.nSrvType = g_pDataServer->GetSerType();
 	CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_DATASER, DS_SUB_MSG_CONN_SUCSS,&conn,sizeof(conn));
 }
 
@@ -39,13 +40,9 @@ bool CDataSerSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void* pD
 {
 	switch (nMain)
 	{
-	case MAIN_MSG_NET:
-	{
-		return HandMainMsgNet(nIndex,nSub,pData,nDataSize);
-	}
 	case MAIN_MSG_GAMESER:
 	{
-		return HandMainMsgGameSer(nIndex,nSub,pData,nDataSize);
+		return HandMainMsgFromGameSer(nIndex,nSub,pData,nDataSize);
 	}
 	default:
 		break;
@@ -78,23 +75,6 @@ bool CDataSerSink::TestNetLink()
 	return true;
 }
 
-bool CDataSerSink::HandMainMsgNet(USHORT nIndex,USHORT nSub, void* pData, USHORT nDataSize)
-{
-	switch (nSub)
-	{
-		 case SUB_MSG_TEST:
-		 {
-			m_nTestLink = 0;
-			CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_DATASER, DS_SUB_MSG_TEST);
-			return true;
-		 }
-		 default:
-			 return false;
-	}
-	return true;
-}
-
-
 bool CDataSerSink::HandMainMsgFromGameSer(USHORT nIndex,USHORT nSub,void* pData,USHORT nDataSize)
 {
 	switch (nSub)
@@ -102,6 +82,7 @@ bool CDataSerSink::HandMainMsgFromGameSer(USHORT nIndex,USHORT nSub,void* pData,
 		case GS_SUB_MSG_TEST:
 		{
 			m_nTestLink = 0;
+			CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_DATASER, DS_SUB_MSG_TEST);
 			return true;
 		}
 		case SUB_MSG_MEM_DATA_BASE_REQ:

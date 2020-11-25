@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../MemDataBaseEnginer/MyRedis.h"
+#include "../include/types.h"
 
 class CDataRedis : public CRedis
 {
@@ -14,5 +15,5 @@ protected:
 private:
 	void RegRedisScript(int nType,const char* szStr);
 private:
-	char* m_RedisPro[PRO_MAX];
+	char* m_RedisPro[5];
 };

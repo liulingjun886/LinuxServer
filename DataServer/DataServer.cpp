@@ -1,9 +1,12 @@
 #include "DataServer.h"
 #include "../include/IniFile.h"
+#include "../MemDataBaseEnginer/MemDataBaseEnger.h"
+#include "../DataBaseEnginer/DataBaseEnginer.h"
+#include <stdio.h>
 
 CDataServer* g_pDataServer = NULL;
 
-CDataServer::CDataServer(CServices* pServices):CNetHandSink(pServices)
+CDataServer::CDataServer()
 {
 	g_pDataServer = this;
 }
@@ -30,7 +33,7 @@ int	 CDataServer::Initialize()
 	m_pData->SetServiceNum(8);
 
 	if(0 == m_pCore->AddTcpNetCli(m_szCenterIp.c_str(),m_nCenterPort,false))
-		return -1
+		return -1;
 
 	if(0 == m_pCore->AddTcpNetSer(m_szIp.c_str(), m_nPort, false))
 		return -1;
@@ -52,16 +55,16 @@ int  CDataServer::ReadConfig(const char* szConfigFile)
 	m_nPort = iniFile.ReadInt(szFild, "Port", 0);
 
 	m_szRedisHost = iniFile.ReadString(szFild, "redisHost", "");
-	m_nRedisPort = iniFile.ReadInt(szFild, "redisPort", 0;
+	m_nRedisPort = iniFile.ReadInt(szFild, "redisPort", 0);
 	m_szAuth = iniFile.ReadString(szFild, "redisAuth", "");
 
 	m_szDbHost = iniFile.ReadString(szFild, "DBHost", "");
-	m_nDbPort = iniFile.ReadInt(szFild, "DBPort", 0;
+	m_nDbPort = iniFile.ReadInt(szFild, "DBPort", 0);
 	m_szDbName = iniFile.ReadString(szFild, "DBName", "");
 	m_szDbUserName = iniFile.ReadString(szFild, "DBUserName", "");
 	m_szDbPass = iniFile.ReadString(szFild, "DBPassword", "");
 	
-	iniFile.CloseFile();
+	//iniFile.CloseFile();
 	return 0;
 }
 
