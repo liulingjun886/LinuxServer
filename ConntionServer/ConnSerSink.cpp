@@ -1,16 +1,18 @@
 #include <stdio.h>
 #include "ConnSerSink.h"
-#include "Core.h"
-#include "ToolLock.h"
-#include "commproto.h"
-#include "Services.h"
-#include "MemDataDef.h"
-#include "DataBaseDef.h"
-#include "NetSinkObj.h"
-#include "CliNetSink.h"
+#include "../include/Core.h"
+#include "../include/ToolLock.h"
+#include "../commproto.h"
+#include "../include/Services.h"
+#include "../MemDataBaseEnginer/MemDataDef.h"
+#include "../DataBaseEnginer/DataBaseDef.h"
+#include "../NetSinkObj.h"
+//#include "CliNetSink.h"
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include "ConnectServer.h"
+
 
 extern CConnectServer* g_pConnectServer;
 
@@ -51,9 +53,9 @@ bool CConnSerSink::DisConnect()
 
 	Mem::UserLogOutMemReq req;
 	req.nUserId = m_pUserInfo->GetUserId();
-	req.nSerNo = g_serno;
+	req.nSerNo = g_pConnectServer->GetSerNo();
 	req.nSockNo = m_pNet->GetServiceIndex();
-	CCliNetSink::PostMemDataBaseReq(m_pNet,Mem::USER_LOGOUT_REQ, &req, sizeof(Mem::UserLogOutMemReq));
+	//CCliNetSink::PostMemDataBaseReq(m_pNet,Mem::USER_LOGOUT_REQ, &req, sizeof(Mem::UserLogOutMemReq));
 
 	USHORT nGid,nGsid,nSeatNo;
 	m_pUserInfo->GetGameInfo(nGid,nGsid,nSeatNo);
@@ -65,7 +67,7 @@ bool CConnSerSink::DisConnect()
 		pUg.nSub = SUB_MSG_USER_DISCONNECT;
 		pUg.nIndex = nGsid;
 		pUg.nSeatNo = nSeatNo;
-		SendToGameSer(nGid, MAIN_MSG_CONNECT, SUB_MSG_USER4GAME,&pUg,sizeof(User2Game));
+		SendToGameSer(nGid, MAIN_MSG_CONNSER, SUB_MSG_USER4GAME,&pUg,sizeof(User2Game));
 	}
 	return false;
 }
@@ -76,37 +78,37 @@ bool CConnSerSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void* pD
 
 	switch (nMain)
 	{
-	case MAIN_MSG_NET:
-	{
-		return HandMainMsgNet(nIndex,nSub,pData,nDataSize);
-	}
-	case MAIN_MSG_LOGIN:
-	{
-		if(nDataSize != sizeof(DataBase::UserLoginReq))
-			return false;
-		if(NULL != m_pUserInfo)
-			return false;
+	//case MAIN_MSG_NET:
+	//{
+	//	return HandMainMsgNet(nIndex,nSub,pData,nDataSize);
+	//}
+	//case MAIN_MSG_LOGIN:
+	//{
+	//	if(nDataSize != sizeof(DataBase::UserLoginReq))
+	//		return false;
+	//	if(NULL != m_pUserInfo)
+	//		return false;
 		//DataBase::UserLoginReq* pReq = (DataBase::UserLoginReq*)pData;
 		//CCliNetSink::PostDataBaseReq(m_pNet,DataBase::USER_LOGIN_REQ,pData,nDataSize);
-		return true;
-	}
-	case MAIN_MSG_ROOM_MANAGER:
-	{
-		return HandMainMsgToRoom(nIndex,nSub,pData,nDataSize);
-	}
+	//	return true;
+	//}
+	//case MAIN_MSG_ROOM_MANAGER:
+	//{
+	//	return HandMainMsgToRoom(nIndex,nSub,pData,nDataSize);
+	//}
 	case MAIN_MSG_ROOM:
 	case MAIN_MSG_GAME:
 	{
 		return HandMainMsgToGame(nIndex,nMain,nSub,pData,nDataSize);
 	}
-	case MAIN_MSG_CONNECT:
-	{
-		return HandMainMsgFromConnect(nIndex,nSub,pData,nDataSize);
-	}
-	case MAIN_ERROR:
-	{
-		return false;
-	}
+	//case MAIN_MSG_CONNECT:
+	//{
+	//	return HandMainMsgFromConnect(nIndex,nSub,pData,nDataSize);
+	//}
+	//case MAIN_ERROR:
+	//{
+	//	return false;
+	//}
 	default:
 		break;
 	}
@@ -140,7 +142,7 @@ bool CConnSerSink::TestNetLink()
 	  	return DisConnect();
 	}
 	++m_nTestLink;
-	SendToMySelf(MAIN_MSG_NET, NT_SUB_MSG_TEST);
+	SendToMySelf(MAIN_MSG_CONNSER, CS_SUB_MSG_TEST);
 	m_timerConnTest.StartTimerSec(60);
 	return true;
 }
@@ -153,7 +155,7 @@ bool CConnSerSink::SendToCenterSer(USHORT nMain, USHORT nSub, void* pData, USHOR
 
 bool CConnSerSink::SendToMySelf(USHORT nMain, USHORT nSub, void* pData, USHORT nDataSize)
 {
-	CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), nMain, USHORT, pData, nDataSize);
+	CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), nMain, nSub, pData, nDataSize);
 	return true;
 }
 
@@ -194,7 +196,7 @@ bool CConnSerSink::HandDataBaseRet(UINT nType, void * pData, USHORT nDataSize)
 			req.nUserId = m_pUserInfo->GetUserId();
 			req.nSerNo = g_pConnectServer->GetSerNo();
 			req.nSockNo = m_pNet->GetServiceIndex();
-			CCliNetSink::PostMemDataBaseReq(m_pNet,Mem::USER_LOGIN_REQ, &req, sizeof(req));
+			//CCliNetSink::PostMemDataBaseReq(m_pNet,Mem::USER_LOGIN_REQ, &req, sizeof(req));
 			break;
 		}
 		default:
@@ -211,7 +213,7 @@ bool CConnSerSink::HandMemDataRet(UINT nType, void* pData, USHORT uDataSize)
 		{
 			Mem::UserLoginMemRet* pRet = (Mem::UserLoginMemRet*)pData;
 			m_pUserInfo->UpdateGameInfo(pRet->nGid, pRet->nGSid, pRet->nGsno);
-			SendToMySelf(MAIN_MSG_LOGIN,SUB_MSG_LOGIN, m_pUserInfo->GetUserBaseInfo(),sizeof(UserBaseInfo));
+			SendToMySelf(MAIN_MSG_CONNSER,SUB_MSG_LOGIN, m_pUserInfo->GetUserBaseInfo(),sizeof(UserBaseInfo));
 			
 			if(pRet->nCid > 0)
 			{
@@ -230,9 +232,9 @@ bool CConnSerSink::HandMemDataRet(UINT nType, void* pData, USHORT uDataSize)
 					login.nUserId = m_pUserInfo->GetUserId();
 					login.nCid = pRet->nCid;
 					login.nCsid = pRet->nCSid;
-					USHORT nIndex = g_pConnectServer->GetCenterServerIndex();
+					//USHORT nIndex = g_pConnectServer->GetCenterServerIndex();
 					//SendToCenterSer(MAIN_MSG_CONNECT, SUB_MSG_USER_DOUBLELOGIN, &login, sizeof(UserDoubleLogin));
-					SendToConnectSer(MAIN_MSG_CONNECT, SUB_MSG_USER_DOUBLELOGIN, &login, sizeof(UserDoubleLogin));
+					SendToConnectSer(MAIN_MSG_CONNSER, SUB_MSG_USER_DOUBLELOGIN, &login, sizeof(UserDoubleLogin));
 				}
 			}
 
@@ -249,7 +251,7 @@ bool CConnSerSink::HandMemDataRet(UINT nType, void* pData, USHORT uDataSize)
 				pConn->nUserId = m_pUserInfo->GetUserId();
 				pConn->nCid = g_pConnectServer->GetSerNo();
 				pConn->nCsid = m_pNet->GetServiceIndex();
-				SendToGameSer(pRet->nGid, MAIN_MSG_CONNECT, SUB_MSG_USER_RELOGIN, szBuff, 	sizeof(User2Game)+sizeof(UserReConnInfo));
+				SendToGameSer(pRet->nGid, MAIN_MSG_CONNSER, SUB_MSG_USER_RELOGIN, szBuff, 	sizeof(User2Game)+sizeof(UserReConnInfo));
 			}
 			break;
 		}
@@ -281,7 +283,7 @@ bool CConnSerSink::HandUserMsg(int nEvent, void * pData, USHORT nDataSize)
 			UID *pUid = (UID*)(pData);
 			if(m_pUserInfo && *pUid == m_pUserInfo->GetUserId())
 			{
-				SendToMySelf(MAIN_MSG_LOGIN, SUB_MSG_DOUBLE_LOGIN);
+				SendToMySelf(MAIN_MSG_CONNSER, SUB_MSG_DOUBLE_LOGIN);
 				m_pNet->PostData(m_pNet->GetServiceIndex(), EXIT_MSG);
 			}
 			break;
@@ -299,7 +301,7 @@ bool CConnSerSink::HandUserMsg(int nEvent, void * pData, USHORT nDataSize)
 		{
 			Mem::UserQuitGameReq req;
 			req.nUserId = m_pUserInfo->GetUserId();
-			CCliNetSink::PostMemDataBaseReq(m_pNet,Mem::USER_QUIT_GAME_REQ, &req, sizeof(Mem::UserQuitGameReq));
+			//CCliNetSink::PostMemDataBaseReq(m_pNet,Mem::USER_QUIT_GAME_REQ, &req, sizeof(Mem::UserQuitGameReq));
 			m_pUserInfo->UpdateGameInfo(0, 0, 0);
 			break;
 		}
@@ -365,7 +367,7 @@ bool CConnSerSink::HandMainMsgToRoom(USHORT nIndex,USHORT nSub, void* pData, USH
 	if(nSerNo == INVALID_SERIVCE_INDEX)
 		printf("nSerNo falt\n");
 	
-	SendToGameSer(nSerNo, MAIN_MSG_CONNECT, SUB_MSG_USER4ROOM, buff, nDataSize + sizeof(User2Room) + sizeof(UserBaseInfo));
+	SendToGameSer(nSerNo, MAIN_MSG_CONNSER, SUB_MSG_USER4ROOM, buff, nDataSize + sizeof(User2Room) + sizeof(UserBaseInfo));
 	return true;
 }
 
@@ -380,7 +382,7 @@ bool CConnSerSink::HandMainMsgToGame(USHORT nIndex,USHORT nMain,USHORT nSub, voi
 	pCom->nMain = nMain;
 	pCom->nSub = nSub;
 	memcpy(pCom + 1, pData, nDataSize);
-	SendToGameSer(nGameSerNo, MAIN_MSG_CONNECT, SUB_MSG_USER4GAME, buff, nDataSize + sizeof(User2Game));
+	SendToGameSer(nGameSerNo, MAIN_MSG_CONNSER, SUB_MSG_USER4GAME, buff, nDataSize + sizeof(User2Game));
 	return true;
 }
 

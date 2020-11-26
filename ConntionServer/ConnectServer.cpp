@@ -1,13 +1,14 @@
 #include "ConnectServer.h"
 #include "../include/IniFile.h"
 #include <algorithm>
+#include <stdio.h>
 
 CConnectServer* g_pConnectServer = NULL;
 
 CConnectServer::CConnectServer()
 {
 	g_pConnectServer = this;
-	m_vecConfigGameInfo.clear();
+	//m_vecConfigGameInfo.clear();
 	m_mapGameSerInfo.clear();
 	m_vecUserSerConfig.clear();
 	m_vecUserSerIndex.clear();
@@ -75,7 +76,7 @@ int  CConnectServer::ReadConfig(const char* szConfigFile)
 	}
 	
 	
-	iniFile.CloseFile();
+	//iniFile.CloseFile();
 	return 0;
 }
 
@@ -120,7 +121,7 @@ int  CConnectServer::DisconnectToServer(USHORT nSerType, USHORT nSerNo, USHORT n
 			if(it == vecSerNo.end())
 				return 0;
 			
-			vecSerNo.earse(it);
+			vecSerNo.erase(it);
 			if(0 == vecSerNo.size())
 			{
 				std::map<USHORT, int>::iterator it_ser_game = m_mapGameNoToGameId.find(nSerNo);
@@ -129,7 +130,7 @@ int  CConnectServer::DisconnectToServer(USHORT nSerType, USHORT nSerNo, USHORT n
 				
 				std::map<int,std::vector<USHORT> >::iterator it_game_ser = m_mapGameSerInfo.find(it_ser_game->second);
 				std::vector<USHORT>& vecGameSers = it_game_ser->second;
-				std::vector<USHORT>::iterator it_ser = vecGameSers.find(nSerNo);
+				std::vector<USHORT>::iterator it_ser = find(vecGameSers.begin(),vecGameSers.end(),nSerNo);
 				if(it_ser == vecGameSers.end())
 					return 0;
 
@@ -139,6 +140,7 @@ int  CConnectServer::DisconnectToServer(USHORT nSerType, USHORT nSerNo, USHORT n
 			return 0;
 		}
 	}
+	return 0;
 }
 
 

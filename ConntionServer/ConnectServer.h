@@ -16,7 +16,7 @@ public:
 	int	 ConnectToGameServer(const GameInfo& info);
 	int  DisconnectToServer(USHORT nSerType, USHORT nSerNo, USHORT nIndex);
 	
-	USHORT  GetGameSerIndexByNo(USHORT nGameSrvNo);
+	USHORT  GetGameSerIndexByNo(USHORT nGameSrvNo,UINT nRand);
 	USHORT 	GetGameSerNoByGameId(int nGameId);
 	USHORT 	GetARandGameSer();
 	USHORT 	GetCenterServerIndex() const;

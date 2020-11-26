@@ -29,6 +29,11 @@ void CGameSerSink::Close()
 	g_pGameServer->DelConnSrvIndex(m_nConnNo, m_pNet->GetServiceIndex());
 }
 
+bool CGameSerSink::HandTimeMsg(USHORT uTimeID)
+{
+	return true;
+}
+
 
 bool CGameSerSink::HandNetData(USHORT nIndex, USHORT nMain, USHORT nSub, void* pData, UINT nDataSize)
 {

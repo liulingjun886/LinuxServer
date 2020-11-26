@@ -1,7 +1,6 @@
 #pragma once
 #include "../NetHandSink.h"
 #include "../include/TimerNode.h"
-#include "../commproto.h"
 
 class CServices;
 class ConnSucess;

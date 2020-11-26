@@ -1,10 +1,10 @@
 #include "ConnCliSink.h"
 #include <stdio.h>
-#include "commproto.h"
-#include "Core.h"
-#include "MemDataDef.h"
-#include "NetSinkObj.h"
-#include "Services.h"
+#include "../commproto.h"
+#include "../include/Core.h"
+#include "../MemDataBaseEnginer/MemDataDef.h"
+#include "../NetSinkObj.h"
+#include "../include/Services.h"
 #include "ConnectServer.h"
 
 extern CConnectServer* g_pConnectServer;
@@ -35,7 +35,7 @@ bool CConnCliSink::DisConnect()
 
 void CConnCliSink::Close()
 {
-	g_pConnectServer->DisconnectToServer(m_nPeerSerType, m_nPeerSerNo, m_pNet->GetServiceIndex())
+	g_pConnectServer->DisconnectToServer(m_nPeerSerType, m_nPeerSerNo, m_pNet->GetServiceIndex());
 }
 
 
@@ -68,7 +68,7 @@ bool CConnCliSink::HandTimeMsg(USHORT uTimeID)
 	{
 	case TIME_CONN_IS_LINK:
 	{
-		CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_NET, SUB_MSG_TEST);
+		CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_CONNSER, SUB_MSG_TEST);
 		m_timerConnTest.StartTimerSec(5);
 		break;
 	}
@@ -94,7 +94,7 @@ void CConnCliSink::SendData(USHORT nIndex, USHORT nMain, USHORT nSub, void* pDat
 	CNetSinkObj::SendData(m_pNet, nIndex, nMain, nSub, pData, nDataSize);
 }
 
-void CConnCliSink::RegConnSrv(ConnSucess* pConn)
+void CConnCliSink::RegConnSrv()
 {
 	RegConnSer ser;
 	ser.nSerNo = g_pConnectServer->GetSerNo();

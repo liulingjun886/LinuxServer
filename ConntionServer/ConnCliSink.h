@@ -1,8 +1,10 @@
 #pragma once
+#include "../include/types.h"
 #include "../NetHandSink.h"
 #include "../include/TimerNode.h"
 
 class CServices;
+class ConnSucess;
 
 class CConnCliSink : public CNetHandSink
 {
