@@ -1,5 +1,6 @@
 CC = g++
-VPATH = ./CenterServer:./ConntionServer:./DataBaseEnginer:./DataServer:./GameServer:./MemDataBaseEnginer:./UserServer
+VPATH = ./CenterServer:./ConntionServer:./DataBaseEnginer:./DataServer: \
+		./GameServer:./MemDataBaseEnginer:./UserServer
 
 CURR_SRC_FILES = $(wildcard ./*.cpp)
 MDE_SRC_FILES = $(wildcard ./MemDataBaseEnginer/*.cpp)

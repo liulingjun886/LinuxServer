@@ -10,12 +10,6 @@ CServer* g_pSer = NULL;
 
 int main(int argc,char* argv[])
 {
-	if (argc != 3 && argc != 6)
-	{
-		printf("use ./server nSerType nSerNo");
-		return 0;
-	}
-
 	USHORT nSrvType;
 	USHORT nSrvNo;
 	
@@ -59,7 +53,14 @@ int main(int argc,char* argv[])
 		case SRV_TYPE_CENTER:
 			g_pSer = new CCenterServer;
 			break;
-		
+		default:
+			break;
+	}
+
+	if(NULL == g_pSer)
+	{
+		printf("invalid argvs \n");
+        return -1;
 	}
 
 	if(0 != g_pSer->Init(nSrvType, nSrvNo))
