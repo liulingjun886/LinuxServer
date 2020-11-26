@@ -26,7 +26,7 @@ CConnectServer::~CConnectServer()
 
 int	 CConnectServer::Initialize()
 {
-	if(0 != ReadConfig("../config/config.ini"))
+	if(0 != ReadConfig("./config/config.ini"))
 		return -1;
 
 	m_nCenterIndex = m_pCore->AddTcpNetCli(m_szCenterIp.c_str(), m_nCenterPort, false);

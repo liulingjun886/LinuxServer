@@ -80,7 +80,7 @@ bool CConnCliSink::HandTimeMsg(USHORT uTimeID)
 			return false;
 		}
 		m_pNet->PostData(m_pNet->GetServiceIndex(), NET_RECONNECT);
-		m_timerReConn.StartTimerSec(30);
+		//m_timerReConn.StartTimerSec(30);
 		break;
 	}
 	default:

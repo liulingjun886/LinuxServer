@@ -17,7 +17,7 @@ CUserServer::~CUserServer()
 
 int	CUserServer::Initialize()
 {
-	if(0 != ReadConfig("../config/config.ini"))
+	if(0 != ReadConfig("./config/config.ini"))
 		return -1;
 
 	m_pMem = Single_Create(CMemDataBaseEnginer);
@@ -29,6 +29,7 @@ int	CUserServer::Initialize()
 	if(0 == m_pCore->AddTcpNetSer(m_szIp.c_str(), m_nPort, false))
 		return -1;
 
+	InitLogFile("UserServer");
 	return 0;
 }
 

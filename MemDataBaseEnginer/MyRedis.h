@@ -12,7 +12,9 @@ struct RedisConfig
 
 	RedisConfig()
 	{
-		memset(this,0,sizeof(RedisConfig));
+		nPort = 0;
+		szHost = "";
+		szAuth = "";
 	}
 };
 

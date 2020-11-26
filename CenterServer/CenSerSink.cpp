@@ -26,6 +26,7 @@ void CCenSerSink::Connect()
 	conn.nSrvNo = g_pCenterServer->GetSerNo();
 	conn.nSrvType = g_pCenterServer->GetSerType();
 	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_CENTERSER, CT_SUB_MSG_CONN_SUCSS,&conn,sizeof(conn));
+	m_pNet->Log("New Connection");
 }
 
 void CCenSerSink::Close()
@@ -84,7 +85,7 @@ bool CCenSerSink::HandTimeMsg(USHORT nTimeID)
 			if(m_nTestNum > 1)
 				return false;
 			
-			m_timerTestLink.StartTimerSec(300);
+			m_timerTestLink.StartTimerSec(30);
 			return true;
 		}
 	}
@@ -114,6 +115,8 @@ bool CCenSerSink::HandMainMsgFromUserSrv(USHORT nSrcIndex, USHORT nSub, void* pD
 				return false;
 			g_pCenterServer->s_szConnSer[pSer->nSerNo] = m_pNet->GetServiceIndex();
 			g_pCenterServer->m_mapLinkInfo[m_pNet->GetServiceIndex()] = &(g_pCenterServer->s_szConnSer[pSer->nSerNo]);
+			HandTestNetConn();
+			m_timerTestLink.StartTimerSec(30);
 			return true;
 		}
 	}

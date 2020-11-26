@@ -18,7 +18,7 @@ CDataServer::~CDataServer()
 
 int	 CDataServer::Initialize()
 {
-	if(0 != ReadConfig("../config/config.ini"))
+	if(0 != ReadConfig("./config/config.ini"))
 		return -1;
 
 	m_pMem = Single_Create(CMemDataBaseEnginer);

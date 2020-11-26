@@ -4,6 +4,10 @@
 #include "Server.h"
 #include <iostream>
 #include "./CenterServer/CenterServer.h"
+#include "./UserServer/UserServer.h"
+#include "./DataServer/DataServer.h"
+#include "./GameServer/GameServer.h"
+#include "./ConntionServer/ConnectServer.h"
 
 CServer* g_pSer = NULL;
 
@@ -48,10 +52,22 @@ int main(int argc,char* argv[])
         }
     };
 
-	switch(nSrvNo)
+	switch(nSrvType)
 	{
 		case SRV_TYPE_CENTER:
 			g_pSer = new CCenterServer;
+			break;
+		case SRV_TYPE_USER:
+			g_pSer = new CUserServer;
+			break;
+		case SRV_TYPE_DATA:
+			g_pSer = new CDataServer;
+			break;
+		case SRV_TYPE_GAME:
+			g_pSer = new CGameServer;
+			break;
+		case SRV_TYPE_CONN:
+			g_pSer = new CConnectServer;
 			break;
 		default:
 			break;

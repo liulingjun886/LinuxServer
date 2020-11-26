@@ -28,7 +28,7 @@ bool CRedis::InitConnection()
 	if(!OpenConnect())
 		return false;
 
-	if(0 != Connected())
+	if(!Connected())
 		return false;
 
 	return true;
@@ -49,15 +49,18 @@ bool CRedis::OpenConnect()
 		printf("redis connect failer:%s\n",m_pConn->errstr);
 		return false;
 	}
-	
-	redisReply* reply = (redisReply*)redisCommand(m_pConn, "AUTH %s", m_dbConfig.szAuth.c_str());
-	if(reply->type == 6)
+
+	if(m_dbConfig.szAuth.length() > 0)
 	{
-		printf("auth failer\n");
-		return false;
+		redisReply* reply = (redisReply*)redisCommand(m_pConn, "AUTH %s", m_dbConfig.szAuth.c_str());
+		if(reply->type == 6)
+		{
+			printf("auth failer\n");
+			freeReplyObject(reply);	
+			return false;
+		}
+		freeReplyObject(reply);	
 	}
-	
-	freeReplyObject(reply);	
 	return true;
 }
 

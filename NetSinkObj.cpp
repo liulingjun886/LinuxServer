@@ -122,6 +122,7 @@ int CNetSinkObj::HandNetMsg(SERVICEINDEX nIndex, const char* pData, unsigned nDa
 	{
 		return -1;
 	}
+	
 	return nPacketSize;
 }
 

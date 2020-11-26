@@ -18,7 +18,7 @@ CGameServer::~CGameServer()
 
 int	 CGameServer::Initialize()
 {
-	return ReadConfig("../config/config.ini");
+	return ReadConfig("./config/config.ini");
 }
 
 int  CGameServer::ReadConfig(const char* szConfigFile)
