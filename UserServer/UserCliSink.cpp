@@ -58,7 +58,7 @@ bool CUserCliSink::HandNetData(USHORT nSrcIndex, USHORT nMain, USHORT nSub, void
 	{
 		case MAIN_MSG_CENTERSER:
 		{
-			return HandMainMsgCenter(nSrcIndex, nSub, pData, nDataSize);
+			return HandMainMsgFromCenter(nSrcIndex, nSub, pData, nDataSize);
 		}
 		default:
 			m_pNet->Log("invalid cmd main=%d,sub=%d", nMain,nSub);
@@ -74,7 +74,7 @@ bool CUserCliSink::DisConnect()
 }
 
 
-bool CUserCliSink::HandMainMsgCenter(USHORT nSrcIndex, USHORT nSub, void* pData, UINT nDataSize)
+bool CUserCliSink::HandMainMsgFromCenter(USHORT nSrcIndex, USHORT nSub, void* pData, UINT nDataSize)
 {
 	switch(nSub)
 	{
@@ -84,6 +84,7 @@ bool CUserCliSink::HandMainMsgCenter(USHORT nSrcIndex, USHORT nSub, void* pData,
 			RegConnSer ser;
 			ser.nSerNo = g_pUserServer->GetSerNo();
 			CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_USERSER, US_SUB_MSG_REGUSERSRV, &ser, sizeof(ser));
+			m_pNet->Log("Recv CT_SUB_MSG_CONN_SUCSS");
 			return true;
 		}
 		case CT_SUB_MSG_TEST:
