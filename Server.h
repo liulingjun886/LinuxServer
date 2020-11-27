@@ -11,8 +11,8 @@ public:
 public:
 	const char* GetIP() const;
 	unsigned short GetPort() const;
-	USHORT GetSerType() const;
-	USHORT GetSerNo() const;
+	uint16 GetSerType() const;
+	uint16 GetSerNo() const;
 protected:
 	void InitLogFile(const char*   pLogFile);
 	virtual int Initialize() = 0;

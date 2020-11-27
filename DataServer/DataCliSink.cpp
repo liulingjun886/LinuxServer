@@ -1,5 +1,5 @@
 #include "DataCliSink.h"
-#include "../include/types.h"
+#include "../Defines.h"
 #include "../NetSinkObj.h"
 #include "../include/Services.h"
 #include "../commproto.h"
@@ -23,7 +23,7 @@ CDataCliSink::~CDataCliSink()
 }
 
 
-bool CDataCliSink::HandTimeMsg(USHORT nTimeID)
+bool CDataCliSink::HandTimeMsg(uint16 nTimeID)
 {
 	switch(nTimeID)
 	{
@@ -41,7 +41,7 @@ bool CDataCliSink::HandTimeMsg(USHORT nTimeID)
 	return false;
 }
 
-bool CDataCliSink::HandNetData(USHORT nSrcIndex, USHORT nMain, USHORT nSub, void* pData, UINT nDataSize)
+bool CDataCliSink::HandNetData(uint16 nSrcIndex, uint16 nMain, uint16 nSub, void* pData, uint32 nDataSize)
 {
 	switch(nMain)
 	{
@@ -55,7 +55,7 @@ bool CDataCliSink::HandNetData(USHORT nSrcIndex, USHORT nMain, USHORT nSub, void
 	return false;
 }
 
-bool CDataCliSink::HandMainMsgFromCenterSrv(USHORT nSrcIndex, USHORT nSub, void* pData, UINT nDataSize)
+bool CDataCliSink::HandMainMsgFromCenterSrv(uint16 nSrcIndex, uint16 nSub, void* pData, uint32 nDataSize)
 {
 	switch(nSub)
 	{

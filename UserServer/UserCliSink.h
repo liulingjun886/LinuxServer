@@ -1,7 +1,7 @@
 #pragma once
 #include "UserServer.h"
 #include "../include/TimerNode.h"
-#include "../include/types.h"
+#include "../Defines.h"
 #include "../NetHandSink.h"
 
 class CUserCliSink : public CNetHandSink
@@ -10,16 +10,16 @@ public:
 	CUserCliSink(CServices* pServices);
 	~CUserCliSink();
 public:
-	virtual bool HandTimeMsg(USHORT nTimeID);
-	virtual bool HandNetData(USHORT, USHORT, USHORT, void*, UINT);
+	virtual bool HandTimeMsg(uint16 nTimeID);
+	virtual bool HandNetData(uint16, uint16, uint16, void*, uint32);
 	virtual bool DisConnect();
 private:
-	bool HandMainMsgFromCenter(USHORT,    USHORT, void*, UINT);
+	bool HandMainMsgFromCenter(uint16,    uint16, void*, uint32);
 private:
 	CTimer m_timer_Link;
-	USHORT m_nTestNum;
+	uint16 m_nTestNum;
 
-	USHORT m_nReConnectCount;
+	uint16 m_nReConnectCount;
 	CTimer m_timer_reconnect;
 };
 

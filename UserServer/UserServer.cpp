@@ -18,16 +18,27 @@ CUserServer::~CUserServer()
 int	CUserServer::Initialize()
 {
 	if(0 != ReadConfig("./config/config.ini"))
+	{
+		printf("readconfig failer!\n");
 		return -1;
+	}
 
 	m_pMem = Single_Create(CMemDataBaseEnginer);
 	m_pMem->SetServiceNum(8);
 	
 	if(0 == m_pCore->AddTcpNetCli(m_szCenterIp.c_str(),m_nCenterPort,false))
+	{
+		printf("connect to center Failer!\n");
 		return -1;
+	}
+		
 
 	if(0 == m_pCore->AddTcpNetSer(m_szIp.c_str(), m_nPort, false))
+	{
+		printf("AddTcpNetSer Failer!\n");
 		return -1;
+	}
+		
 
 	InitLogFile("UserServer");
 	return 0;

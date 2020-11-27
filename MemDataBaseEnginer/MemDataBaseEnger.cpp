@@ -64,19 +64,19 @@ void CMemDataBaseEnginer::PostMemDataBaseReq(CServices* pServices,void* pData, D
 	pServices->PostData(nIndex, MEM_DATA_BASE_REQ, pData, uDataSize);
 }
 
-void CMemDataBaseEnginer::PostMemDataBaseRet(CServices* pServices,SERVICEINDEX nIndex,SERVICEINDEX nCsid, UINT uTypeId, void* pData, DATASIZE uDataSize)
+void CMemDataBaseEnginer::PostMemDataBaseRet(CServices* pServices,SERVICEINDEX nIndex,SERVICEINDEX nCsid, uint32 uTypeId, void* pData, DATASIZE uDataSize)
 {
-	static DATASIZE nHeadSize = sizeof(DataCenter) + sizeof(UINT);
+	static DATASIZE nHeadSize = sizeof(DataCenter) + sizeof(uint32);
 	char* buff[MAX_MSG_SIZE] = {0};
 	DataCenter* pCenter = (DataCenter*)buff;
 	pCenter->nCsid = nCsid;
-	UINT* pType = (UINT*)(pCenter+1);
+	uint32* pType = (uint32*)(pCenter+1);
 	*pType = uTypeId;
 	if (uDataSize > 0)
 	{
 		memcpy(pType+1, pData, uDataSize);
 	}
-	CNetSinkObj::SendData(pServices,  nIndex,MAIN_MSG_USERSER, SUB_MSG_MEM_DATA_BASE_RET,buff, nHeadSize + uDataSize);
+	CNetSinkObj::SendData(pServices,  nIndex, MAIN_MSG_USERSER, SUB_MSG_MEM_DATA_BASE_RET,buff, nHeadSize + uDataSize);
 }
 
 

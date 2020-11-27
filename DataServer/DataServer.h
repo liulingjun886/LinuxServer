@@ -38,7 +38,7 @@ private:
 	std::string m_szAuth;
 
 	std::string m_szDbHost;
-	USHORT 		m_nDbPort;
+	uint16 		m_nDbPort;
 	std::string m_szDbName;
 	std::string m_szDbUserName;
 	std::string m_szDbPass;

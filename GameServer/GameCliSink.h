@@ -11,17 +11,17 @@ public:
 	CGameCliSink(CServices* pNet);
 	~CGameCliSink();
 public:
-	void Init(UINT nIp);
+	void Init(uint32 nIp);
 	bool DisConnect();
-	bool HandNetData(USHORT,USHORT, USHORT, void*, USHORT);
-	bool HandTimeMsg(USHORT uTimeID);
+	bool HandNetData(uint16,uint16, uint16, void*, uint16);
+	bool HandTimeMsg(uint16 uTimeID);
 private:
-	bool HandMainMsgRoom(USHORT,USHORT, void*, USHORT);
-	bool HandMainMsgNet(USHORT, USHORT, void*, USHORT);
+	bool HandMainMsgRoom(uint16,uint16, void*, uint16);
+	bool HandMainMsgNet(uint16, uint16, void*, uint16);
 
-	bool HandMsgFromCenterSrv(USHORT, USHORT, void*, USHORT);
-	bool HandMsgFromUserSrv(USHORT, USHORT, void*, USHORT);
-	bool HandMsgFromDataSrv(USHORT, USHORT, void*, USHORT);
+	bool HandMsgFromCenterSrv(uint16, uint16, void*, uint16);
+	bool HandMsgFromUserSrv(uint16, uint16, void*, uint16);
+	bool HandMsgFromDataSrv(uint16, uint16, void*, uint16);
 private:
 	bool HandMsgTestConn();
 	void ConnectSucess(ConnSucess* pConn);
@@ -29,8 +29,8 @@ private:
 private:
 	char 		m_nTestLink;
 	char 		m_nReConnectCount;
-	USHORT		m_nPeerSrvType;
-	USHORT 		m_nPeerSrvNo;
+	uint16		m_nPeerSrvType;
+	uint16 		m_nPeerSrvNo;
 	CTimerNode 	m_timerConnTest;
 	CTimerNode 	m_timerReConn;
 };

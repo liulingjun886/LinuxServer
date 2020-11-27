@@ -19,8 +19,8 @@ namespace Mem
 	struct UserLoginMemReq
 	{
 		int nUserId;
-		USHORT nSerNo;
-		USHORT nSockNo;
+		uint16 nSerNo;
+		uint16 nSockNo;
 
 		UserLoginMemReq()
 		{
@@ -30,11 +30,11 @@ namespace Mem
 
 	struct UserLoginMemRet
 	{
-		USHORT nCid;
-		USHORT nGid;
+		uint16 nCid;
+		uint16 nGid;
 		SERVICEINDEX nCSid;
 		SERVICEINDEX nGSid;
-		USHORT nGsno;
+		uint16 nGsno;
 
 		UserLoginMemRet()
 		{
@@ -45,8 +45,8 @@ namespace Mem
 	struct UserLogOutMemReq
 	{
 		int nUserId;
-		USHORT nSerNo;
-		USHORT nSockNo;
+		uint16 nSerNo;
+		uint16 nSockNo;
 
 		UserLogOutMemReq()
 		{
@@ -58,7 +58,7 @@ namespace Mem
 	{
 		int nUserId;
 		int nSeatNo;
-		USHORT nGid;
+		uint16 nGid;
 		SERVICEINDEX nGsid;
 		
 		UserJoinGameReq()
@@ -71,7 +71,7 @@ namespace Mem
 	struct UserJoinGameRet
 	{
 		int nSeatNo;
-		USHORT nCid;
+		uint16 nCid;
 		SERVICEINDEX nCsid;
 		UserJoinGameRet()
 		{

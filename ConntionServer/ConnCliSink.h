@@ -1,5 +1,5 @@
 #pragma once
-#include "../include/types.h"
+#include "../Defines.h"
 #include "../NetHandSink.h"
 #include "../include/TimerNode.h"
 
@@ -12,24 +12,24 @@ public:
 	CConnCliSink(CServices* pNet);
 	~CConnCliSink();
 public:
-	void Init(UINT nIp);
+	void Init(uint32 nIp);
 	bool DisConnect();
 	void Close();
-	bool HandNetData(USHORT,USHORT, USHORT, void*, USHORT);
-	bool HandTimeMsg(USHORT uTimeID);
+	bool HandNetData(uint16,uint16, uint16, void*, uint16);
+	bool HandTimeMsg(uint16 uTimeID);
 private:	
-	bool HandMsgFromCenterSrv(USHORT, USHORT, void*, USHORT);
-	bool HandMsgFromGameSrv(USHORT, USHORT, void*, USHORT);
-	bool HandMsgFromUserSrv(USHORT, USHORT, void*, USHORT);
+	bool HandMsgFromCenterSrv(uint16, uint16, void*, uint16);
+	bool HandMsgFromGameSrv(uint16, uint16, void*, uint16);
+	bool HandMsgFromUserSrv(uint16, uint16, void*, uint16);
 
-	void SendData(USHORT, USHORT, USHORT, void*, USHORT);
+	void SendData(uint16, uint16, uint16, void*, uint16);
 	void RegConnSrv();
 	void ConnectSucess(ConnSucess* pConn);
 private:
-	USHORT m_nPeerSerType;
-	USHORT m_nPeerSerNo;
+	uint16 m_nPeerSerType;
+	uint16 m_nPeerSerNo;
 	
-	USHORT m_nTestLink;
+	uint16 m_nTestLink;
 	char m_nReConnectCount;
 	CTimerNode m_timerConnTest;
 	CTimerNode m_timerReConn;

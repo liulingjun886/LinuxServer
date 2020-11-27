@@ -10,7 +10,7 @@ class CNetSinkObj : public CNetSink
 public:
 	CNetSinkObj(CServices* pServices,int nConnType);
 	~CNetSinkObj();
-	static void SendData(CServices* pService,SERVICEINDEX nIndex, USHORT nMain,USHORT nSub,void* pData = NULL,DATASIZE nDataSize = 0);
+	static void SendData(CServices* pService,SERVICEINDEX nIndex, uint16 nMain,uint16 nSub,void* pData = NULL,DATASIZE nDataSize = 0);
 public:
 	virtual void Init(const char* szIp);
 	virtual void Connect();

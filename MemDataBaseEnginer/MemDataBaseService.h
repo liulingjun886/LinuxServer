@@ -1,6 +1,6 @@
 #pragma once
 #include "../include/Services.h"
-#include "../include/types.h"
+#include "../Defines.h"
 //#include "interface.h"
 
 class CMemSink;

@@ -70,7 +70,7 @@ CBaseLogic* CRoom::CreateLogic()
 	return m_sFun(this);
 }
 
-bool CRoom::InitRoomData(UID uid,int nRoomId,CreateRoom* pData, USHORT uDataSize)
+bool CRoom::InitRoomData(UID uid,int nRoomId,CreateRoom* pData, uint16 uDataSize)
 {
 	if (m_nRoomId != 0)
 		return false;
@@ -92,8 +92,8 @@ bool CRoom::InitRoomData(UID uid,int nRoomId,CreateRoom* pData, USHORT uDataSize
 		m_pUsers[i] = NULL;
 	}
 	
-	m_pUserState = new USHORT[m_nUserCount];
-	memset(m_pUserState,0,sizeof(USHORT)*m_nUserCount);
+	m_pUserState = new uint16[m_nUserCount];
+	memset(m_pUserState,0,sizeof(uint16)*m_nUserCount);
 	
 	if (m_pGameLogic->InitGameStation(&pData->logicinfo, uDataSize - sizeof(CreateRoomInfo)))
 	{
@@ -133,13 +133,13 @@ bool CRoom::HandData(int e, SERVICEINDEX uFromSerId, void *pData, DATASIZE nData
 	}
 	case MEM_DATA_BASE_RET:
 	{
-		UINT uType = *(UINT*)pData;
-		return HandMemDataRet(uType, (UINT*)pData + 1,nDataSize - sizeof(UINT));
+		uint32 uType = *(uint32*)pData;
+		return HandMemDataRet(uType, (uint32*)pData + 1,nDataSize - sizeof(uint32));
 	}
 	case USER_MSG:
 	{
-		UINT nType = *(UINT*)pData;
-		return HandUserMsg(nType,(UINT*)pData + 1,nDataSize - sizeof(UINT));
+		uint32 nType = *(uint32*)pData;
+		return HandUserMsg(nType,(uint32*)pData + 1,nDataSize - sizeof(uint32));
 	}
 	default:
 		break;
@@ -159,7 +159,7 @@ void CRoom::PreExitSelf()
 	Single_Get(CRoomManager)->DestroyRoom(m_nRoomId);
 }
 
-bool CRoom::HandNetMsg(USHORT nSeatNo,USHORT nIndex,USHORT uMain, USHORT uSub, void* pData, USHORT uDataSize)
+bool CRoom::HandNetMsg(uint16 nSeatNo,uint16 nIndex,uint16 uMain, uint16 uSub, void* pData, uint16 uDataSize)
 {
 	switch (uMain)
 	{
@@ -224,7 +224,7 @@ bool CRoom::HandNetMsg(USHORT nSeatNo,USHORT nIndex,USHORT uMain, USHORT uSub, v
 	return true;
 }
 
-bool CRoom::HandTimeMsg(USHORT nTimeId)
+bool CRoom::HandTimeMsg(uint16 nTimeId)
 {
 	switch (nTimeId)
 	{
@@ -238,7 +238,7 @@ bool CRoom::HandTimeMsg(USHORT nTimeId)
 		m_timerGameMustBegin.StopTimer();
 		if (!m_bStarted)
 		{
-			for(UINT i = 0; i < m_pUsers.size(); i++)
+			for(uint32 i = 0; i < m_pUsers.size(); i++)
 			{
 				if(m_pUsers[i])
 					UserQuit(i);
@@ -249,7 +249,7 @@ bool CRoom::HandTimeMsg(USHORT nTimeId)
 	}
 	case GAME_BEGIN:
 	{
-		for(UINT i = 0; i < m_pUsers.size(); i++)
+		for(uint32 i = 0; i < m_pUsers.size(); i++)
 		{
 			UserReady(i);
 		}
@@ -266,7 +266,7 @@ bool CRoom::HandTimeMsg(USHORT nTimeId)
 	return true;
 }
 
-bool CRoom::HandMemDataRet(UINT uType, void* pData, USHORT uDataSize)
+bool CRoom::HandMemDataRet(uint32 uType, void* pData, uint16 uDataSize)
 {
 
 	switch (uType)
@@ -286,13 +286,13 @@ bool CRoom::HandMemDataRet(UINT uType, void* pData, USHORT uDataSize)
 	return true;
 }
 
-bool CRoom::HandUserMsg(UINT nType, void* pData, USHORT nDataSize)
+bool CRoom::HandUserMsg(uint32 nType, void* pData, uint16 nDataSize)
 {
 	return true;
 }
 
 
-void CRoom::SendDataToUser(USHORT nSeatNo, USHORT nMain, USHORT nSub, void* pData, USHORT nDataSize)
+void CRoom::SendDataToUser(uint16 nSeatNo, uint16 nMain, uint16 nSub, void* pData, uint16 nDataSize)
 {
 	if(nSeatNo >= m_nUserCount)
 		return;
@@ -301,10 +301,10 @@ void CRoom::SendDataToUser(USHORT nSeatNo, USHORT nMain, USHORT nSub, void* pDat
 		return;
 	
 	
-	USHORT nCid,nCsid;
+	uint16 nCid,nCsid;
 	pUser->GetConnInfo(nCid, nCsid);
 
-	//USHORT nIndex = CGameCliNetSink::GetConnSerById(nCid,GetServiceIndex()+nSeatNo);
+	//uint16 nIndex = CGameCliNetSink::GetConnSerById(nCid,GetServiceIndex()+nSeatNo);
 	/*
 	if(nMain == 6 && nSub == 10)
 	{
@@ -327,7 +327,7 @@ void CRoom::SendDataToUser(USHORT nSeatNo, USHORT nMain, USHORT nSub, void* pDat
 	//CNetSinkObj::SendData(this,nIndex, MAIN_MSG_GAMESER, SUB_MSG_GAME4USER, szBuff, nDataSize + sizeof(Game2User));
 }
 
-void CRoom::SendDataToAll(USHORT nMain, USHORT nSub, void* pData, USHORT nDataSize,USHORT nSeatNo)
+void CRoom::SendDataToAll(uint16 nMain, uint16 nSub, void* pData, uint16 nDataSize,uint16 nSeatNo)
 {	
 	for(int i = 0; i < m_nUserCount; i++)
 	{
@@ -337,24 +337,24 @@ void CRoom::SendDataToAll(USHORT nMain, USHORT nSub, void* pData, USHORT nDataSi
 	}
 }
 
-USHORT CRoom::GetUserCount() const
+uint16 CRoom::GetUserCount() const
 {
 	return m_nUserCount;
 }
 
-CUserInfo* CRoom::GetUsers(USHORT nSeatNo)
+CUserInfo* CRoom::GetUsers(uint16 nSeatNo)
 {
 	if(nSeatNo >= m_pUsers.size())
 		return NULL;
 	return m_pUsers[nSeatNo];
 }
 
-bool CRoom::UserJoin(USHORT nCsid, USHORT nIndex, void* pData, USHORT uDataSize)
+bool CRoom::UserJoin(uint16 nCsid, uint16 nIndex, void* pData, uint16 uDataSize)
 {
 	//char buff[MAX_MSG_SIZE] = { 0 };
 	int nSeatNo = -1;
 	UserBaseInfo* pInfo = (UserBaseInfo*)pData;
-	for (UINT i = 0; i < m_pUsers.size(); i++)
+	for (uint32 i = 0; i < m_pUsers.size(); i++)
 	{
 		if (m_pUsers[i] == NULL)
 		{
@@ -394,7 +394,7 @@ bool CRoom::UserJoin(USHORT nCsid, USHORT nIndex, void* pData, USHORT uDataSize)
 	return true;
 }
 
-bool CRoom::UserQuit(USHORT nSeatNo)
+bool CRoom::UserQuit(uint16 nSeatNo)
 {
 	CUserInfo* pUser = m_pUsers[nSeatNo];
 	if(!pUser)
@@ -403,7 +403,7 @@ bool CRoom::UserQuit(USHORT nSeatNo)
 	m_pUsers[nSeatNo] = NULL;
 	m_pUserState[nSeatNo] = 0;
 	
-	USHORT nCid,nCsid;
+	uint16 nCid,nCsid;
 	pUser->GetConnInfo(nCid, nCsid);
 	Mem::UserQuitGameReq req;
 	req.nUserId = pUser->GetUserId();
@@ -456,7 +456,7 @@ void CRoom::GameOver()
 {
 	//Log("GameOver nRoomId = %d",m_nRoomId);
 	m_pGameLogic->GameOver();
-	for (UINT i = 0; i < m_pUsers.size(); i++)
+	for (uint32 i = 0; i < m_pUsers.size(); i++)
 	{
 		if (m_pUsers[i] != NULL)
 		{
@@ -465,7 +465,7 @@ void CRoom::GameOver()
 	}
 }
 
-void CRoom::SendRoomInfoToUser(USHORT nSeatNo)
+void CRoom::SendRoomInfoToUser(uint16 nSeatNo)
 {
 	CUserInfo* pUser = m_pUsers[nSeatNo];
 	if(!pUser)
@@ -482,19 +482,19 @@ void CRoom::SendRoomInfoToUser(USHORT nSeatNo)
 	SendDataToUser(nSeatNo, MAIN_MSG_ROOM, SUB_MSG_ROOMINFO, buf, sizeof(RoomInfo));
 }
 
-void CRoom::SendAllUsersInfoToUser(USHORT nSeatNo)
+void CRoom::SendAllUsersInfoToUser(uint16 nSeatNo)
 {
 	
 }
 
 
-void CRoom::SyncGameSerInfo(USHORT nSeatNo)
+void CRoom::SyncGameSerInfo(uint16 nSeatNo)
 {
 	CUserInfo *pUser = m_pUsers[nSeatNo];
 	if(!pUser)
 		return;
 	
-	USHORT nCid,nCsid;
+	uint16 nCid,nCsid;
 	pUser->GetConnInfo(nCid, nCsid);
 	
 	char buf[MAX_MSG_SIZE] = { 0 };
@@ -510,7 +510,7 @@ void CRoom::SyncGameSerInfo(USHORT nSeatNo)
 	//CNetSinkObj::SendData(this,CGameCliNetSink::GetConnSerById(nCid,GetServiceIndex()+nSeatNo), MAIN_MSG_GAMESER, SUB_MSG_GAME2CONN, buf, 	sizeof(InnserSync)+sizeof(UserGameSerInfo));	
 }
 
-void CRoom::UserReady(USHORT nSeatNo)
+void CRoom::UserReady(uint16 nSeatNo)
 {
 	m_pUserState[nSeatNo] = 1;
 	

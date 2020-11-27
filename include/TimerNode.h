@@ -16,11 +16,11 @@ public:
 	~CTimerNode();
 public:
 	//设置定时器绑定的Service
-	void InitTimerObj(CServices* pService,UINT nTimerId);
+	void InitTimerObj(CServices* pService,uint32 nTimerId);
 	//单位是10毫秒
-	void StartTimer(UINT nInterval);
+	void StartTimer(uint32 nInterval);
 	//单位是秒
-	void StartTimerSec(UINT nSec);
+	void StartTimerSec(uint32 nSec);
 	//终止定时器
 	void StopTimer();
 private:
@@ -29,8 +29,8 @@ private:
 	void RemoveNode();
 	void AddTail(CTimerNode* const pNode);
 private:
-	UINT m_nExpire;
-	UINT m_nTimerId;
+	uint32 m_nExpire;
+	uint32 m_nTimerId;
 	CTimerNode* m_pPrev;
 	CTimerNode* m_pNext;
 	CServices* m_pService;

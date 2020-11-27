@@ -9,14 +9,14 @@ public:
 	CUserSerSink(CServices* pServices);
 	~CUserSerSink();
 public:
-	virtual bool HandTimeMsg(USHORT uTimeID);
-	virtual bool HandNetData(USHORT, USHORT, USHORT, void*, UINT);
+	virtual bool HandTimeMsg(uint16 uTimeID);
+	virtual bool HandNetData(uint16, uint16, uint16, void*, uint32);
 	virtual void Connect();
 private:
-	bool HandMainMSgGameSer(USHORT, USHORT, void*, UINT);
-	bool HandMainMsgConnSer(USHORT, USHORT, void*, UINT);
+	bool HandMainMSgGameSer(uint16, uint16, void*, uint32);
+	bool HandMainMsgConnSer(uint16, uint16, void*, uint32);
 	bool HandTestNetConn();
 private:
 	CTimer m_timer_TestLink;
-	USHORT m_nNum;
+	uint16 m_nNum;
 };

@@ -28,7 +28,7 @@ CDataBaseSink::~CDataBaseSink()
 	SAFE_DELTE(m_pDataBase);
 }
 
-bool CDataBaseSink::HandDataBaseReq(SERVICEINDEX nFromIndex,SERVICEINDEX nCsid, UINT nType,void* pData,DATASIZE nDataSize)
+bool CDataBaseSink::HandDataBaseReq(SERVICEINDEX nFromIndex,SERVICEINDEX nCsid, uint32 nType,void* pData,DATASIZE nDataSize)
 {
 	switch(nType)
 	{
@@ -49,7 +49,7 @@ bool CDataBaseSink::HandTimeMsg(TIMEERID nTimeId)
 }
 
 
-void CDataBaseSink::UserLogin(USHORT nIndex,SERVICEINDEX nCsid,void* pData,USHORT nDataSize)
+void CDataBaseSink::UserLogin(uint16 nIndex,SERVICEINDEX nCsid,void* pData,uint16 nDataSize)
 {
 	if(nDataSize != sizeof(UserLoginReq))
 		return;

@@ -31,10 +31,10 @@ public:
 	SERVICEINDEX AddWebSockSer(const char* szIp, unsigned short nPort, bool IsIpV6 = false);
 
 	//网络引擎添加自定义套接字 自定义套接字必须继承自CSocketService
-	void AddPoller(CPoller* pPollerService,UINT events);
+	void AddPoller(CPoller* pPollerService,uint32 events);
 	
 	//网络引擎修改自定义套接字
-	void ModPoller(CPoller* pPollerService, UINT events);
+	void ModPoller(CPoller* pPollerService, uint32 events);
 	
 	//网络引擎删除自定义套接字
 	void DelPoller(CPoller* pPollerService);

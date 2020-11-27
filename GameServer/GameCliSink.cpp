@@ -24,7 +24,7 @@ CGameCliSink::~CGameCliSink()
 	
 }
 
-void CGameCliSink::Init(UINT nIp)
+void CGameCliSink::Init(uint32 nIp)
 {
 	m_timerConnTest.StartTimerSec(5);
 }
@@ -36,7 +36,7 @@ bool CGameCliSink::DisConnect()
 	return true;
 }
 
-bool CGameCliSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void* pData, USHORT nDataSize)
+bool CGameCliSink::HandNetData(uint16 nIndex,uint16 nMain, uint16 nSub, void* pData, uint16 nDataSize)
 {
 	m_nTestLink = 0;
 
@@ -79,7 +79,7 @@ bool CGameCliSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void* pD
 			case SUB_MSG_USER_DOUBLELOGIN:
 			{
 				UserDoubleLogin* pDouble = (UserDoubleLogin*)pData;
-				USHORT nIndex = m_RemoteSer.GetConnSerById(pDouble->nCid,m_pNet->GetServiceIndex());
+				uint16 nIndex = m_RemoteSer.GetConnSerById(pDouble->nCid,m_pNet->GetServiceIndex());
 				CNetSinkObj::SendData(m_pNet, nIndex, MAIN_MSG_CONNECT, SUB_MSG_USER_DOUBLELOGIN,pData,nDataSize);
 				return true;
 			}
@@ -97,7 +97,7 @@ bool CGameCliSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void* pD
 					InnserSync sync;
 					sync.nIndex = pConn->nCsid;
 					sync.nType = EN_RECONNECT_FAIL;
-					USHORT nIndex = m_RemoteSer.GetConnSerById(pConn->nCid,m_pNet->GetServiceIndex());
+					uint16 nIndex = m_RemoteSer.GetConnSerById(pConn->nCid,m_pNet->GetServiceIndex());
 					CNetSinkObj::SendData(m_pNet,nIndex, MAIN_MSG_GAMESER, SUB_MSG_GAME2CONN,  &sync, sizeof(InnserSync));
 				}
 				return true;	
@@ -126,7 +126,7 @@ bool CGameCliSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void* pD
 	return true;*/
 }
 
-bool CGameCliSink::HandTimeMsg(USHORT uTimeID)
+bool CGameCliSink::HandTimeMsg(uint16 uTimeID)
 {
 	switch (uTimeID)
 	{
@@ -153,7 +153,7 @@ bool CGameCliSink::HandTimeMsg(USHORT uTimeID)
 	return true;
 }
 
-bool CGameCliSink::HandMainMsgRoom(USHORT nCsid,USHORT nSub, void* pData, USHORT nDataSize)
+bool CGameCliSink::HandMainMsgRoom(uint16 nCsid,uint16 nSub, void* pData, uint16 nDataSize)
 {
 	UserBaseInfo* pUserInfo = (UserBaseInfo*)pData;
 
@@ -162,7 +162,7 @@ bool CGameCliSink::HandMainMsgRoom(USHORT nCsid,USHORT nSub, void* pData, USHORT
 	case SUB_MSG_CREATE:
 	{
 		bool bRet(true);
-		USHORT nIndex = 0;
+		uint16 nIndex = 0;
 		CreateRoom* pInfo = (CreateRoom*)(pUserInfo+1);
 		do
 		{
@@ -210,7 +210,7 @@ bool CGameCliSink::HandMainMsgRoom(USHORT nCsid,USHORT nSub, void* pData, USHORT
 	case SUB_MSG_ENTER:
 	{
 		int nRoomId = *(int*)(pUserInfo+1);
-		USHORT nIndex = Single_Get(CRoomManager)->GetRoom(nRoomId);
+		uint16 nIndex = Single_Get(CRoomManager)->GetRoom(nRoomId);
 
 		char buff[MAX_MSG_SIZE] = { 0 };		
 		if(nIndex != INVALID_SERIVCE_INDEX)
@@ -240,7 +240,7 @@ bool CGameCliSink::HandMainMsgRoom(USHORT nCsid,USHORT nSub, void* pData, USHORT
 	return true;
 }
 
-bool CGameCliSink::HandMsgFromCenterSrv(USHORT nIndex, USHORT nSub, void* pData, USHORT nDataSize)
+bool CGameCliSink::HandMsgFromCenterSrv(uint16 nIndex, uint16 nSub, void* pData, uint16 nDataSize)
 {
 	switch(nSub)
 	{
@@ -261,7 +261,7 @@ bool CGameCliSink::HandMsgFromCenterSrv(USHORT nIndex, USHORT nSub, void* pData,
 	return true;
 }
 
-bool CGameCliSink::HandMsgFromUserSrv(USHORT nIndex, USHORT nSub, void* pData, USHORT nDataSize)
+bool CGameCliSink::HandMsgFromUserSrv(uint16 nIndex, uint16 nSub, void* pData, uint16 nDataSize)
 {
 	switch(nSub)
 	{
@@ -281,7 +281,7 @@ bool CGameCliSink::HandMsgFromUserSrv(USHORT nIndex, USHORT nSub, void* pData, U
 	return true;
 }
 
-bool CGameCliSink::HandMsgFromDataSrv(USHORT nIndex, USHORT nSub, void* pData, USHORT nDataSize)
+bool CGameCliSink::HandMsgFromDataSrv(uint16 nIndex, uint16 nSub, void* pData, uint16 nDataSize)
 {
 	switch(nSub)
 	{

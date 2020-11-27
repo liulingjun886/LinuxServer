@@ -16,11 +16,21 @@
 
 extern CServer* g_pSer;
 
+typedef struct tagNetHead
+{
+	uint16 uDataSize;
+}NetHead;
+
+typedef struct tagNetMsgCommand
+{
+	uint16 uMain;
+	uint16 uSub;
+}NetMsgCommand;
 
 
-USHORT nHeadSize = sizeof(NetHead);
-USHORT nCommandSize = sizeof(NetMsgCommand);
-USHORT nMinDataSize = nHeadSize + nCommandSize;
+uint16 nHeadSize = sizeof(NetHead);
+uint16 nCommandSize = sizeof(NetMsgCommand);
+uint16 nMinDataSize = nHeadSize + nCommandSize;
 
 
 CNetSinkObj::CNetSinkObj(CServices* pServices,int nConnType):
@@ -75,7 +85,7 @@ CNetSinkObj::~CNetSinkObj()
 	SAFE_DELTE(m_pSink)
 }
 
-void CNetSinkObj::SendData(CServices* pService,SERVICEINDEX nIndex, USHORT nMain,USHORT nSub,void* pData,DATASIZE nDataSize)
+void CNetSinkObj::SendData(CServices* pService,SERVICEINDEX nIndex, uint16 nMain,uint16 nSub,void* pData,DATASIZE nDataSize)
 {
 	if(nIndex == INVALID_SERIVCE_INDEX)
 		return;
@@ -107,7 +117,7 @@ void CNetSinkObj::SendData(CServices* pService,SERVICEINDEX nIndex, USHORT nMain
 */
 int CNetSinkObj::HandNetMsg(SERVICEINDEX nIndex, const char* pData, unsigned nDataCount)
 {
-	if(nDataCount <= nMinDataSize)
+	if(nDataCount < nMinDataSize)
 		return 0;
 
 	NetHead* pHead = (NetHead*)pData;

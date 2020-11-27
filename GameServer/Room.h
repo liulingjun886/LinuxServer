@@ -25,15 +25,15 @@ class CRoom :
 	
 	int m_nRoomId;
 	int m_nGameId;	
-	USHORT m_nUserCount;
+	uint16 m_nUserCount;
 	UID m_dwOwerId;
-	USHORT m_nAllRound;
-	USHORT m_nCurRound;
+	uint16 m_nAllRound;
+	uint16 m_nCurRound;
 	bool m_bStarted;
 	//Users** m_pUsers;
 	//CUserInfo** m_pUsers;
 	CSmartArrayPoint<CUserInfo*> m_pUsers;
-	USHORT *m_pUserState;
+	uint16 *m_pUserState;
 	CBaseLogic* m_pGameLogic;
 
 	
@@ -45,33 +45,33 @@ public:
 	CRoom();
 	~CRoom();
 	CBaseLogic* CreateLogic();
-	bool InitRoomData(UID uid,int,CreateRoom* pData,USHORT uDataSize);
+	bool InitRoomData(UID uid,int,CreateRoom* pData,uint16 uDataSize);
 	static bool LoadGameLogic(int nGameId);
 	static void ReleaseGameLogic();
 public:
 	bool GameStart();
 	void GameFinish();
-	void SendDataToUser(USHORT, USHORT, USHORT, void* pData = NULL, USHORT nDataSize = 0);
-	void SendDataToAll(USHORT, USHORT, void*, USHORT,USHORT nSeatNo = -1);
-	USHORT GetUserCount() const;
-	CUserInfo* GetUsers(USHORT nSeatNo);
+	void SendDataToUser(uint16, uint16, uint16, void* pData = NULL, uint16 nDataSize = 0);
+	void SendDataToAll(uint16, uint16, void*, uint16,uint16 nSeatNo = -1);
+	uint16 GetUserCount() const;
+	CUserInfo* GetUsers(uint16 nSeatNo);
 
 private:
 	virtual bool HandData(int e, SERVICEINDEX uFromSerId, void *pData, DATASIZE size);
 	void PreExitSelf();
 	
 private:
-	bool HandNetMsg(USHORT nSeatNo,USHORT nIndex,USHORT uMain,USHORT uSub,void* pData,USHORT uDataSize);
-	bool HandTimeMsg(USHORT uTimeId);
+	bool HandNetMsg(uint16 nSeatNo,uint16 nIndex,uint16 uMain,uint16 uSub,void* pData,uint16 uDataSize);
+	bool HandTimeMsg(uint16 uTimeId);
 	bool HandDataBaseRet();
-	bool HandMemDataRet(UINT uType, void* pData, USHORT uDataSize);
-	bool HandUserMsg(UINT nType, void* pData, USHORT nDataSize);
-	bool UserJoin(USHORT nCsid, USHORT nIndex,void* pData,USHORT uDataSize);
-	bool UserQuit(USHORT);
+	bool HandMemDataRet(uint32 uType, void* pData, uint16 uDataSize);
+	bool HandUserMsg(uint32 nType, void* pData, uint16 nDataSize);
+	bool UserJoin(uint16 nCsid, uint16 nIndex,void* pData,uint16 uDataSize);
+	bool UserQuit(uint16);
 	void GameOver();
-	void SendRoomInfoToUser(USHORT nSeatNo);
-	void SendAllUsersInfoToUser(USHORT);
-	void SyncGameSerInfo(USHORT nSeatNo);
-	void UserReady(USHORT nSeatNo);
+	void SendRoomInfoToUser(uint16 nSeatNo);
+	void SendAllUsersInfoToUser(uint16);
+	void SyncGameSerInfo(uint16 nSeatNo);
+	void UserReady(uint16 nSeatNo);
 };
 

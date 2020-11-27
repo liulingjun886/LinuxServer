@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "./include/types.h"
+#include "./Defines.h"
 #include "Server.h"
 #include <iostream>
 #include "./CenterServer/CenterServer.h"
@@ -14,8 +14,8 @@ CServer* g_pSer = NULL;
 
 int main(int argc,char* argv[])
 {
-	USHORT nSrvType;
-	USHORT nSrvNo;
+	uint16 nSrvType;
+	uint16 nSrvNo;
 	
 	char option[] = ":s:t::";
     int result;

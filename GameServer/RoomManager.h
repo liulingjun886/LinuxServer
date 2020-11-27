@@ -3,18 +3,18 @@
 #include <vector>
 #include "../include/ToolLock.h"
 #include <assert.h>
-#include "../include/types.h"
+#include "../Defines.h"
 using namespace std;
 
 class CRoomManager
 {
 	Single(CRoomManager)
 public:
-	int AddRoom(USHORT);
+	int AddRoom(uint16);
 	void DestroyRoom(int);
-	USHORT GetRoom(int);
+	uint16 GetRoom(int);
 private:
-	map<int, USHORT> m_room_manager;
+	map<int, uint16> m_room_manager;
 	CRWLock m_rwlock;
 	vector<int> m_vecRoomId;
 };

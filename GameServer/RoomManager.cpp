@@ -1,5 +1,5 @@
 #include "RoomManager.h"
-#include "../include/types.h"
+#include "../Defines.h"
 #include <assert.h>
 #include <time.h>
 //#include "Services.h"
@@ -22,7 +22,7 @@ CRoomManager::~CRoomManager()
 {
 }
 
-int CRoomManager::AddRoom(USHORT nIndex)
+int CRoomManager::AddRoom(uint16 nIndex)
 {
 	static int sCurRoomid = 0;
 	int i = sCurRoomid;
@@ -52,7 +52,7 @@ void CRoomManager::DestroyRoom(int nRoomId)
 {
 	if(nRoomId < 100000)
 		return;
-	map<int, USHORT>::iterator it;
+	map<int, uint16>::iterator it;
 	CToolLock lock(&m_rwlock);
 	it = m_room_manager.find(nRoomId);
 	if (it != m_room_manager.end())
@@ -61,9 +61,9 @@ void CRoomManager::DestroyRoom(int nRoomId)
 	}
 }
 
-USHORT CRoomManager::GetRoom(int nRoomId)
+uint16 CRoomManager::GetRoom(int nRoomId)
 {
-	map<int, USHORT>::iterator it;
+	map<int, uint16>::iterator it;
 	CToolLock lock(&m_rwlock,1);
 	it = m_room_manager.find(nRoomId);
 	if (it != m_room_manager.end())

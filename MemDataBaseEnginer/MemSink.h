@@ -12,7 +12,7 @@ public:
 	~CMemSink();
 public:
 	bool Init();
-	bool HandMemDataReq(SERVICEINDEX uFromSerId,SERVICEINDEX nCsid,UINT uTypeID, void *pData, DATASIZE size);
+	bool HandMemDataReq(SERVICEINDEX uFromSerId,SERVICEINDEX nCsid,uint32 uTypeID, void *pData, DATASIZE size);
 	bool HandTimeMsg(TIMEERID nTimeId);
 };
 

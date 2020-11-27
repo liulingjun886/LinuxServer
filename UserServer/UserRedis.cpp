@@ -28,7 +28,7 @@ void CUserRedis::RegRedisScript(int nType,const char* szStr)
 	freeReplyObject(reply);
 }
 
-void CUserRedis::UserLoginReq(int nUserId,USHORT nSerNo,SERVICEINDEX nSevNo,void* pRet,UINT nRet)
+void CUserRedis::UserLoginReq(int nUserId,uint16 nSerNo,SERVICEINDEX nSevNo,void* pRet,uint32 nRet)
 {
 	redisReply* pReply = (redisReply*)redisCommand(m_pConn, "EVALSHA %s %d %d %d %d", m_RedisPro[PRO_LOGIN_IN],3,nUserId,nSerNo,nSevNo);
 
@@ -60,7 +60,7 @@ void CUserRedis::UserLoginReq(int nUserId,USHORT nSerNo,SERVICEINDEX nSevNo,void
 	freeReplyObject(pReply);
 }
 
-void CUserRedis::UserJoinGame(int nUserId,USHORT nGid,SERVICEINDEX nGsid,int nSeatNo,void* pRet,UINT nRet)
+void CUserRedis::UserJoinGame(int nUserId,uint16 nGid,SERVICEINDEX nGsid,int nSeatNo,void* pRet,uint32 nRet)
 {
 	Mem::UserJoinGameRet* pData = (Mem::UserJoinGameRet*)pRet;
 	redisReply* reply = (redisReply*)redisCommand(m_pConn, "EVALSHA %s %d %d %d %d %d",m_RedisPro[PRO_JOIN_GAME],4,nUserId,nGid,nGsid,nSeatNo);
@@ -137,7 +137,7 @@ bool CUserRedis::Connected()
 	return true;
 }
 
-int  CUserRedis::Exec(UINT nType,void* pData,UINT nDataSize,void *pRet,UINT nRet)
+int  CUserRedis::Exec(uint32 nType,void* pData,uint32 nDataSize,void *pRet,uint32 nRet)
 {
 	CloseReply();
 	

@@ -30,12 +30,12 @@ bool CMemDataBaseService::HandData(int e, SERVICEINDEX uFromSerId, void *pData, 
 	}
 	case MEM_DATA_BASE_REQ:
 	{
-		static DATASIZE nHeadSize = sizeof(DataCenter) + sizeof(UINT);
+		static DATASIZE nHeadSize = sizeof(DataCenter) + sizeof(uint32);
 		if(uDataSize < nHeadSize)
 			break;
 		
 		DataCenter* pCsid = (DataCenter*)pData;
-		UINT* pType = (UINT*)(pCsid+1);
+		uint32* pType = (uint32*)(pCsid+1);
 		m_Sink->HandMemDataReq(uFromSerId,pCsid->nCsid,*pType ,pType+1, uDataSize-nHeadSize);
 		break;
 	}

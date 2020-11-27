@@ -3,7 +3,7 @@
 #include "../NetHandSink.h"
 #include <string>
 #include <map>
-#include "../include/types.h"
+#include "../Defines.h"
 #include "../include/ToolLock.h"
 #include "../include/TimerNode.h"
 #include "../commproto.h"
@@ -15,15 +15,15 @@ public:
 	CCenSerSink(CServices* pServices);
 	~CCenSerSink();
 public:
-	virtual bool HandTimeMsg(USHORT uTimeID);
-	virtual bool HandNetData(USHORT, USHORT, USHORT, void*, UINT);
+	virtual bool HandTimeMsg(uint16 uTimeID);
+	virtual bool HandNetData(uint16, uint16, uint16, void*, uint32);
 	virtual void Connect();
 	virtual void Close();
 private:
-	bool HandMainMsgFromUserSrv(USHORT, USHORT, void* , UINT);
-	bool HandMainMsgFromDataSrv(USHORT, USHORT, void* , UINT);
-	bool HandMainMsgFromGameSrv(USHORT, USHORT, void* , UINT);
-	bool HandMainMsgFromConnSrv(USHORT, USHORT, void* , UINT);
+	bool HandMainMsgFromUserSrv(uint16, uint16, void* , uint32);
+	bool HandMainMsgFromDataSrv(uint16, uint16, void* , uint32);
+	bool HandMainMsgFromGameSrv(uint16, uint16, void* , uint32);
+	bool HandMainMsgFromConnSrv(uint16, uint16, void* , uint32);
 
 	bool HandTestNetConn();
 	

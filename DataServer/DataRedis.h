@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../MemDataBaseEnginer/MyRedis.h"
-#include "../include/types.h"
+#include "../Defines.h"
 
 class CDataRedis : public CRedis
 {
@@ -11,7 +11,7 @@ public:
 protected:
 	virtual int  GetRedisConfig();
 	virtual bool Connected();
-	virtual int  Exec(UINT nType,void* pData,UINT nDataSize,void *pRet=NULL,UINT nRet=0);
+	virtual int  Exec(uint32 nType,void* pData,uint32 nDataSize,void *pRet=NULL,uint32 nRet=0);
 private:
 	void RegRedisScript(int nType,const char* szStr);
 private:

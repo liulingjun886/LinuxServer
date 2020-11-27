@@ -1,18 +1,18 @@
 #pragma once
-#include "./include/types.h"
+#include "./Defines.h"
 
 struct ConnSucess
 {
-	USHORT nSrvType;
-	USHORT nSrvNo;
+	uint16 nSrvType;
+	uint16 nSrvNo;
 };
 
 struct RegGameSer
 {
-	USHORT nSerNo;
-	UINT nGameID;
+	uint16 nSerNo;
+	uint32 nGameID;
 	char szIp[16];
-	USHORT nPort;
+	uint16 nPort;
 	RegGameSer()
 	{
 		memset(this,0,sizeof(RegGameSer));
@@ -21,20 +21,20 @@ struct RegGameSer
 
 struct RegConnSer
 {
-	USHORT nSerNo;
+	uint16 nSerNo;
 };
 
 typedef struct tagCreateRoomInfo
 {
-	UINT nGameId;
-	USHORT uPlayerCount;
-	USHORT uRound;
+	uint32 nGameId;
+	uint16 uPlayerCount;
+	uint16 uRound;
 }CreateRoomInfo;
 
 typedef struct tagLogicInfo
 {
-	USHORT nNum;
-	USHORT nRules[1];
+	uint16 nNum;
+	uint16 nRules[1];
 }LogicInfo;
 
 typedef struct tagCreateRoom
@@ -46,49 +46,49 @@ typedef struct tagCreateRoom
 
 typedef struct tagJoinRoom
 {
-	UINT nRoomId;
+	uint32 nRoomId;
 }JoinRoom;
 
 
 typedef struct tagRoomInfo
 {
-	UINT	nGameId;
-	UINT 	nRoomId;
-	USHORT 	nRound;
-	USHORT 	nUserCount;
-	USHORT	nCurRound;
+	uint32	nGameId;
+	uint32 	nRoomId;
+	uint16 	nRound;
+	uint16 	nUserCount;
+	uint16	nCurRound;
 }RoomInfo;
 
 typedef struct tagUserDoubleLogin
 {
 	UID nUserId;
-	USHORT nCid;
-	USHORT nCsid;
+	uint16 nCid;
+	uint16 nCsid;
 }UserDoubleLogin;
 
 typedef struct tagUserGameSerInfo
 {
-	UINT nUserId;
-	USHORT nGid;
-	USHORT nGsid;
-	USHORT nSeatNo;
+	uint32 nUserId;
+	uint16 nGid;
+	uint16 nGsid;
+	uint16 nSeatNo;
 }UserGameSerInfo;
 
 typedef struct tagInnerSync
 {
-	USHORT nIndex;
-	UINT nType;
+	uint16 nIndex;
+	uint32 nType;
 }InnserSync;
 
 typedef struct tagUserConnSerInfo
 {
-	USHORT nCid;
-	USHORT nCsid;
+	uint16 nCid;
+	uint16 nCsid;
 }UserConnSerInfo;
 
 typedef struct tagUserReConnInfo
 {
 	UID nUserId;
-	USHORT nCid;
-	USHORT nCsid;
+	uint16 nCid;
+	uint16 nCsid;
 }UserReConnInfo;

@@ -12,11 +12,11 @@ public:
 	~CDataSerSink();
 public:
 	void Connect();
-	bool HandNetData(USHORT,USHORT, USHORT, void*, USHORT);
-	bool HandTimeMsg(USHORT uTimeId);
+	bool HandNetData(uint16,uint16, uint16, void*, uint16);
+	bool HandTimeMsg(uint16 uTimeId);
 private:
 	bool TestNetLink();
-	bool HandMainMsgFromGameSer(USHORT,USHORT,void*,USHORT);
+	bool HandMainMsgFromGameSer(uint16,uint16,void*,uint16);
 private:
 	int m_nTestLink;
 };

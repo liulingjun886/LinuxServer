@@ -1,5 +1,5 @@
 #pragma once
-#include "../include/types.h"
+#include "../Defines.h"
 
 class IDataBase;
 class CServices;
@@ -11,10 +11,10 @@ public:
 	~CDataBaseSink();
 public:
 	bool Init();
-	bool HandDataBaseReq(SERVICEINDEX nFromIndex,SERVICEINDEX nCsid,UINT nType,void* pData,DATASIZE nDataSize);
+	bool HandDataBaseReq(SERVICEINDEX nFromIndex,SERVICEINDEX nCsid,uint32 nType,void* pData,DATASIZE nDataSize);
 	bool HandTimeMsg(TIMEERID nTimeId);
 private:
-	void UserLogin(USHORT nIndex,SERVICEINDEX nCsid,void* pData,USHORT nDataSize);
+	void UserLogin(uint16 nIndex,SERVICEINDEX nCsid,void* pData,uint16 nDataSize);
 private:
 	CServices* const m_pService;
 	IDataBase* m_pDataBase;

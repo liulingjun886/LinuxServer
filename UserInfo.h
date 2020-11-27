@@ -1,5 +1,5 @@
 #pragma once
-#include "./include/types.h"
+#include "./Defines.h"
 struct UserBaseInfo
 {
 	UID nUserId;
@@ -15,8 +15,8 @@ struct UserBaseInfo
 
 struct UserCoinInfo
 {
-	UINT nDiamond;
-	UINT64 nJinBi;
+	uint32 nDiamond;
+	uint64 nJinBi;
 	UserCoinInfo()
 	{
 		memset(this,0,sizeof(UserCoinInfo));
@@ -46,11 +46,11 @@ class CUserInfo
 	public:
 		UID GetUserId();
 
-		void UpdateConnInfo(USHORT nCid,USHORT nCsid);
-		void UpdateGameInfo(USHORT nGid,USHORT nGsid, USHORT nGsno);
+		void UpdateConnInfo(uint16 nCid,uint16 nCsid);
+		void UpdateGameInfo(uint16 nGid,uint16 nGsid, uint16 nGsno);
 
-		void GetConnInfo(USHORT& nCid,USHORT& nCsid);
-		void GetGameInfo(USHORT& nGid,USHORT& nGsid, USHORT& nGsno);
+		void GetConnInfo(uint16& nCid,uint16& nCsid);
+		void GetGameInfo(uint16& nGid,uint16& nGsid, uint16& nGsno);
 
 		void SetUserBaseInfo(UID nUserId,char bSex=0,char const *szName=NULL,char const *szHeadUrl=NULL);
 		UserBaseInfo* GetUserBaseInfo();

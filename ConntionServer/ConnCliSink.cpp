@@ -22,7 +22,7 @@ CConnCliSink::~CConnCliSink()
 	
 }
 
-void CConnCliSink::Init(UINT nIp)
+void CConnCliSink::Init(uint32 nIp)
 {
 }
 
@@ -39,7 +39,7 @@ void CConnCliSink::Close()
 }
 
 
-bool CConnCliSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void* pData, USHORT nDataSize)
+bool CConnCliSink::HandNetData(uint16 nIndex,uint16 nMain, uint16 nSub, void* pData, uint16 nDataSize)
 {
 	m_nTestLink = 0;
 	switch (nMain)
@@ -62,7 +62,7 @@ bool CConnCliSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void* pD
 	return false;
 }
 
-bool CConnCliSink::HandTimeMsg(USHORT uTimeID)
+bool CConnCliSink::HandTimeMsg(uint16 uTimeID)
 {
 	switch (uTimeID)
 	{
@@ -89,7 +89,7 @@ bool CConnCliSink::HandTimeMsg(USHORT uTimeID)
 	return true;
 }
 
-void CConnCliSink::SendData(USHORT nIndex, USHORT nMain, USHORT nSub, void* pData, USHORT nDataSize)
+void CConnCliSink::SendData(uint16 nIndex, uint16 nMain, uint16 nSub, void* pData, uint16 nDataSize)
 {
 	CNetSinkObj::SendData(m_pNet, nIndex, nMain, nSub, pData, nDataSize);
 }
@@ -109,7 +109,7 @@ void CConnCliSink::ConnectSucess(ConnSucess* pConn)
 }
 
 
-bool CConnCliSink::HandMsgFromCenterSrv(USHORT nSrcIndex, USHORT nSub, void* pData, USHORT nDataSize)
+bool CConnCliSink::HandMsgFromCenterSrv(uint16 nSrcIndex, uint16 nSub, void* pData, uint16 nDataSize)
 {
 	switch(nSub)
 	{
@@ -127,10 +127,10 @@ bool CConnCliSink::HandMsgFromCenterSrv(USHORT nSrcIndex, USHORT nSub, void* pDa
 		}
 		case CT_SUB_MSG_NEWGAMESER:
 		{
-			USHORT nNum = *(USHORT*)pData;
-			if(nDataSize != sizeof(RegGameSer) * nNum + sizeof(USHORT))
+			uint16 nNum = *(uint16*)pData;
+			if(nDataSize != sizeof(RegGameSer) * nNum + sizeof(uint16))
 				return true;
-			RegGameSer* pInfo = (RegGameSer*)(((USHORT*)pData)+1);
+			RegGameSer* pInfo = (RegGameSer*)(((uint16*)pData)+1);
 			for(int i = 0; i < nNum; i++)
 			{
 				GameInfo info;
@@ -147,7 +147,7 @@ bool CConnCliSink::HandMsgFromCenterSrv(USHORT nSrcIndex, USHORT nSub, void* pDa
 	return true;
 }
 
-bool CConnCliSink::HandMsgFromGameSrv(USHORT nSrcIndex, USHORT nSub, void* pData, USHORT nDataSize)
+bool CConnCliSink::HandMsgFromGameSrv(uint16 nSrcIndex, uint16 nSub, void* pData, uint16 nDataSize)
 {
 	switch (nSub)
 	{
@@ -181,7 +181,7 @@ bool CConnCliSink::HandMsgFromGameSrv(USHORT nSrcIndex, USHORT nSub, void* pData
 	return true;
 }
 
-bool CConnCliSink::HandMsgFromUserSrv(USHORT nSrcIndex, USHORT nSub, void* pData, USHORT nDataSize)
+bool CConnCliSink::HandMsgFromUserSrv(uint16 nSrcIndex, uint16 nSub, void* pData, uint16 nDataSize)
 {
 	switch(nSub)
 	{

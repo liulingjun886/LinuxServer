@@ -13,6 +13,8 @@ enum TIME_ID
 };
 
 CUserCliSink::CUserCliSink(CServices* pServices):CNetHandSink(pServices)
+	,m_nTestNum(0)
+	,m_nReConnectCount(0)
 {
 	m_timer_Link.InitTimerObj(m_pNet, TIME_TEST_CONN);
 	m_timer_reconnect.InitTimerObj(m_pNet, TIME_RECONNECT);
@@ -23,7 +25,7 @@ CUserCliSink::~CUserCliSink()
 	
 }
 
-bool CUserCliSink::HandTimeMsg(USHORT nTimeID)
+bool CUserCliSink::HandTimeMsg(uint16 nTimeID)
 {
 	switch(nTimeID)
 	{
@@ -31,10 +33,13 @@ bool CUserCliSink::HandTimeMsg(USHORT nTimeID)
 		{
 			++m_nTestNum;
 			if(m_nTestNum > 1)
+			{
+				m_pNet->Log("test link times = %d", m_nTestNum);
 				return false;
+			}
 			
 			m_timer_Link.StartTimerSec(30);
-			CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_USERSER, SUB_MSG_TEST);
+			CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_USERSER, US_SUB_MSG_TEST);
 			return true;
 		}
 		case TIME_RECONNECT:
@@ -42,6 +47,7 @@ bool CUserCliSink::HandTimeMsg(USHORT nTimeID)
 			++m_nReConnectCount;
 			if(m_nReConnectCount == 3)
 			{
+				m_pNet->Log("m_nReConnectCount = %d", m_nReConnectCount);
 				return false;
 			}
 			m_pNet->PostData(m_pNet->GetServiceIndex(), NET_RECONNECT);
@@ -51,7 +57,7 @@ bool CUserCliSink::HandTimeMsg(USHORT nTimeID)
 	return true;
 }
 
-bool CUserCliSink::HandNetData(USHORT nSrcIndex, USHORT nMain, USHORT nSub, void* pData, UINT nDataSize)
+bool CUserCliSink::HandNetData(uint16 nSrcIndex, uint16 nMain, uint16 nSub, void* pData, uint32 nDataSize)
 {
 	m_pNet->Log("Recv cmd %d, %d", nMain, nSub);
 	switch(nMain)
@@ -68,23 +74,25 @@ bool CUserCliSink::HandNetData(USHORT nSrcIndex, USHORT nMain, USHORT nSub, void
 
 bool CUserCliSink::DisConnect()
 {
+	m_timer_Link.StopTimer();
 	m_timer_reconnect.StopTimer();
 	m_timer_reconnect.StartTimerSec(30);
 	return true;
 }
 
 
-bool CUserCliSink::HandMainMsgFromCenter(USHORT nSrcIndex, USHORT nSub, void* pData, UINT nDataSize)
+bool CUserCliSink::HandMainMsgFromCenter(uint16 nSrcIndex, uint16 nSub, void* pData, uint32 nDataSize)
 {
 	switch(nSub)
 	{
 		case CT_SUB_MSG_CONN_SUCSS:
 		{
+			m_nTestNum = 0;
+			m_nReConnectCount = 0;
 			m_timer_Link.StartTimerSec(30);
 			RegConnSer ser;
 			ser.nSerNo = g_pUserServer->GetSerNo();
 			CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_USERSER, US_SUB_MSG_REGUSERSRV, &ser, sizeof(ser));
-			m_pNet->Log("Recv CT_SUB_MSG_CONN_SUCSS");
 			return true;
 		}
 		case CT_SUB_MSG_TEST:

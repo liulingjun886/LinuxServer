@@ -11,13 +11,13 @@ public:
 	CDataCliSink(CServices* m_pNetSer);
 	~CDataCliSink();
 public:
-	virtual bool HandTimeMsg(USHORT nTimeID);
-	virtual bool HandNetData(USHORT, USHORT, USHORT, void*, UINT);
+	virtual bool HandTimeMsg(uint16 nTimeID);
+	virtual bool HandNetData(uint16, uint16, uint16, void*, uint32);
 private:
-	bool HandMainMsgFromCenterSrv(USHORT,	  USHORT, void*, UINT);
+	bool HandMainMsgFromCenterSrv(uint16,	  uint16, void*, uint32);
 private:
 	CTimer m_timer_Link;
-	USHORT m_nTestNum;
+	uint16 m_nTestNum;
 };
 
 

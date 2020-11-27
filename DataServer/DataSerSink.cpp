@@ -36,7 +36,7 @@ void CDataSerSink::Connect()
 	CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_DATASER, DS_SUB_MSG_CONN_SUCSS,&conn,sizeof(conn));
 }
 
-bool CDataSerSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void* pData, USHORT nDataSize)
+bool CDataSerSink::HandNetData(uint16 nIndex,uint16 nMain, uint16 nSub, void* pData, uint16 nDataSize)
 {
 	switch (nMain)
 	{
@@ -50,7 +50,7 @@ bool CDataSerSink::HandNetData(USHORT nIndex,USHORT nMain, USHORT nSub, void* pD
 	return false;
 }
 
-bool CDataSerSink::HandTimeMsg(USHORT uTimeId)
+bool CDataSerSink::HandTimeMsg(uint16 uTimeId)
 {
 	switch (uTimeId)
 	{
@@ -75,7 +75,7 @@ bool CDataSerSink::TestNetLink()
 	return true;
 }
 
-bool CDataSerSink::HandMainMsgFromGameSer(USHORT nIndex,USHORT nSub,void* pData,USHORT nDataSize)
+bool CDataSerSink::HandMainMsgFromGameSer(uint16 nIndex,uint16 nSub,void* pData,uint16 nDataSize)
 {
 	switch (nSub)
 	{

@@ -19,12 +19,12 @@ public:
 protected:
 	virtual int  GetRedisConfig();
 	virtual bool Connected();
-	virtual int  Exec(UINT nType,void* pData,UINT nDataSize,void *pRet=NULL,UINT nRet=0);
+	virtual int  Exec(uint32 nType,void* pData,uint32 nDataSize,void *pRet=NULL,uint32 nRet=0);
 private:
 	void RegRedisScript(int nType,const char* szStr);
 
-	void UserLoginReq(int nUserId,USHORT nSerNo,SERVICEINDEX nSevNo,void* pRet=NULL,UINT nRet=0);
-	void UserJoinGame(int nUserId,USHORT nSerNo,SERVICEINDEX nSevNo,int nSeatNo,void* pRet=NULL,UINT nRet=0);
+	void UserLoginReq(int nUserId,uint16 nSerNo,SERVICEINDEX nSevNo,void* pRet=NULL,uint32 nRet=0);
+	void UserJoinGame(int nUserId,uint16 nSerNo,SERVICEINDEX nSevNo,int nSeatNo,void* pRet=NULL,uint32 nRet=0);
 private:
 	char* m_RedisPro[PRO_MAX];
 };

@@ -1,5 +1,5 @@
 #include <assert.h>
-#include "./include/types.h"
+#include "./Defines.h"
 #include "Server.h"
 #include "./include/Core.h"
 #include <stdlib.h>
@@ -76,12 +76,12 @@ void CServer::Run()
 	m_pCore->Run();
 }
 
-USHORT CServer::GetSerType() const
+uint16 CServer::GetSerType() const
 {
 	return m_nSerType;
 }
 
-USHORT CServer::GetSerNo() const
+uint16 CServer::GetSerNo() const
 {
 	return m_nSerNo;
 }

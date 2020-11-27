@@ -35,7 +35,7 @@ bool CMemSink::Init()
 	return m_pMemData->InitConnection();
 }
 
-bool CMemSink::HandMemDataReq(SERVICEINDEX uFromSerId,SERVICEINDEX nCsid,UINT uTypeId,void *pData, DATASIZE nDataSize)
+bool CMemSink::HandMemDataReq(SERVICEINDEX uFromSerId,SERVICEINDEX nCsid,uint32 uTypeId,void *pData, DATASIZE nDataSize)
 {
 	switch (uTypeId)
 	{

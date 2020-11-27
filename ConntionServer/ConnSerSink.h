@@ -15,8 +15,8 @@ enum SERVICE_TYPE
 
 typedef struct tagGameSerInfo
 {
-	UINT nSerNo;
-	UINT nGameId;
+	uint32 nSerNo;
+	uint32 nGameId;
 }GameSerInfo;
 
 union KEY
@@ -31,11 +31,11 @@ public:
 	CConnSerSink(CServices* m_pNetSer);
 	~CConnSerSink();
 public:
-	bool HandNetData(USHORT,USHORT, USHORT, void*, USHORT);
-	bool HandTimeMsg(USHORT uTimeId);
-	bool HandDataBaseRet(UINT uType, void * pData, USHORT nDataSize);
-	bool HandMemDataRet(UINT uType, void* pData, USHORT uDataSize);
-	bool HandUserMsg(int nEvent, void * pData, USHORT uDataSize);
+	bool HandNetData(uint16,uint16, uint16, void*, uint16);
+	bool HandTimeMsg(uint16 uTimeId);
+	bool HandDataBaseRet(uint32 uType, void * pData, uint16 nDataSize);
+	bool HandMemDataRet(uint32 uType, void* pData, uint16 uDataSize);
+	bool HandUserMsg(int nEvent, void * pData, uint16 uDataSize);
 	void Close();
 	void Init(const char* szIp);
 	void Connect();
@@ -43,16 +43,16 @@ public:
 private:
 	bool TestNetLink();
 
-	bool SendToMySelf(USHORT, USHORT, void* pData = NULL, USHORT nDataSize = 0);
-	bool SendToGameSer(USHORT, USHORT, USHORT, void*, USHORT);
-	bool SendToCenterSer(USHORT, USHORT, void*, USHORT);
-	bool SendToUserSer(UINT, USHORT, USHORT, void*, USHORT);
-	bool SendToConnectSer(USHORT, USHORT, void*, USHORT);
+	bool SendToMySelf(uint16, uint16, void* pData = NULL, uint16 nDataSize = 0);
+	bool SendToGameSer(uint16, uint16, uint16, void*, uint16);
+	bool SendToCenterSer(uint16, uint16, void*, uint16);
+	bool SendToUserSer(uint32, uint16, uint16, void*, uint16);
+	bool SendToConnectSer(uint16, uint16, void*, uint16);
 	
-	bool HandMainMsgNet(USHORT, USHORT, void*, USHORT);
-	bool HandMainMsgToRoom(USHORT, USHORT, void*, USHORT);
-	bool HandMainMsgToGame(USHORT,USHORT, USHORT, void*, USHORT);
-	bool HandMainMsgFromConnect(USHORT nIndex,USHORT nSub, void* pData, USHORT nDataSize);
+	bool HandMainMsgNet(uint16, uint16, void*, uint16);
+	bool HandMainMsgToRoom(uint16, uint16, void*, uint16);
+	bool HandMainMsgToGame(uint16,uint16, uint16, void*, uint16);
+	bool HandMainMsgFromConnect(uint16 nIndex,uint16 nSub, void* pData, uint16 nDataSize);
 private:
 	CUserInfo* m_pUserInfo;
 	int m_nTestLink;

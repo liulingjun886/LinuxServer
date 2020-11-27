@@ -1,7 +1,7 @@
 #pragma once
 #include <stdlib.h>
 #include "../include/hiredis/hiredis.h"
-#include "../include/types.h"
+#include "../Defines.h"
 #include <string>
 
 struct RedisConfig
@@ -25,7 +25,7 @@ public:
 	virtual ~CRedis();
 public:
 	bool InitConnection();
-	virtual int  Exec(UINT nType,void* pData,UINT nDataSize,void *pRet=NULL,UINT nRet=0)=0;
+	virtual int  Exec(uint32 nType,void* pData,uint32 nDataSize,void *pRet=NULL,uint32 nRet=0)=0;
 protected:
 	virtual int  GetRedisConfig()=0;
 	virtual bool Connected()=0;

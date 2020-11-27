@@ -1,5 +1,6 @@
 #include "CenterServer.h"
 #include "../include/IniFile.h"
+#include <stdio.h>
 
 
 CCenterServer* g_pCenterServer = NULL;
@@ -39,10 +40,18 @@ int  CCenterServer::ReadConfig(const char* szConfigFile)
 int	 CCenterServer::Initialize()
 {
 	if(0 != ReadConfig("./config/config.ini"))
+	{
+		printf("readconfig failer!\n");
 		return -1;
+	}
+		
 	
 	if(0 == m_pCore->AddTcpNetSer(m_szIp.c_str(), m_nPort, false))
+	{
+		printf("AddTcpNetSer Failer!\n");
 		return -1;
+	}
+		
 	
 	InitLogFile("CenterServer");
 	return 0;

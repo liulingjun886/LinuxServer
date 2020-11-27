@@ -22,14 +22,14 @@ bool CDataBaseService::HandData(int e, SERVICEINDEX uFromSerId, void *pData, DAT
 	{
 		case TIME_MSG:
 		{
-			UINT nTimeId = *(UINT*)pData;
+			uint32 nTimeId = *(uint32*)pData;
 			return m_pSink->HandTimeMsg(nTimeId);
 		}
 		case DATA_BASE_REQ:
 		{
 			DataCenter* pCenter = (DataCenter*)pData;
-			UINT* pType = (UINT*)(pCenter+1);
-			return m_pSink->HandDataBaseReq(uFromSerId,pCenter->nCsid,*pType,pType+1,size-sizeof(UINT)-sizeof(DataCenter));
+			uint32* pType = (uint32*)(pCenter+1);
+			return m_pSink->HandDataBaseReq(uFromSerId,pCenter->nCsid,*pType,pType+1,size-sizeof(uint32)-sizeof(DataCenter));
 		}
 		default:
 			break;

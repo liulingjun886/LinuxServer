@@ -14,26 +14,26 @@ UID CUserInfo::GetUserId()
 	return m_tagBaseInfo.nUserId;
 }
 
-void CUserInfo::UpdateConnInfo(USHORT nCid,USHORT nCsid)
+void CUserInfo::UpdateConnInfo(uint16 nCid,uint16 nCsid)
 {
 	m_tagSerInfo.nCid = nCid;
 	m_tagSerInfo.nCsid = nCsid;
 }
 
-void CUserInfo::UpdateGameInfo(USHORT nGid,USHORT nGsid, USHORT nGsno)
+void CUserInfo::UpdateGameInfo(uint16 nGid,uint16 nGsid, uint16 nGsno)
 {
 	m_tagSerInfo.nGid = nGid;
 	m_tagSerInfo.nGsid = nGsid;
 	m_tagSerInfo.nGsno = nGsno;
 }
 
-void CUserInfo::GetConnInfo(USHORT& nCid,USHORT& nCsid)
+void CUserInfo::GetConnInfo(uint16& nCid,uint16& nCsid)
 {
 	nCid = m_tagSerInfo.nCid;
 	nCsid = m_tagSerInfo.nCsid;
 }
 
-void CUserInfo::GetGameInfo(USHORT& nGid,USHORT& nGsid, USHORT& nGsno)
+void CUserInfo::GetGameInfo(uint16& nGid,uint16& nGsid, uint16& nGsno)
 {
 	nGid = m_tagSerInfo.nGid;
 	nGsid = m_tagSerInfo.nGsid;
