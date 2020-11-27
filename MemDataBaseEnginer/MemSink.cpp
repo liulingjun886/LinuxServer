@@ -43,7 +43,7 @@ bool CMemSink::HandMemDataReq(SERVICEINDEX uFromSerId,SERVICEINDEX nCsid,uint32 
 		{
 			UserLoginMemRet ret;
 			m_pMemData->Exec(Mem::USER_LOGIN_REQ,pData,nDataSize,&ret,sizeof(UserLoginMemRet));
-			CMemDataBaseEnginer::PostMemDataBaseRet(m_pService,uFromSerId,nCsid,Mem::USER_LOGIN_RET,&ret,sizeof(ret));
+			//CMemDataBaseEnginer::PostMemDataBaseRet(m_pService,uFromSerId,nCsid,Mem::USER_LOGIN_RET,&ret,sizeof(ret));
 			break;
 		}
 		case Mem::USER_LOGOUT_REQ:
@@ -60,7 +60,7 @@ bool CMemSink::HandMemDataReq(SERVICEINDEX uFromSerId,SERVICEINDEX nCsid,uint32 
 			
 			Mem::UserJoinGameRet ret;
 			m_pMemData->Exec(Mem::USER_JOIN_GAME_REQ, pData, nDataSize, &ret, sizeof(Mem::UserJoinGameRet));
-			CMemDataBaseEnginer::PostMemDataBaseRet(m_pService,uFromSerId,nCsid,Mem::USER_JOIN_GAME_RET,&ret,sizeof(ret));
+			//CMemDataBaseEnginer::PostMemDataBaseRet(m_pService,uFromSerId,nCsid,Mem::USER_JOIN_GAME_RET,&ret,sizeof(ret));
 			break;
 		}
 		case Mem::USER_QUIT_GAME_REQ:

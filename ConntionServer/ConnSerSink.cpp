@@ -16,6 +16,11 @@
 
 extern CConnectServer* g_pConnectServer;
 
+enum TIME_ID
+{
+	TIME_CONN_IS_LINK = 1,
+};
+
 //CGameSerManager CConnSerSink::m_RemoteSer;
 CConnSerSink::CConnSerSink(CServices* pNet) :CNetHandSink(pNet),m_nTestLink(0)
 {

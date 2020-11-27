@@ -69,7 +69,7 @@ bool CDataCliSink::HandMainMsgFromCenterSrv(uint16 nSrcIndex, uint16 nSub, void*
 			m_timer_Link.StartTimerSec(300);
 			RegConnSer ser;
 			ser.nSerNo = g_pDataServer->GetSerNo();
-			CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_DATASER, SUB_MSG_REG_DATASER, &ser, sizeof(ser));
+			//CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_DATASER, SUB_MSG_REG_DATASER, &ser, sizeof(ser));
 			return true;
 		}
 		default:

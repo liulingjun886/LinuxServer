@@ -72,7 +72,7 @@ void CDataBaseEnginer::PostDataBaseRet(CServices* pServices,SERVICEINDEX nToSerI
 	{
 		memcpy(pType+1, pData, uDataSize);
 	}
-	CNetSinkObj::SendData(pServices,  nToSerId, MAIN_MSG_USERSER,SUB_MSG_DATA_BASE_RET , buff, uDataSize+sizeof(uint32));
+	//CNetSinkObj::SendData(pServices,  nToSerId, MAIN_MSG_USERSER,SUB_MSG_DATA_BASE_RET , buff, uDataSize+sizeof(uint32));
 }
 
 

@@ -68,7 +68,7 @@ typedef struct tagUserDoubleLogin
 
 typedef struct tagUserGameSerInfo
 {
-	uint32 nUserId;
+	UID nUserId;
 	uint16 nGid;
 	uint16 nGsid;
 	uint16 nSeatNo;

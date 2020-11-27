@@ -16,6 +16,11 @@
 
 extern CDataServer* g_pDataServer;
 
+enum TIME_ID
+{
+	TIME_CONN_IS_LINK = 1,
+};
+
 CDataSerSink::CDataSerSink(CServices* pNet) :CNetHandSink(pNet),m_nTestLink(0)
 {
 
@@ -85,16 +90,16 @@ bool CDataSerSink::HandMainMsgFromGameSer(uint16 nIndex,uint16 nSub,void* pData,
 			CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_DATASER, DS_SUB_MSG_TEST);
 			return true;
 		}
-		case SUB_MSG_MEM_DATA_BASE_REQ:
-		{
-			CMemDataBaseEnginer::PostMemDataBaseReq(m_pNet, pData, nDataSize);
-			break;
-		}
-		case SUB_MSG_DATA_BASE_REQ:
-		{
-			CDataBaseEnginer::PostDataBaseReq(m_pNet,pData, nDataSize);
-			break;
-		}
+		//case SUB_MSG_MEM_DATA_BASE_REQ:
+		//{
+		//	CMemDataBaseEnginer::PostMemDataBaseReq(m_pNet, pData, nDataSize);
+		//	break;
+		//}
+		//case SUB_MSG_DATA_BASE_REQ:
+		//{
+		//	CDataBaseEnginer::PostDataBaseReq(m_pNet,pData, nDataSize);
+		//	break;
+		//}
 		default:
 			return false;
 	}

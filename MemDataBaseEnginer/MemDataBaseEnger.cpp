@@ -58,7 +58,7 @@ inline SERVICEINDEX CMemDataBaseEnginer::GetIndex(SERVICEINDEX nRand)
 
 void CMemDataBaseEnginer::PostMemDataBaseReq(CServices* pServices,void* pData, DATASIZE uDataSize)
 {
-	SERVICEINDEX nIndex = Single_Get(CMemDataBaseEnginer)->GetIndex(pServices->GetServiceIndex());
+	SERVICEINDEX nIndex = GetIndex(pServices->GetServiceIndex());
 	if(nIndex == INVALID_SERIVCE_INDEX)
 		return;
 	pServices->PostData(nIndex, MEM_DATA_BASE_REQ, pData, uDataSize);
@@ -76,7 +76,7 @@ void CMemDataBaseEnginer::PostMemDataBaseRet(CServices* pServices,SERVICEINDEX n
 	{
 		memcpy(pType+1, pData, uDataSize);
 	}
-	CNetSinkObj::SendData(pServices,  nIndex, MAIN_MSG_USERSER, SUB_MSG_MEM_DATA_BASE_RET,buff, nHeadSize + uDataSize);
+	//CNetSinkObj::SendData(pServices,  nIndex, MAIN_MSG_USERSER, SUB_MSG_MEM_DATA_BASE_RET,buff, nHeadSize + uDataSize);
 }
 
 

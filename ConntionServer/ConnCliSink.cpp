@@ -9,6 +9,11 @@
 
 extern CConnectServer* g_pConnectServer;
 
+enum TIME_ID
+{
+	TIME_CONN_IS_LINK = 1,
+	TIME_CONN_RECONNECT,
+};
 
 CConnCliSink::CConnCliSink(CServices* pNet) :CNetHandSink(pNet),m_nReConnectCount(0)
 {
@@ -68,7 +73,7 @@ bool CConnCliSink::HandTimeMsg(uint16 uTimeID)
 	{
 	case TIME_CONN_IS_LINK:
 	{
-		CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_CONNSER, SUB_MSG_TEST);
+		CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_CONNSER, CS_SUB_MSG_TEST);
 		m_timerConnTest.StartTimerSec(5);
 		break;
 	}

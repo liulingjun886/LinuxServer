@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "./include/Core.h"
+#include "Defines.h"
 class CServer
 {
 public:

@@ -24,6 +24,11 @@ int	CUserServer::Initialize()
 	}
 
 	m_pMem = Single_Create(CMemDataBaseEnginer);
+	if(NULL == m_pMem)
+	{
+		printf("CMemDataBaseEnginer create failer!\n");
+		return -1;
+	}
 	m_pMem->SetServiceNum(8);
 	
 	if(0 == m_pCore->AddTcpNetCli(m_szCenterIp.c_str(),m_nCenterPort,false))

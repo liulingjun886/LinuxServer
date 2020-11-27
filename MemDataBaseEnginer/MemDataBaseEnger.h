@@ -11,8 +11,8 @@ public:
 	void SetServiceNum(int nNum);
 	inline SERVICEINDEX GetIndex(SERVICEINDEX nRand);
 	
-	static void PostMemDataBaseReq(CServices* pServices, void* pData, DATASIZE uDataSize);
-	static void PostMemDataBaseRet(CServices* pServices,SERVICEINDEX nToSerId,SERVICEINDEX nCsid, uint32 uTypeId, void* pData, DATASIZE uDataSize);
+	void PostMemDataBaseReq(CServices* pServices, void* pData, DATASIZE uDataSize);
+	void PostMemDataBaseRet(CServices* pServices,SERVICEINDEX nToSerId,SERVICEINDEX nCsid, uint32 uTypeId, void* pData, DATASIZE uDataSize);
 private:
 	int m_nServiceNum;
 	SERVICEINDEX* m_pIndex;

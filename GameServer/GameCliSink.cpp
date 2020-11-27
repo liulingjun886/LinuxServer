@@ -11,6 +11,12 @@
 
 extern CGameServer* g_pGameServer;
 
+enum TIME_ID
+{
+	TIME_CONN_IS_LINK = 1,
+	TIME_CONN_RECONNECT,	
+};
+
 
 CGameCliSink::CGameCliSink(CServices* pNet) :CNetHandSink(pNet),m_nReConnectCount(0)
 {

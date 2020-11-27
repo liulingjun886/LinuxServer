@@ -2,6 +2,7 @@
 #include "../include/interface.h"
 #include "../include/mysql/mysql.h"
 #include <string.h>
+#include <string>
 #include <vector>
 #include <map>
 using namespace std;
