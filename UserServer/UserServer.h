@@ -15,6 +15,8 @@ public:
 	const char* GetRedisHost() const;
 	const unsigned short GetRedisPort() const;
 	const char* GetRedisAuth() const;
+	bool PostMemDataBaseReq(CServices* pServices,void* pData, DATASIZE uDataSize);
+	bool PostMemDataBaseRet(CServices* pServices,SERVICEINDEX nToSerId,SERVICEINDEX nCsid, uint32 nTypeId, void* pData, DATASIZE nDataSize);
 private:
 	int  ReadConfig(const char* szConfigFile);
 private:

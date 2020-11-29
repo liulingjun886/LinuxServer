@@ -8,7 +8,7 @@
 #include "../include/Core.h"
 #include "../NetSinkObj.h"
 
-Single_Init(CMemDataBaseEnginer)
+//Single_Init(CMemDataBaseEnginer)
 
 CMemDataBaseEnginer::CMemDataBaseEnginer() : m_nServiceNum(0), m_pIndex(NULL)
 {
@@ -34,6 +34,7 @@ void CMemDataBaseEnginer::SetServiceNum(int nNum)
 		assert(pService != NULL);
 		if (!Single_Get(CCore)->AddService(pService))
 		{
+			printf("MemDataBaseService Create Failer\n");
 			exit(0);
 		}
 		
@@ -47,7 +48,7 @@ void CMemDataBaseEnginer::SetServiceNum(int nNum)
 	}
 }
 
-inline SERVICEINDEX CMemDataBaseEnginer::GetIndex(SERVICEINDEX nRand)
+SERVICEINDEX CMemDataBaseEnginer::GetIndex(SERVICEINDEX nRand)
 {
 	if(m_nServiceNum == 0)
 		return 0;
@@ -55,6 +56,7 @@ inline SERVICEINDEX CMemDataBaseEnginer::GetIndex(SERVICEINDEX nRand)
 	return m_pIndex[nRand%m_nServiceNum];
 }
 
+/*
 
 void CMemDataBaseEnginer::PostMemDataBaseReq(CServices* pServices,void* pData, DATASIZE uDataSize)
 {
@@ -79,4 +81,5 @@ void CMemDataBaseEnginer::PostMemDataBaseRet(CServices* pServices,SERVICEINDEX n
 	//CNetSinkObj::SendData(pServices,  nIndex, MAIN_MSG_USERSER, SUB_MSG_MEM_DATA_BASE_RET,buff, nHeadSize + uDataSize);
 }
 
+*/
 

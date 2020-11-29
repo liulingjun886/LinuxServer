@@ -10,9 +10,10 @@ CUserServer::CUserServer():m_pMem(NULL)
 {
 	g_pUserServer = this;
 }
+
 CUserServer::~CUserServer()
 {
-	
+	SAFE_DELTE(m_pMem);
 }
 
 int	CUserServer::Initialize()
@@ -23,7 +24,7 @@ int	CUserServer::Initialize()
 		return -1;
 	}
 
-	m_pMem = Single_Create(CMemDataBaseEnginer);
+	m_pMem = new CMemDataBaseEnginer;
 	if(NULL == m_pMem)
 	{
 		printf("CMemDataBaseEnginer create failer!\n");
@@ -83,5 +84,29 @@ const unsigned short CUserServer::GetRedisPort() const
 const char* CUserServer::GetRedisAuth() const
 {
 	return m_szAuth.c_str();
+}
+
+bool CUserServer::PostMemDataBaseReq(CServices* pServices,void* pData, DATASIZE uDataSize)
+{
+	SERVICEINDEX nIndex = m_pMem->GetIndex(pServices->GetServiceIndex());
+	if(nIndex == INVALID_SERIVCE_INDEX)
+		return false;
+	return pServices->PostData(nIndex, MEM_DATA_BASE_REQ, pData, uDataSize);
+}
+
+bool CUserServer::PostMemDataBaseRet(CServices* pServices,SERVICEINDEX nToSerId,SERVICEINDEX nCsid, uint32 nTypeId, void* pData, DATASIZE nDataSize)
+{
+	static DATASIZE nHeadSize = sizeof(DataCenter) + sizeof(uint32);
+	char* buff[MAX_MSG_SIZE] = {0};
+	DataCenter* pCenter = (DataCenter*)buff;
+	pCenter->nCsid = nCsid;
+	uint32* pType = (uint32*)(pCenter+1);
+	*pType = nTypeId;
+	if (nDataSize > 0)
+	{
+		memcpy(pType+1, pData, nDataSize);
+	}
+	CNetSinkObj::SendData(pServices,  nToSerId, MAIN_MSG_USERSER, US_SUB_MSG_DATA_BASE_RET,buff, nHeadSize + nDataSize);
+	return true;
 }
 

@@ -11,11 +11,11 @@
 
 enum USER_EVENT
 {
-	USER_MSG = MAX_SYS_MSG,	//用户消息
-	DATA_BASE_REQ,			//数据库请求
-	DATA_BASE_RET,			//数据库结果
-	MEM_DATA_BASE_REQ,		//缓存请求
-	MEM_DATA_BASE_RET,		//缓存结果
+	USER_MSG = MAX_SYS_MSG+1,	//用户消息
+	DATA_BASE_REQ,				//数据库请求
+	DATA_BASE_RET,				//数据库结果
+	MEM_DATA_BASE_REQ,			//缓存请求
+	MEM_DATA_BASE_RET,			//缓存结果
 	EN_DOUBLE_LOGIN,
 	EN_SYNC_GAME_SER_INFO,
 	EN_RECONNECT_FAIL,
