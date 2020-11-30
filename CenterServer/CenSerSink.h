@@ -30,7 +30,7 @@ private:
 	void BroadCastGameSerInfo(const GameInfo& gameInfo);
 	void SendAllGameSerInfo();
 private:
-	CTimer m_timerTestLink;
-	unsigned m_nTestNum;
+	CTimer m_timer_Link;
+	uint16 m_nTestNum;
 	
 };

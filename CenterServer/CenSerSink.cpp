@@ -11,7 +11,7 @@ enum TIMER_ID
 
 CCenSerSink::CCenSerSink(CServices* pServices):CNetHandSink(pServices)
 {
-	m_timerTestLink.InitTimerObj(pServices, TIME_TEST_LINK);
+	m_timer_Link.InitTimerObj(pServices, TIME_TEST_LINK);
 }
 
 CCenSerSink::~CCenSerSink()
@@ -21,6 +21,7 @@ CCenSerSink::~CCenSerSink()
 
 void CCenSerSink::Connect()
 {
+	m_pNet->Log("socket connected !");
 	m_nTestNum = 0;
 	ConnSucess conn;
 	conn.nSrvNo = g_pCenterServer->GetSerNo();
@@ -89,9 +90,7 @@ bool CCenSerSink::HandTimeMsg(uint16 nTimeID)
 				m_pNet->Log("test link timeout!");
 				return false;
 			}
-				
-			
-			m_timerTestLink.StartTimerSec(35);
+			m_timer_Link.StartTimerSec(SERVER_TEST_TIME);
 			return true;
 		}
 	}
@@ -122,7 +121,7 @@ bool CCenSerSink::HandMainMsgFromUserSrv(uint16 nSrcIndex, uint16 nSub, void* pD
 			g_pCenterServer->s_szConnSer[pSer->nSerNo] = m_pNet->GetServiceIndex();
 			g_pCenterServer->m_mapLinkInfo[m_pNet->GetServiceIndex()] = &(g_pCenterServer->s_szConnSer[pSer->nSerNo]);
 			HandTestNetConn();
-			m_timerTestLink.StartTimerSec(35);
+			m_timer_Link.StartTimerSec(SERVER_TEST_TIME);
 			return true;
 		}
 	}
@@ -145,6 +144,8 @@ bool CCenSerSink::HandMainMsgFromDataSrv(uint16 nSrcIndex, uint16 nSub, void* pD
 
 			g_pCenterServer->s_szDataSer[pSer->nSerNo] = m_pNet->GetServiceIndex();
 			g_pCenterServer->m_mapLinkInfo[m_pNet->GetServiceIndex()] = &(g_pCenterServer->s_szDataSer[pSer->nSerNo]);
+			HandTestNetConn();
+			m_timer_Link.StartTimerSec(SERVER_TEST_TIME);
 			return true;
 		}
 	}
@@ -172,8 +173,9 @@ bool CCenSerSink::HandMainMsgFromGameSrv(uint16 nSrcIndex, uint16 nSub, void* pD
 			game.szIp = pGameSer->szIp;
 			game.nPort = pGameSer->nPort;
 			game.nGameId = pGameSer->nGameID;
-
 			g_pCenterServer->m_mapGameInfo[m_pNet->GetServiceIndex()] = game;
+			HandTestNetConn();
+			m_timer_Link.StartTimerSec(SERVER_TEST_TIME);
 
 			BroadCastGameSerInfo(game);
 			return true;
@@ -193,13 +195,17 @@ bool CCenSerSink::HandMainMsgFromConnSrv(uint16 nSrcIndex, uint16 nSub, void* pD
 		case CS_SUB_MSG_REG_CONN:
 		{
 			RegConnSer* pSer = (RegConnSer*)pData;
-			if(0 != g_pCenterServer->s_szConnSer[pSer->nSerNo])
-				return false;
+			//if(0 != g_pCenterServer->s_szConnSer[pSer->nSerNo])
+			//{
+			//	m_pNet->Log("Connect %d Have Reged", pSer->nSerNo);
+			//	return false;
+			//}
 
 			g_pCenterServer->s_szConnSer[pSer->nSerNo] = m_pNet->GetServiceIndex();
 			g_pCenterServer->m_mapLinkInfo[m_pNet->GetServiceIndex()] = &(g_pCenterServer->s_szConnSer[pSer->nSerNo]);
-
+			HandTestNetConn();
 			SendAllGameSerInfo();
+			m_timer_Link.StartTimerSec(SERVER_TEST_TIME);
 			return true;
 		}
 	}

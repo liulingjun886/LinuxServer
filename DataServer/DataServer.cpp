@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include "../include/Services.h"
 #include "../NetSinkObj.h"
+#include <stdio.h>
 
 CDataServer* g_pDataServer = NULL;
 
@@ -20,6 +21,10 @@ CDataServer::~CDataServer()
 
 int	 CDataServer::Initialize()
 {
+	char szLogFile[128] = {0};
+	sprintf(szLogFile,"DataServer_%d", GetSerNo());
+	InitLogFile(szLogFile);
+
 	if(0 != ReadConfig("./config/config.ini"))
 		return -1;
 
@@ -34,11 +39,19 @@ int	 CDataServer::Initialize()
 	m_pMem->SetServiceNum(8);
 	m_pData->SetServiceNum(8);
 
-	if(0 == m_pCore->AddTcpNetCli(m_szCenterIp.c_str(),m_nCenterPort,false))
+	m_nCenterIndex = m_pCore->AddTcpNetCli(m_szCenterIp.c_str(),m_nCenterPort,false);
+	
+	if(0 == m_nCenterIndex)
+	{
+		printf("Connect to center failer\n");
 		return -1;
+	}
 
 	if(0 == m_pCore->AddTcpNetSer(m_szIp.c_str(), m_nPort, false))
+	{
+		printf("Add Tcp Server Failer\n");
 		return -1;
+	}
 
 	return 0;	
 }
@@ -109,6 +122,12 @@ const char* CDataServer::GetDbPass() const
 {
 	return m_szDbPass.c_str();
 }
+
+SERVICEINDEX CDataServer::GetCenterIndex() const
+{
+	return m_nCenterIndex;
+}
+
 
 bool CDataServer::PostMemDataBaseReq(CServices* pServices,void* pData, DATASIZE uDataSize)
 {

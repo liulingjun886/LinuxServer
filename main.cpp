@@ -27,7 +27,7 @@ int main(int argc,char* argv[])
 
             case 's':       //server Id
                 nSrvNo = (unsigned short)atoi(optarg);
-                if (nSrvNo <= 0)
+                if (nSrvNo < 0)
                 {
                     printf("sid=%d\n", nSrvNo);
                     return -1;

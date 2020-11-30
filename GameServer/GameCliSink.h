@@ -11,9 +11,9 @@ public:
 	CGameCliSink(CServices* pNet);
 	~CGameCliSink();
 public:
-	void Init(uint32 nIp);
+	void Init(const char* szIp);
 	bool DisConnect();
-	bool HandNetData(uint16,uint16, uint16, void*, uint16);
+	bool HandNetData(uint16, uint16, uint16, void*, uint32);
 	bool HandTimeMsg(uint16 uTimeID);
 private:
 	bool HandMainMsgRoom(uint16,uint16, void*, uint16);
@@ -27,11 +27,13 @@ private:
 	void ConnectSucess(ConnSucess* pConn);
 	void RegGameSrv();
 private:
-	char 		m_nTestLink;
-	char 		m_nReConnectCount;
+	uint16 		m_nTestNum;
+	uint16 		m_nReConnectCount;
+	
 	uint16		m_nPeerSrvType;
 	uint16 		m_nPeerSrvNo;
-	CTimerNode 	m_timerConnTest;
-	CTimerNode 	m_timerReConn;
+	
+	CTimerNode 	m_timer_Link;
+	CTimerNode 	m_timer_reconnect;
 };
 

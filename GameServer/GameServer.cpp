@@ -18,6 +18,10 @@ CGameServer::~CGameServer()
 
 int	 CGameServer::Initialize()
 {
+	char szLogFile[128] = {0};
+	sprintf(szLogFile,"GameServer_%d",GetSerNo());
+	InitLogFile(szLogFile);
+	
 	return ReadConfig("./config/config.ini");
 }
 
@@ -46,7 +50,7 @@ int  CGameServer::ReadConfig(const char* szConfigFile)
 	if(nUserNum <= 0)
 		return -1;
 
-	memset(szFild,sizeof(szFild),0);
+	memset(szFild,0,sizeof(szFild));
 	for(int i = 0; i < nUserNum; i++)
 	{
 		HostConfig conf;
@@ -61,7 +65,8 @@ int  CGameServer::ReadConfig(const char* szConfigFile)
 	int nDataNum = iniFile.ReadInt("dataserver_count", "num", 0);
 	if(nDataNum <= 0)
 		return -1;
-	memset(szFild,sizeof(szFild),0);
+	
+	memset(szFild,0,sizeof(szFild));
 	for(int i = 0; i < nDataNum; i++)
 	{
 		HostConfig conf;
@@ -73,7 +78,6 @@ int  CGameServer::ReadConfig(const char* szConfigFile)
 			return -1;
 	}
 	
-	//iniFile.CloseFile();
 	return 0;
 }
 

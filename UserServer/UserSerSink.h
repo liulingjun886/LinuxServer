@@ -17,6 +17,6 @@ private:
 	bool HandMainMsgConnSer(uint16, uint16, void*, uint32);
 	bool HandTestNetConn();
 private:
-	CTimer m_timer_TestLink;
-	uint16 m_nNum;
+	CTimer m_timer_Link;
+	uint16 m_nTestNum;
 };

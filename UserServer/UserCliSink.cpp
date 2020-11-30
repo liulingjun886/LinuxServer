@@ -38,14 +38,14 @@ bool CUserCliSink::HandTimeMsg(uint16 nTimeID)
 				return false;
 			}
 			
-			m_timer_Link.StartTimerSec(30);
+			m_timer_Link.StartTimerSec(CLIENT_TEST_TIME);
 			CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_USERSER, US_SUB_MSG_TEST);
 			return true;
 		}
 		case TIME_RECONNECT:
 		{
 			++m_nReConnectCount;
-			if(m_nReConnectCount == 3)
+			if(m_nReConnectCount >= CLIENT_RECONN_NUMS)
 			{
 				m_pNet->Log("m_nReConnectCount = %d", m_nReConnectCount);
 				return false;
@@ -76,7 +76,7 @@ bool CUserCliSink::DisConnect()
 {
 	m_timer_Link.StopTimer();
 	m_timer_reconnect.StopTimer();
-	m_timer_reconnect.StartTimerSec(30);
+	m_timer_reconnect.StartTimerSec(CLIENT_RECONN_TIME);
 	return true;
 }
 
@@ -89,7 +89,7 @@ bool CUserCliSink::HandMainMsgFromCenter(uint16 nSrcIndex, uint16 nSub, void* pD
 		{
 			m_nTestNum = 0;
 			m_nReConnectCount = 0;
-			m_timer_Link.StartTimerSec(30);
+			m_timer_Link.StartTimerSec(CLIENT_TEST_TIME);
 			RegConnSer ser;
 			ser.nSerNo = g_pUserServer->GetSerNo();
 			CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_USERSER, US_SUB_MSG_REGUSERSRV, &ser, sizeof(ser));

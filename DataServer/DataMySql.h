@@ -1,5 +1,4 @@
 #pragma once
-#include "../include/interface.h"
 #include "../DataBaseEnginer/MySql.h"
 
 using namespace std;

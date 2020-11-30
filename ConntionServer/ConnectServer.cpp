@@ -26,6 +26,10 @@ CConnectServer::~CConnectServer()
 
 int	 CConnectServer::Initialize()
 {
+	char szLogFile[128] = {0};
+	sprintf(szLogFile,"Conn_%d",GetSerNo());
+	InitLogFile(szLogFile);
+	
 	if(0 != ReadConfig("./config/config.ini"))
 		return -1;
 
@@ -65,7 +69,7 @@ int  CConnectServer::ReadConfig(const char* szConfigFile)
 	if(nNum <= 0)
 		return -1;
 
-	memset(szFild,sizeof(szFild),0);
+	memset(szFild, 0, sizeof(szFild));
 	for(int i = 0; i < nNum; i++)
 	{
 		HostConfig conf;

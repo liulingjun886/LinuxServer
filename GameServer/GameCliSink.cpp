@@ -20,8 +20,8 @@ enum TIME_ID
 
 CGameCliSink::CGameCliSink(CServices* pNet) :CNetHandSink(pNet),m_nReConnectCount(0)
 {
-	m_timerConnTest.InitTimerObj(m_pNet, TIME_CONN_IS_LINK);
-	m_timerReConn.InitTimerObj(m_pNet, TIME_CONN_RECONNECT);
+	m_timer_Link.InitTimerObj(m_pNet, TIME_CONN_IS_LINK);
+	m_timer_reconnect.InitTimerObj(m_pNet, TIME_CONN_RECONNECT);
 }
 
 
@@ -30,22 +30,21 @@ CGameCliSink::~CGameCliSink()
 	
 }
 
-void CGameCliSink::Init(uint32 nIp)
+void CGameCliSink::Init(const char* szIp)
 {
-	m_timerConnTest.StartTimerSec(5);
+	m_pNet->Log("CGameCliSink init %s", szIp);
 }
 
 bool CGameCliSink::DisConnect()
 {
-	m_timerConnTest.StopTimer();
-	m_timerReConn.StartTimerSec(30);
+	m_timer_Link.StopTimer();
+	m_timer_reconnect.StartTimerSec(CLIENT_RECONN_TIME);
 	return true;
 }
 
-bool CGameCliSink::HandNetData(uint16 nIndex,uint16 nMain, uint16 nSub, void* pData, uint16 nDataSize)
+bool CGameCliSink::HandNetData(uint16 nIndex,uint16 nMain, uint16 nSub, void* pData, uint32 nDataSize)
 {
-	m_nTestLink = 0;
-
+	m_pNet->Log("Recv cmd %d, %d", nMain, nSub);
 	switch(nMain)
 	{
 		case MAIN_MSG_CENTERSER:
@@ -137,20 +136,26 @@ bool CGameCliSink::HandTimeMsg(uint16 uTimeID)
 	switch (uTimeID)
 	{
 	case TIME_CONN_IS_LINK:
-	{
+	{	
+		++m_nTestNum;
+		if(m_nTestNum > 1)
+		{
+			m_pNet->Log("test link times = %d", m_nTestNum);
+			return false;
+		}
+		
 		CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_GAMESER, GS_SUB_MSG_TEST);
-		m_timerConnTest.StartTimerSec(5);
+		m_timer_Link.StartTimerSec(CLIENT_TEST_TIME);
 		break;
 	}
 	case TIME_CONN_RECONNECT:
 	{
 		++m_nReConnectCount;
-		if(m_nReConnectCount == 5)
+		if(m_nReConnectCount >= CLIENT_RECONN_NUMS)
 		{
 			return false;
 		}
 		m_pNet->PostData(m_pNet->GetServiceIndex(), NET_RECONNECT);
-		m_timerReConn.StartTimerSec(5);
 		break;
 	}
 	default:
@@ -309,16 +314,19 @@ bool CGameCliSink::HandMsgFromDataSrv(uint16 nIndex, uint16 nSub, void* pData, u
 
 bool CGameCliSink::HandMsgTestConn()
 {
-	m_nTestLink = 0;
-	CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_GAMESER, GS_SUB_MSG_TEST);
+	m_nTestNum = 0;
 	return true;
 }
 
 void CGameCliSink::ConnectSucess(ConnSucess* pConn)
 {
-	m_nTestLink = 0;
+	m_nTestNum = 0;
+	m_nReConnectCount = 0;
+
 	m_nPeerSrvType = pConn->nSrvType;
 	m_nPeerSrvNo = pConn->nSrvNo;
+	
+	m_timer_Link.StartTimerSec(CLIENT_TEST_TIME);
 }
 
 void CGameCliSink::RegGameSrv()

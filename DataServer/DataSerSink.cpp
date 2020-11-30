@@ -18,12 +18,12 @@ extern CDataServer* g_pDataServer;
 
 enum TIME_ID
 {
-	TIME_CONN_IS_LINK = 1,
+	TIME_TEST_LINK = 1,
 };
 
-CDataSerSink::CDataSerSink(CServices* pNet) :CNetHandSink(pNet),m_nTestLink(0)
+CDataSerSink::CDataSerSink(CServices* pNet) :CNetHandSink(pNet),m_nTestNum(0)
 {
-
+	m_timer_Link.InitTimerObj(m_pNet, TIME_TEST_LINK);
 }
 
 
@@ -34,14 +34,13 @@ CDataSerSink::~CDataSerSink()
 
 void CDataSerSink::Connect()
 {
-	//m_pNet->SetTimer(TIME_CONN_IS_LINK, 100*60, -1);
 	ConnSucess conn;
 	conn.nSrvNo = g_pDataServer->GetSerNo();
 	conn.nSrvType = g_pDataServer->GetSerType();
 	CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_DATASER, DS_SUB_MSG_CONN_SUCSS,&conn,sizeof(conn));
 }
 
-bool CDataSerSink::HandNetData(uint16 nIndex,uint16 nMain, uint16 nSub, void* pData, uint16 nDataSize)
+bool CDataSerSink::HandNetData(uint16 nIndex,uint16 nMain, uint16 nSub, void* pData, uint32 nDataSize)
 {
 	switch (nMain)
 	{
@@ -59,50 +58,54 @@ bool CDataSerSink::HandTimeMsg(uint16 uTimeId)
 {
 	switch (uTimeId)
 	{
-	case TIME_CONN_IS_LINK:
-	{
-		return TestNetLink();
-	}
-	default:
-		break;
+		case TIME_TEST_LINK:
+		{
+			return TestNetLink();
+		}
+		default:
+			break;
 	}
 	return true;
 }
 
 bool CDataSerSink::TestNetLink()
 {
-	if (m_nTestLink > 0)
+	++m_nTestNum;
+	if(m_nTestNum > 1)
 	{
-	  	return DisConnect();
+		m_pNet->Log("test link timeout!");
+		return false;
 	}
-	++m_nTestLink;
-	
+	m_timer_Link.StartTimerSec(SERVER_TEST_TIME);
 	return true;
 }
 
-bool CDataSerSink::HandMainMsgFromGameSer(uint16 nIndex,uint16 nSub,void* pData,uint16 nDataSize)
+bool CDataSerSink::HandMainMsgFromGameSer(uint16 nIndex,uint16 nSub,void* pData,uint32 nDataSize)
 {
 	switch (nSub)
 	{
 		case GS_SUB_MSG_TEST:
 		{
-			m_nTestLink = 0;
-			CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_DATASER, DS_SUB_MSG_TEST);
+			HandTestNetConn();
 			return true;
 		}
-		//case SUB_MSG_MEM_DATA_BASE_REQ:
-		//{
-		//	CMemDataBaseEnginer::PostMemDataBaseReq(m_pNet, pData, nDataSize);
-		//	break;
-		//}
-		//case SUB_MSG_DATA_BASE_REQ:
-		//{
-		//	CDataBaseEnginer::PostDataBaseReq(m_pNet,pData, nDataSize);
-		//	break;
-		//}
+		case GS_SUB_MSG_REG_GAMESRV:
+		{
+			HandTestNetConn();
+			m_timer_Link.StartTimerSec(SERVER_TEST_TIME);
+			return true;
+		}
 		default:
 			return false;
 	}
 	return true;
 }
+
+bool CDataSerSink::HandTestNetConn()
+{
+	m_nTestNum = 0;
+	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_DATASER, DS_SUB_MSG_TEST);
+	return true;
+}
+
 

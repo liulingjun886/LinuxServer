@@ -25,6 +25,8 @@ public:
 	const char* GetDbUserName() const;
 	const char* GetDbPass() const;
 
+	SERVICEINDEX GetCenterIndex() const;
+
 	bool PostMemDataBaseReq(CServices* pServices,void* pData, DATASIZE uDataSize);
 	bool PostMemDataBaseRet(CServices* pServices,SERVICEINDEX nToSerId,SERVICEINDEX nCsid, uint32 nTypeId, void* pData, DATASIZE nDataSize);
 
@@ -39,6 +41,7 @@ private:
 
 	std::string m_szCenterIp;
 	unsigned short m_nCenterPort;
+	SERVICEINDEX m_nCenterIndex;
 
 	std::string m_szRedisHost;
 	unsigned short m_nRedisPort;

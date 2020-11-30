@@ -13,11 +13,16 @@ public:
 public:
 	virtual bool HandTimeMsg(uint16 nTimeID);
 	virtual bool HandNetData(uint16, uint16, uint16, void*, uint32);
+	virtual bool DisConnect();
 private:
+	void SendMsgToCenterSrv(uint16, uint16, void*, DATASIZE);
 	bool HandMainMsgFromCenterSrv(uint16,	  uint16, void*, uint32);
 private:
 	CTimer m_timer_Link;
 	uint16 m_nTestNum;
+
+	uint16 m_nReConnectCount;
+	CTimer m_timer_reconnect;
 };
 
 
