@@ -1,7 +1,7 @@
 #pragma once
 #include "../Defines.h"
 
-class IDataBase;
+class CMySql;
 class CServices;
 
 class CDataBaseSink
@@ -14,8 +14,5 @@ public:
 	bool HandDataBaseReq(SERVICEINDEX nFromIndex,SERVICEINDEX nCsid,uint32 nType,void* pData,DATASIZE nDataSize);
 	bool HandTimeMsg(TIMEERID nTimeId);
 private:
-	void UserLogin(uint16 nIndex,SERVICEINDEX nCsid,void* pData,uint16 nDataSize);
-private:
-	CServices* const m_pService;
-	IDataBase* m_pDataBase;
+	CMySql* m_pDataBase;
 };

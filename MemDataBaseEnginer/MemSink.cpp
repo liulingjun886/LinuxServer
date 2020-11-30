@@ -7,21 +7,18 @@
 #include "MemDataBaseEnger.h"
 #include "../UserServer/UserRedis.h"
 #include "../DataServer/DataRedis.h"
-#include "../UserServer/UserServer.h"
-#include "../DataServer/DataServer.h"
+#include "../Server.h"
 
 using namespace std;
 using namespace Mem;
 
-extern CUserServer* g_pUserServer;
-extern CDataServer* g_pDataServer;
-
+extern CServer* g_pSer;
 
 CMemSink::CMemSink(CServices* pMemData) :m_pService(pMemData),m_pMemData(NULL)
 {
-	if(NULL != g_pUserServer)
-		m_pMemData  = new CUserRedis;
-	else
+	if(SRV_TYPE_USER == g_pSer->GetSerType())
+		m_pMemData = new CUserRedis;
+	else if(SRV_TYPE_DATA == g_pSer->GetSerType())
 		m_pMemData = new CDataRedis;
 }
 

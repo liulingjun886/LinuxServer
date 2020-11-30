@@ -30,7 +30,7 @@ public:
 	//添加websocket服务器
 	SERVICEINDEX AddWebSockSer(const char* szIp, unsigned short nPort, bool IsIpV6 = false);
 
-	//网络引擎添加自定义套接字 自定义套接字必须继承自CSocketService
+	//网络引擎添加自定义套接字 自定义套接字必须继承自CPoller
 	void AddPoller(CPoller* pPollerService,uint32 events);
 	
 	//网络引擎修改自定义套接字

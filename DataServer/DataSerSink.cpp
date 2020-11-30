@@ -5,7 +5,7 @@
 #include "../commproto.h"
 #include "../include/Services.h"
 #include "../MemDataBaseEnginer/MemDataDef.h"
-#include "../DataBaseEnginer/DataBaseDef.h"
+#include "DataBaseDef.h"
 #include "../NetSinkObj.h"
 #include <sys/socket.h>
 #include <netinet/in.h>

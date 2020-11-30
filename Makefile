@@ -28,6 +28,8 @@ server:$(SEROBJ)
 	g++ -fPIC -shared -g -Wall $^ -o $@
 	
 clean:
-	rm -rf ./debug/*.o core.* *.so rm -f log/*
+	rm -rf ./debug/*.o core.* log/*
 
-.PHONY:all clean server
+all:clean server
+
+.PHONY:all clean

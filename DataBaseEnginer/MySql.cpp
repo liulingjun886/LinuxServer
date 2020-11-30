@@ -1,35 +1,41 @@
 #include "MySql.h"
+#include "../include/Services.h"
 #include <stdio.h>
-#include <fstream>
 #include <stdlib.h>
 
-CMySql::CMySql() : m_pMySql(NULL)
+CMySql::CMySql(CServices* pService):m_pService(pService),m_pMySql(NULL)
 {
 	Clean();
-	
 }
 
 CMySql::~CMySql()
 {
 	Clean();
-	CloseConnection();
+	CloseConnect();
 	mysql_library_end();
 }
 
-bool CMySql::Init()
+bool CMySql::InitConnection()
 {
-	if(!GetDbCfg())
+	if(0 != GetDBConfig())
 		return false;
-	
-	return OpenConnection();
+
+	if(!OpenConnect())
+		return false;
+
+	if(!Connected())
+		return false;
+
+	return true;
 }
 
-bool CMySql::OpenConnection()
+
+bool CMySql::OpenConnect()
 {
 	m_pMySql = mysql_init(NULL);
 	if(!m_pMySql)
 		return false;
-	m_pMySql = mysql_real_connect(m_pMySql, m_dbConfig.szHost, m_dbConfig.szUser, m_dbConfig.szPass, m_dbConfig.szDbName,	m_dbConfig.nPort,0, CLIENT_MULTI_STATEMENTS);
+	m_pMySql = mysql_real_connect(m_pMySql, m_dbConfig.szHost.c_str(), m_dbConfig.szDbUser.c_str(), m_dbConfig.szDbPass.c_str(), m_dbConfig.szDbName.c_str(),	m_dbConfig.nPort, 0, CLIENT_MULTI_STATEMENTS);
 
 	if(!m_pMySql)
 	{
@@ -39,7 +45,7 @@ bool CMySql::OpenConnection()
 	return true;
 }
 
-void CMySql::CloseConnection()
+void CMySql::CloseConnect()
 {
 	if(m_pMySql)
 	{
@@ -218,8 +224,8 @@ redo:	int ret = mysql_real_query(m_pMySql, szSql.c_str(), szSql.length());
 	if(ret != 0)
 	{
 		printf("mysql_real_query failer = %s,szSql = %s\n",mysql_error(m_pMySql),szSql.c_str());
-		CloseConnection();
-		if(OpenConnection())
+		CloseConnect();
+		if(OpenConnect())
 			goto redo;
 		return false;
 	}
@@ -320,37 +326,3 @@ bool CMySql::GetSingleResult()
 	return true;
 }
 
-
-bool CMySql::GetDbCfg()
-{
-	ifstream in("./config/mysql.config");
-	if(in.is_open())
-	{
-		char szConfig[64] = { 0 };
-		while (in.getline(szConfig, 64))
-		{
-			char *szKey = strtok(szConfig, ":");
-			char *szValue = strtok(NULL, ":");
-			
-			if(!szKey)
-				continue;
-			if(!strcmp(szKey,"Host"))
-				strcpy(m_dbConfig.szHost,szValue);
-			else if(!strcmp(szKey,"Port"))
-				m_dbConfig.nPort = atoi(szValue);
-			else if(!strcmp(szKey,"DbName"))
-				strcpy((char*)m_dbConfig.szDbName,szValue);
-			else if(!strcmp(szKey,"User"))
-				strcpy((char*)m_dbConfig.szUser,szValue);
-			else if(!strcmp(szKey,"Pass"))
-				strcpy((char*)m_dbConfig.szPass,szValue);
-		}
-		in.close();
-	}
-	else
-	{
-		printf("mysql.config not found\n");
-		return false;
-	}
-	return true;
-}

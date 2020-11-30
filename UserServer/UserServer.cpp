@@ -1,5 +1,7 @@
 #include "UserServer.h"
 #include "../include/IniFile.h"
+#include "../include/Services.h"
+#include "../NetSinkObj.h"
 #include "../MemDataBaseEnginer/MemDataBaseEnger.h"
 #include <stdio.h>
 
@@ -106,7 +108,7 @@ bool CUserServer::PostMemDataBaseRet(CServices* pServices,SERVICEINDEX nToSerId,
 	{
 		memcpy(pType+1, pData, nDataSize);
 	}
-	CNetSinkObj::SendData(pServices,  nToSerId, MAIN_MSG_USERSER, US_SUB_MSG_DATA_BASE_RET,buff, nHeadSize + nDataSize);
+	CNetSinkObj::SendData(pServices,  nToSerId, MAIN_MSG_USERSER, US_SUB_MSG_MEM_BASE_RET,buff, nHeadSize + nDataSize);
 	return true;
 }
 

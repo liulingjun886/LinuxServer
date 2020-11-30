@@ -5,6 +5,7 @@
 
 class CMemDataBaseEnginer;
 class CDataBaseEnginer;
+class CServices;
 
 class CDataServer : public CServer
 {
@@ -23,6 +24,12 @@ public:
 	const char* GetDbName() const;
 	const char* GetDbUserName() const;
 	const char* GetDbPass() const;
+
+	bool PostMemDataBaseReq(CServices* pServices,void* pData, DATASIZE uDataSize);
+	bool PostMemDataBaseRet(CServices* pServices,SERVICEINDEX nToSerId,SERVICEINDEX nCsid, uint32 nTypeId, void* pData, DATASIZE nDataSize);
+
+	bool PostDataBaseReq(CServices* pServices,void* pData, DATASIZE uDataSize);
+	bool PostDataBaseRet(CServices* pServices,SERVICEINDEX nToSerId,SERVICEINDEX nCsid, uint32 uTypeId, void* pData, DATASIZE uDataSize);
 private:
 	int  ReadConfig(const char* szConfigFile);
 	

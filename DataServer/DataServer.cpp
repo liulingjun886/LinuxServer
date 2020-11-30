@@ -3,17 +3,19 @@
 #include "../MemDataBaseEnginer/MemDataBaseEnger.h"
 #include "../DataBaseEnginer/DataBaseEnginer.h"
 #include <stdio.h>
+#include "../include/Services.h"
+#include "../NetSinkObj.h"
 
 CDataServer* g_pDataServer = NULL;
 
-CDataServer::CDataServer()
+CDataServer::CDataServer():m_pMem(NULL)
 {
 	g_pDataServer = this;
 }
 
 CDataServer::~CDataServer()
 {
-	
+	SAFE_DELTE(m_pMem);
 }
 
 int	 CDataServer::Initialize()
@@ -21,11 +23,11 @@ int	 CDataServer::Initialize()
 	if(0 != ReadConfig("./config/config.ini"))
 		return -1;
 
-	m_pMem = Single_Create(CMemDataBaseEnginer);
+	m_pMem = new CMemDataBaseEnginer;
 	if(NULL == m_pMem)
 		return -1;
 
-	m_pData = Single_Create(CDataBaseEnginer);
+	m_pData = new CDataBaseEnginer;
 	if(NULL == m_pData)
 		return -1;
 
@@ -106,6 +108,73 @@ const char* CDataServer::GetDbUserName() const
 const char* CDataServer::GetDbPass() const
 {
 	return m_szDbPass.c_str();
+}
+
+bool CDataServer::PostMemDataBaseReq(CServices* pServices,void* pData, DATASIZE uDataSize)
+{
+	if(NULL == m_pMem)
+	{
+		pServices->Log("m_pMem is NULL");
+		return false;
+	}
+	
+	SERVICEINDEX nIndex = m_pMem->GetIndex(pServices->GetServiceIndex());
+	if(nIndex == INVALID_SERIVCE_INDEX)
+	{
+		pServices->Log("No memdatabase services");
+		return false;
+	}
+	return pServices->PostData(nIndex, MEM_DATA_BASE_REQ, pData, uDataSize);
+}
+
+bool CDataServer::PostMemDataBaseRet(CServices* pServices,SERVICEINDEX nToSerId,SERVICEINDEX nCsid, uint32 nTypeId, void* pData, DATASIZE nDataSize)
+{
+	static DATASIZE nHeadSize = sizeof(DataCenter) + sizeof(uint32);
+	char* buff[MAX_MSG_SIZE] = {0};
+	DataCenter* pCenter = (DataCenter*)buff;
+	pCenter->nCsid = nCsid;
+	uint32* pType = (uint32*)(pCenter+1);
+	*pType = nTypeId;
+	if (nDataSize > 0)
+	{
+		memcpy(pType+1, pData, nDataSize);
+	}
+	CNetSinkObj::SendData(pServices,  nToSerId, MAIN_MSG_DATASER, DS_SUB_MSG_MEM_BASE_RET, buff, nHeadSize + nDataSize);
+	return true;
+}
+
+bool CDataServer::PostDataBaseReq(CServices* pServices,void* pData, DATASIZE uDataSize)
+{
+	if(NULL == m_pData)
+	{
+		pServices->Log("no databaseEnginer");
+		return false;
+	}
+	
+	SERVICEINDEX nIndex = m_pData->GetIndex(pServices->GetServiceIndex());
+	if(nIndex == INVALID_SERIVCE_INDEX)
+	{
+		pServices->Log("no databaseService");
+		return false;
+	}
+
+	return pServices->PostData(nIndex, DATA_BASE_REQ, pData, uDataSize);
+}
+
+bool CDataServer::PostDataBaseRet(CServices* pServices,SERVICEINDEX nToSerId,SERVICEINDEX nCsid, uint32 uTypeId, void* pData, DATASIZE nDataSize)
+{
+	static DATASIZE nHeadSize = sizeof(DataCenter) + sizeof(uint32);
+	char* buff[MAX_MSG_SIZE] = {0};
+	DataCenter* pCenter = (DataCenter*)buff;
+	pCenter->nCsid = nCsid;
+	uint32* pType = (uint32*)(pCenter+1);
+	*pType = uTypeId;
+	if (nDataSize > 0)
+	{
+		memcpy(pType+1, pData, nDataSize);
+	}
+	CNetSinkObj::SendData(pServices,  nToSerId, MAIN_MSG_DATASER,DS_SUB_MSG_DATA_BASE_RET , buff, nHeadSize + nDataSize);
+	return true;
 }
 
 

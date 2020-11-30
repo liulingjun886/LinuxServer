@@ -5,7 +5,7 @@
 #include "../commproto.h"
 #include "../include/Services.h"
 #include "../MemDataBaseEnginer/MemDataDef.h"
-#include "../DataBaseEnginer/DataBaseDef.h"
+#include "../DataServer/DataBaseDef.h"
 #include "../NetSinkObj.h"
 //#include "CliNetSink.h"
 #include <sys/socket.h>
@@ -21,7 +21,6 @@ enum TIME_ID
 	TIME_CONN_IS_LINK = 1,
 };
 
-//CGameSerManager CConnSerSink::m_RemoteSer;
 CConnSerSink::CConnSerSink(CServices* pNet) :CNetHandSink(pNet),m_nTestLink(0)
 {
 	m_pUserInfo = NULL;

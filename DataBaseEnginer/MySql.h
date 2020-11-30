@@ -1,47 +1,51 @@
 #pragma once
-#include "../include/interface.h"
+
 #include "../include/mysql/mysql.h"
+#include "../Defines.h"
 #include <string.h>
 #include <string>
 #include <vector>
 #include <map>
+
+
+class CServices;
+
+struct DBConfig
+{
+	std::string szHost;
+	unsigned short nPort;
+	std::string szDbName;
+	std::string szDbUser;
+	std::string szDbPass;
+
+	DBConfig()
+	{
+		szHost = "";
+		nPort = 0;
+		szDbName = "";
+		szDbUser = "";
+		szDbPass = "";
+	}
+};
+
 using namespace std;
 
-typedef struct MySql_Config
+class CMySql
 {
-	char szHost[16];
-	int nPort;
-	char szDbName[16];
-	char szUser[16];
-	char szPass[16];
-	MySql_Config()
-	{
-		memset(this,0,sizeof(MySql_Config));
-	}
-}DBConfig;
-
-class CMySql : public IDataBase
-{
-	DBConfig m_dbConfig;
-	MYSQL *m_pMySql;
-	string m_szSql;
-	string m_szOutSql;
-	int m_nInParam;
-	int m_nOutParam;
-
-	map<string,int> m_mapFildname;
-	vector<vector<string> > m_vecRes;
-	map<string,string> m_mapRes;
-	vector<vector<string> >::iterator m_it;
 public:
-	CMySql();
-	~CMySql();
+	CMySql(CServices* pService);
+	virtual ~CMySql();
 public:
-	bool Init();
-	bool OpenConnection();
-	void CloseConnection();
+	bool InitConnection();
+	virtual int  Exec(SERVICEINDEX nIndex, SERVICEINDEX nCsid ,uint32 nType,void* pData,uint32 nDataSize)=0;
+protected:
+	virtual int  GetDBConfig()=0;
+	virtual bool Connected()=0;
+protected:
+	bool OpenConnect();
+	void CloseConnect();
 
-	void SetSpName(const    char* szSpName);
+	void SetSpName(const   char* szSpName);
 	bool ExecPro();
 	bool ExecSql(const char* szSql);
 	
@@ -57,13 +61,27 @@ public:
 	void AddStrParam(const char* szValue);
 	void AddOutParam(const char* szOutParam);
 	void Clean();
-private:
+
 	void AddStr(const string& szParam);
 	bool ExecQuery(const string& szSql1);
 	bool ExecSingleQuery(string& szSql);
 	bool GetSetResult();
 	bool GetSingleResult();
-	bool GetDbCfg();
 	const char* GetValue(const char* szFild);
 	const char* GetOutValue(const char* szFild);
+protected:
+	DBConfig m_dbConfig;
+	CServices* const m_pService;
+	MYSQL *m_pMySql;
+
+	string m_szSql;
+	string m_szOutSql;
+	int m_nInParam;
+	int m_nOutParam;
+
+	map<string,int> m_mapFildname;
+	vector<vector<string> > m_vecRes;
+	map<string,string> m_mapRes;
+	vector<vector<string> >::iterator m_it;
 };
+

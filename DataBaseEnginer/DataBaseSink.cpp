@@ -1,21 +1,19 @@
 #include "DataBaseSink.h"
-#include "MySql.h"
 #include <stdio.h>
 #include "../commproto.h"
 #include "../include/Services.h"
-#include "DataBaseDef.h"
 #include "DataBaseEnginer.h"
+#include "../DataServer/DataMySql.h"
 
-using namespace DataBase;
 
-CDataBaseSink::CDataBaseSink(CServices    * pService) : m_pService(pService)
+CDataBaseSink::CDataBaseSink(CServices    * pService)
 {
-	m_pDataBase = new CMySql;
+	m_pDataBase = new CDataMySql(pService);
 }
 
 bool CDataBaseSink::Init()
 {
-	if(!m_pDataBase->Init())
+	if(!m_pDataBase->InitConnection())
 	{
 		printf("m_pDataBase->Init() false\n");
 		return false;
@@ -30,43 +28,10 @@ CDataBaseSink::~CDataBaseSink()
 
 bool CDataBaseSink::HandDataBaseReq(SERVICEINDEX nFromIndex,SERVICEINDEX nCsid, uint32 nType,void* pData,DATASIZE nDataSize)
 {
-	switch(nType)
-	{
-		case DataBase::USER_LOGIN_REQ:
-		{
-			UserLogin(nFromIndex,nCsid,pData,nDataSize);
-			break;
-		}
-		default:
-			break;
-	}
-	return true;
+	return m_pDataBase->Exec(nFromIndex, nCsid, nType, pData, nDataSize);
 }
 
 bool CDataBaseSink::HandTimeMsg(TIMEERID nTimeId)
 {
 	return true;
 }
-
-
-void CDataBaseSink::UserLogin(uint16 nIndex,SERVICEINDEX nCsid,void* pData,uint16 nDataSize)
-{
-	if(nDataSize != sizeof(UserLoginReq))
-		return;
-	UserLoginReq* pLogin = (UserLoginReq*)pData;
-	m_pDataBase->SetSpName("UserLogin");
-	m_pDataBase->AddNumParam(pLogin->nUserId);
-	m_pDataBase->AddStrParam(pLogin->szPass);
-	m_pDataBase->AddOutParam("@ret");
-	m_pDataBase->ExecPro();
-	
-	int ret = (int)m_pDataBase->GetOutNumValue("@ret");
-	UserLoginRet LoginRet;
-	LoginRet.ret = ret;
-	LoginRet.nUserId = pLogin->nUserId;
-	LoginRet.nSex = 1;
-	strcpy(LoginRet.szName,"LiLei");
-	strcpy(LoginRet.szHeadUrl,"szHeadUrl");
-	CDataBaseEnginer::PostDataBaseRet(m_pService, nIndex, nCsid, DataBase::USER_LOGIN_RET,&LoginRet,sizeof(UserLoginRet));
-}
-
