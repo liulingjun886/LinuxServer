@@ -34,6 +34,9 @@ void CConnCliSink::Init(const char* szIp)
 
 bool CConnCliSink::DisConnect()
 {	
+	if(SRV_TYPE_GAME == m_nPeerSerType)
+		return false;
+	
 	m_timer_Link.StopTimer();
 	m_timer_reconnect.StartTimerSec(CLIENT_RECONN_TIME);
 	return true;
