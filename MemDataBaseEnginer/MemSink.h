@@ -5,14 +5,14 @@ class CRedis;
 
 class CMemSink
 {
-	CServices* const m_pService;
-	CRedis* m_pMemData;
 public:
 	CMemSink(CServices* pMemData);
 	~CMemSink();
 public:
 	bool Init();
-	bool HandMemDataReq(SERVICEINDEX uFromSerId,SERVICEINDEX nCsid,uint32 uTypeID, void *pData, DATASIZE size);
+	bool HandMemDataReq(SERVICEINDEX uFromSerId, void *pData, DATASIZE size);
 	bool HandTimeMsg(TIMEERID nTimeId);
+private:
+	CRedis* m_pMemData;
 };
 

@@ -1,12 +1,13 @@
 #include "UserRedis.h"
 #include "UserServer.h"
-#include "../MemDataBaseEnginer/MemDataDef.h"
+#include "MemDataDef.h"
+
 
 extern CUserServer* g_pUserServer;
 
 using namespace Mem;
 
-CUserRedis::CUserRedis()
+CUserRedis::CUserRedis(CServices* pService):CRedis(pService)
 {
 	for (int i = 0; i < PRO_MAX; i++)
 	{
@@ -28,7 +29,7 @@ void CUserRedis::RegRedisScript(int nType,const char* szStr)
 	freeReplyObject(reply);
 }
 
-void CUserRedis::UserLoginReq(int nUserId,uint16 nSerNo,SERVICEINDEX nSevNo,void* pRet,uint32 nRet)
+void CUserRedis::UserLoginReq(SERVICEINDEX nSrcIndex,SERVICEINDEX nCsid,int nUserId,uint16 nSerNo,SERVICEINDEX nSevNo)
 {
 	redisReply* pReply = (redisReply*)redisCommand(m_pConn, "EVALSHA %s %d %d %d %d", m_RedisPro[PRO_LOGIN_IN],3,nUserId,nSerNo,nSevNo);
 
@@ -50,19 +51,21 @@ void CUserRedis::UserLoginReq(int nUserId,uint16 nSerNo,SERVICEINDEX nSevNo,void
 		return;
 	}
 	
-	UserLoginMemRet* pData = (UserLoginMemRet*)pRet;
-	pData->nCid = pReply->element[0]->integer;
-	pData->nCSid = pReply->element[1]->integer;
-	pData->nGid = pReply->element[2]->integer;
-	pData->nGSid = pReply->element[3]->integer;
-	pData->nGsno = pReply->element[4]->integer;
+	UserLoginMemRet pData;
+	pData.nCid = pReply->element[0]->integer;
+	pData.nCSid = pReply->element[1]->integer;
+	pData.nGid = pReply->element[2]->integer;
+	pData.nGSid = pReply->element[3]->integer;
+	pData.nGsno = pReply->element[4]->integer;
 
 	freeReplyObject(pReply);
+
+	g_pUserServer->PostMemDataBaseRet(m_pService, nSrcIndex, nCsid, Mem::USER_LOGIN_RET, &pData, sizeof(UserLoginMemRet));
 }
 
-void CUserRedis::UserJoinGame(int nUserId,uint16 nGid,SERVICEINDEX nGsid,int nSeatNo,void* pRet,uint32 nRet)
+void CUserRedis::UserJoinGame(SERVICEINDEX nSrcIndex,SERVICEINDEX nCsid,int nUserId,uint16 nGid,SERVICEINDEX nGsid,int nSeatNo)
 {
-	Mem::UserJoinGameRet* pData = (Mem::UserJoinGameRet*)pRet;
+	Mem::UserJoinGameRet pData;
 	redisReply* reply = (redisReply*)redisCommand(m_pConn, "EVALSHA %s %d %d %d %d %d",m_RedisPro[PRO_JOIN_GAME],4,nUserId,nGid,nGsid,nSeatNo);
 	if(reply == NULL)
 	{
@@ -80,10 +83,12 @@ void CUserRedis::UserJoinGame(int nUserId,uint16 nGid,SERVICEINDEX nGsid,int nSe
 		printf("UserJoinGame RedisError %s\n",reply->str);
 		return;
 	}
-	pData->nSeatNo = nSeatNo;
-	pData->nCid = reply->element[0]->integer;
-	pData->nCsid = reply->element[1]->integer;
+	pData.nSeatNo = nSeatNo;
+	pData.nCid = reply->element[0]->integer;
+	pData.nCsid = reply->element[1]->integer;
 	freeReplyObject(reply);
+	
+	g_pUserServer->PostMemDataBaseRet(m_pService, nSrcIndex, nCsid, Mem::USER_JOIN_GAME_RET, &pData, sizeof(UserLoginMemRet));
 }
 
 
@@ -137,7 +142,7 @@ bool CUserRedis::Connected()
 	return true;
 }
 
-int  CUserRedis::Exec(uint32 nType,void* pData,uint32 nDataSize,void *pRet,uint32 nRet)
+int  CUserRedis::Exec(SERVICEINDEX nSrcIndex,SERVICEINDEX nCsid,uint32 nType,void* pData,DATASIZE nDataSize)
 {
 	CloseReply();
 	
@@ -148,7 +153,7 @@ int  CUserRedis::Exec(uint32 nType,void* pData,uint32 nDataSize,void *pRet,uint3
 			if(nDataSize != sizeof(Mem::UserLoginMemReq))
 				return false;
 			Mem::UserLoginMemReq* pUserInfo = (Mem::UserLoginMemReq*)pData;
-			UserLoginReq(pUserInfo->nUserId,pUserInfo->nSerNo,pUserInfo->nSockNo,pRet,nRet);
+			UserLoginReq(nSrcIndex,nCsid,pUserInfo->nUserId,pUserInfo->nSerNo,pUserInfo->nSockNo);
 			break;
 		}
 		case Mem::USER_LOGOUT_REQ:
@@ -161,7 +166,7 @@ int  CUserRedis::Exec(uint32 nType,void* pData,uint32 nDataSize,void *pRet,uint3
 		case Mem::USER_JOIN_GAME_REQ:
 		{
 			Mem::UserJoinGameReq* pReq = (Mem::UserJoinGameReq*)pData;
-			UserJoinGame(pReq->nUserId, pReq->nGid, pReq->nGsid, pReq->nSeatNo, pRet, nRet);
+			UserJoinGame(nSrcIndex,nCsid,pReq->nUserId, pReq->nGid, pReq->nGsid, pReq->nSeatNo);
 			break;
 		}
 		case Mem::USER_QUIT_GAME_REQ:

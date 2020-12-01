@@ -2,24 +2,20 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <hiredis/hiredis.h>
-#include "MemDataDef.h"
 #include "MyRedis.h"
 #include "MemDataBaseEnger.h"
 #include "../UserServer/UserRedis.h"
 #include "../DataServer/DataRedis.h"
 #include "../Server.h"
 
-using namespace std;
-using namespace Mem;
-
 extern CServer* g_pSer;
 
-CMemSink::CMemSink(CServices* pMemData) :m_pService(pMemData),m_pMemData(NULL)
+CMemSink::CMemSink(CServices* pMemData) : m_pMemData(NULL)
 {
 	if(SRV_TYPE_USER == g_pSer->GetSerType())
-		m_pMemData = new CUserRedis;
+		m_pMemData = new CUserRedis(pMemData);
 	else if(SRV_TYPE_DATA == g_pSer->GetSerType())
-		m_pMemData = new CDataRedis;
+		m_pMemData = new CDataRedis(pMemData);
 }
 
 CMemSink::~CMemSink()
@@ -32,9 +28,17 @@ bool CMemSink::Init()
 	return m_pMemData->InitConnection();
 }
 
-bool CMemSink::HandMemDataReq(SERVICEINDEX uFromSerId,SERVICEINDEX nCsid,uint32 uTypeId,void *pData, DATASIZE nDataSize)
+bool CMemSink::HandMemDataReq(SERVICEINDEX nFromSerId,void *pData, DATASIZE nDataSize)
 {
-	switch (uTypeId)
+	static DATASIZE nHeadSize = sizeof(DataCenter) + sizeof(uint32);
+	if(nDataSize < nHeadSize)
+		return false;
+		
+	DataCenter* pCsid = (DataCenter*)pData;
+	uint32* pType = (uint32*)(pCsid+1);
+	
+	return m_pMemData->Exec(nFromSerId, pCsid->nCsid, *pType, pType+1, nDataSize - nHeadSize);
+	/*switch (uTypeId)
 	{
 		case Mem::USER_LOGIN_REQ:
 		{
@@ -70,7 +74,7 @@ bool CMemSink::HandMemDataReq(SERVICEINDEX uFromSerId,SERVICEINDEX nCsid,uint32 
 		default:
 			break;
 	}
-	return true;
+	return true;*/
 }
 
 bool CMemSink::HandTimeMsg(TIMEERID nTimeId)

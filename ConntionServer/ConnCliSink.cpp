@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "../commproto.h"
 #include "../include/Core.h"
-#include "../MemDataBaseEnginer/MemDataDef.h"
+#include "../UserServer/MemDataDef.h"
 #include "../NetSinkObj.h"
 #include "../include/Services.h"
 #include "ConnectServer.h"

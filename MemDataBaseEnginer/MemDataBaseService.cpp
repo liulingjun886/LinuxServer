@@ -19,7 +19,7 @@ bool CMemDataBaseService::Init()
 	return m_Sink->Init();
 }
 
-bool CMemDataBaseService::HandData(int e, SERVICEINDEX uFromSerId, void *pData, DATASIZE uDataSize)
+bool CMemDataBaseService::HandData(int e, SERVICEINDEX uFromSerId, void *pData, DATASIZE nDataSize)
 {
 	switch (e)
 	{
@@ -30,13 +30,14 @@ bool CMemDataBaseService::HandData(int e, SERVICEINDEX uFromSerId, void *pData, 
 	}
 	case MEM_DATA_BASE_REQ:
 	{
-		static DATASIZE nHeadSize = sizeof(DataCenter) + sizeof(uint32);
-		if(uDataSize < nHeadSize)
-			break;
+		//static DATASIZE nHeadSize = sizeof(DataCenter) + sizeof(uint32);
+		//if(nDataSize < nHeadSize)
+		//	break;
 		
-		DataCenter* pCsid = (DataCenter*)pData;
-		uint32* pType = (uint32*)(pCsid+1);
-		m_Sink->HandMemDataReq(uFromSerId,pCsid->nCsid,*pType ,pType+1, uDataSize-nHeadSize);
+		//DataCenter* pCsid = (DataCenter*)pData;
+		//uint32* pType = (uint32*)(pCsid+1);
+		//m_Sink->HandMemDataReq(uFromSerId,pCsid->nCsid,*pType ,pType+1, nDataSize-nHeadSize);
+		m_Sink->HandMemDataReq(uFromSerId, pData, nDataSize);
 		break;
 	}
 	default:

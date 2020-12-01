@@ -5,7 +5,7 @@
 #include "Room.h"
 #include "../include/Core.h"
 #include "../UserInfo.h"
-#include "../MemDataBaseEnginer/MemDataDef.h"
+#include "../UserServer/MemDataDef.h"
 #include "../NetSinkObj.h"
 #include "GameServer.h"
 

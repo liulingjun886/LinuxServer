@@ -5,7 +5,7 @@
 #include "../UserInfo.h"
 #include "../NetSinkObj.h"
 #include "GameCliSink.h"
-#include "../MemDataBaseEnginer/MemDataDef.h"
+#include "../UserServer/MemDataDef.h"
 #include "../Game/BaseLogic.h"
 #include "GameServer.h"
 

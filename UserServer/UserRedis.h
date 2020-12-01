@@ -14,17 +14,17 @@ enum Redis_Pro
 class CUserRedis : public CRedis
 {
 public:
-	CUserRedis();
+	CUserRedis(CServices* pService);
 	~CUserRedis();
 protected:
 	virtual int  GetRedisConfig();
 	virtual bool Connected();
-	virtual int  Exec(uint32 nType,void* pData,uint32 nDataSize,void *pRet=NULL,uint32 nRet=0);
+	virtual int  Exec(SERVICEINDEX nSrcIndex,SERVICEINDEX nCsid,uint32 nType,void* pData,DATASIZE nDataSize);
 private:
 	void RegRedisScript(int nType,const char* szStr);
 
-	void UserLoginReq(int nUserId,uint16 nSerNo,SERVICEINDEX nSevNo,void* pRet=NULL,uint32 nRet=0);
-	void UserJoinGame(int nUserId,uint16 nSerNo,SERVICEINDEX nSevNo,int nSeatNo,void* pRet=NULL,uint32 nRet=0);
+	void UserLoginReq(SERVICEINDEX nSrcIndex,SERVICEINDEX nCsid,int nUserId,uint16 nSerNo,SERVICEINDEX nSevNo);
+	void UserJoinGame(SERVICEINDEX nSrcIndex,SERVICEINDEX nCsid,int nUserId,uint16 nSerNo,SERVICEINDEX nSevNo,int nSeatNo);
 private:
 	char* m_RedisPro[PRO_MAX];
 };

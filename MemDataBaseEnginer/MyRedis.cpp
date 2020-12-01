@@ -4,13 +4,10 @@
 #include <string>
 #include "MyRedis.h"
 #include "../Defines.h"
-#include "MemDataDef.h"
-#include "MemDataDef.h"
 
 using namespace std;
-using namespace Mem;
 
-CRedis::CRedis() : m_pConn(NULL),m_pReply(NULL)
+CRedis::CRedis(CServices* pService) : m_pConn(NULL),m_pReply(NULL),m_pService(pService)
 {
 	
 }

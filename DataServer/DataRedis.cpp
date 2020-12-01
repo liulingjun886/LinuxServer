@@ -3,7 +3,7 @@
 
 extern CDataServer* g_pDataServer;
 
-CDataRedis::CDataRedis()
+CDataRedis::CDataRedis(CServices* pService):CRedis(pService)
 {
 	
 }
@@ -35,7 +35,7 @@ bool CDataRedis::Connected()
 	return true;
 }
 
-int  CDataRedis::Exec(uint32 nType,void* pData,uint32 nDataSize,void *pRet,uint32 nRet)
+int  CDataRedis::Exec(SERVICEINDEX nSrcIndex,SERVICEINDEX nCsid,uint32 nType,void* pData,DATASIZE nDataSize)
 {
 	return 0;
 }

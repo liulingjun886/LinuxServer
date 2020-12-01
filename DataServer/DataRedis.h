@@ -6,12 +6,12 @@
 class CDataRedis : public CRedis
 {
 public:
-	CDataRedis();
+	CDataRedis(CServices* pService);
 	~CDataRedis();
 protected:
 	virtual int  GetRedisConfig();
 	virtual bool Connected();
-	virtual int  Exec(uint32 nType,void* pData,uint32 nDataSize,void *pRet=NULL,uint32 nRet=0);
+	virtual int  Exec(SERVICEINDEX nSrcIndex,SERVICEINDEX nCsid,uint32 nType,void* pData,DATASIZE nDataSize);
 private:
 	void RegRedisScript(int nType,const char* szStr);
 private:

@@ -4,7 +4,7 @@
 #include "../include/ToolLock.h"
 #include "../commproto.h"
 #include "../include/Services.h"
-#include "../MemDataBaseEnginer/MemDataDef.h"
+#include "../UserServer/MemDataDef.h"
 #include "../DataServer/DataBaseDef.h"
 #include "../NetSinkObj.h"
 #include <sys/socket.h>

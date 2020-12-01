@@ -18,14 +18,16 @@ struct RedisConfig
 	}
 };
 
+class CServices;
+
 class CRedis
 {
 public:
-	CRedis();
+	CRedis(CServices* pService);
 	virtual ~CRedis();
 public:
 	bool InitConnection();
-	virtual int  Exec(uint32 nType,void* pData,uint32 nDataSize,void *pRet=NULL,uint32 nRet=0)=0;
+	virtual int  Exec(SERVICEINDEX nSrcIndex,SERVICEINDEX nCsid,uint32 nType,void* pData,DATASIZE nDataSize)=0;
 protected:
 	virtual int  GetRedisConfig()=0;
 	virtual bool Connected()=0;
@@ -36,4 +38,5 @@ protected:
 	redisContext* m_pConn;
 	redisReply* m_pReply;
 	RedisConfig m_dbConfig;
+	CServices* const m_pService;
 };
