@@ -31,11 +31,11 @@ public:
 	CConnSerSink(CServices* m_pNetSer);
 	~CConnSerSink();
 public:
-	bool HandNetData(uint16,uint16, uint16, void*, uint16);
+	bool HandNetData(uint16,uint16, uint16, void*, DATASIZE);
 	bool HandTimeMsg(uint16 uTimeId);
-	bool HandDataBaseRet(uint32 uType, void * pData, uint16 nDataSize);
-	bool HandMemDataRet(uint32 uType, void* pData, uint16 uDataSize);
-	bool HandUserMsg(int nEvent, void * pData, uint16 uDataSize);
+	bool HandDataBaseRet(uint32 uType, void * pData, DATASIZE nDataSize);
+	bool HandMemDataRet(uint32 uType, void* pData, DATASIZE uDataSize);
+	bool HandUserMsg(int nEvent, void * pData, DATASIZE uDataSize);
 	void Close();
 	void Init(const char* szIp);
 	void Connect();
@@ -43,20 +43,25 @@ public:
 private:
 	bool TestNetLink();
 
-	bool SendToMySelf(uint16, uint16, void* pData = NULL, uint16 nDataSize = 0);
-	bool SendToGameSer(uint16, uint16, uint16, void*, uint16);
-	bool SendToCenterSer(uint16, uint16, void*, uint16);
-	bool SendToUserSer(uint32, uint16, uint16, void*, uint16);
-	bool SendToConnectSer(uint16, uint16, void*, uint16);
+	bool SendToMySelf(uint16, uint16, void* pData = NULL, DATASIZE nDataSize = 0);
+	bool SendToGameSer(uint16, uint16, uint16, void*, DATASIZE);
+	bool SendToCenterSer(uint16, uint16, void*, DATASIZE);
+	bool SendToUserSer(uint32, uint16, uint16, void*, DATASIZE);
+	bool SendToConnectSer(uint16, uint16, void*, DATASIZE);
 	
-	bool HandMainMsgNet(uint16, uint16, void*, uint16);
-	bool HandMainMsgToRoom(uint16, uint16, void*, uint16);
-	bool HandMainMsgToGame(uint16,uint16, uint16, void*, uint16);
-	bool HandMainMsgFromConnect(uint16 nIndex,uint16 nSub, void* pData, uint16 nDataSize);
+	bool HandMainMsgNet(uint16, uint16, void*, DATASIZE);
+	bool HandMainMsgToRoom(uint16, uint16, void*, DATASIZE);
+	bool HandMainMsgToGame(uint16,uint16, uint16, void*, DATASIZE);
+	bool HandMainMsgFromConnect(uint16 nIndex,uint16 nSub, void* pData, DATASIZE nDataSize);
 private:
-	CUserInfo* m_pUserInfo;
 	int m_nTestLink;
+	CTimer m_timerConnTest;
 	const char* m_szIp;
-	CTimerNode m_timerConnTest;
+	
+	CUserInfo* m_pUserInfo;
+	UID m_nUserId;
+	
+	
+	
 };
 

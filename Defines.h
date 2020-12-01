@@ -171,5 +171,4 @@ struct GameInfo : public HostConfig
 {
 	int 	nGameId;
 	int 	nGameNo;
-	
 };

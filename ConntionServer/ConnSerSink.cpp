@@ -7,7 +7,6 @@
 #include "../MemDataBaseEnginer/MemDataDef.h"
 #include "../DataServer/DataBaseDef.h"
 #include "../NetSinkObj.h"
-//#include "CliNetSink.h"
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -77,7 +76,7 @@ bool CConnSerSink::DisConnect()
 }
 
 
-bool CConnSerSink::HandNetData(uint16 nIndex,uint16 nMain, uint16 nSub, void* pData, uint16 nDataSize)
+bool CConnSerSink::HandNetData(uint16 nIndex,uint16 nMain, uint16 nSub, void* pData, DATASIZE nDataSize)
 {
 
 	switch (nMain)
@@ -151,40 +150,40 @@ bool CConnSerSink::TestNetLink()
 	return true;
 }
 
-bool CConnSerSink::SendToCenterSer(uint16 nMain, uint16 nSub, void* pData, uint16 nDataSize)
+bool CConnSerSink::SendToCenterSer(uint16 nMain, uint16 nSub, void* pData, DATASIZE nDataSize)
 {
 	CNetSinkObj::SendData(m_pNet, g_pConnectServer->GetCenterServerIndex(), nMain, nSub, pData, nDataSize);
 	return true;
 }
 
-bool CConnSerSink::SendToMySelf(uint16 nMain, uint16 nSub, void* pData, uint16 nDataSize)
+bool CConnSerSink::SendToMySelf(uint16 nMain, uint16 nSub, void* pData, DATASIZE nDataSize)
 {
 	CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), nMain, nSub, pData, nDataSize);
 	return true;
 }
 
-bool CConnSerSink::SendToGameSer(uint16 nSerNo, uint16 uMain, uint16 uSub, void* pData, uint16 uDataSize)
+bool CConnSerSink::SendToGameSer(uint16 nSerNo, uint16 uMain, uint16 uSub, void* pData, DATASIZE uDataSize)
 {
 	uint16 nIndex = g_pConnectServer->GetGameSerIndexByNo(nSerNo, m_pNet->GetServiceIndex());
 	CNetSinkObj::SendData(m_pNet,nIndex, uMain, uSub, pData, uDataSize);
 	return true;
 }
 
-bool CConnSerSink::SendToUserSer(uint32 nUid, uint16 nMain, uint16 nSub, void* pData, uint16 nDataSize)
+bool CConnSerSink::SendToUserSer(uint32 nUid, uint16 nMain, uint16 nSub, void* pData, DATASIZE nDataSize)
 {
 	uint16 nIndex = g_pConnectServer->GetUserServerIndex(nUid);
 	CNetSinkObj::SendData(m_pNet, nIndex, nMain, nSub, pData, nDataSize);
 	return true;
 }
 
-bool CConnSerSink::SendToConnectSer(uint16 nMain, uint16 nSub, void* pData, uint16 nDataSize)
+bool CConnSerSink::SendToConnectSer(uint16 nMain, uint16 nSub, void* pData, DATASIZE nDataSize)
 {
 	uint16 nTempGameSerNo = g_pConnectServer->GetARandGameSer();
 	return SendToGameSer(nTempGameSerNo, nMain, nSub, pData, nDataSize);
 }
 
 
-bool CConnSerSink::HandDataBaseRet(uint32 nType, void * pData, uint16 nDataSize)
+bool CConnSerSink::HandDataBaseRet(uint32 nType, void * pData, DATASIZE nDataSize)
 {
 	switch (nType)
 	{
@@ -200,7 +199,6 @@ bool CConnSerSink::HandDataBaseRet(uint32 nType, void * pData, uint16 nDataSize)
 			req.nUserId = m_pUserInfo->GetUserId();
 			req.nSerNo = g_pConnectServer->GetSerNo();
 			req.nSockNo = m_pNet->GetServiceIndex();
-			//CCliNetSink::PostMemDataBaseReq(m_pNet,Mem::USER_LOGIN_REQ, &req, sizeof(req));
 			break;
 		}
 		default:
@@ -209,7 +207,7 @@ bool CConnSerSink::HandDataBaseRet(uint32 nType, void * pData, uint16 nDataSize)
 	return true;
 }
 
-bool CConnSerSink::HandMemDataRet(uint32 nType, void* pData, uint16 uDataSize)
+bool CConnSerSink::HandMemDataRet(uint32 nType, void* pData, DATASIZE uDataSize)
 {
 	switch (nType)
 	{
@@ -267,7 +265,7 @@ bool CConnSerSink::HandMemDataRet(uint32 nType, void* pData, uint16 uDataSize)
 	return true;
 }
 
-bool CConnSerSink::HandUserMsg(int nEvent, void * pData, uint16 nDataSize)
+bool CConnSerSink::HandUserMsg(int nEvent, void * pData, DATASIZE nDataSize)
 {
 
 	switch (nEvent)
@@ -315,7 +313,7 @@ bool CConnSerSink::HandUserMsg(int nEvent, void * pData, uint16 nDataSize)
 	return true;
 }
 
-bool CConnSerSink::HandMainMsgNet(uint16 nIndex,uint16 nSub, void* pData, uint16 nDataSize)
+bool CConnSerSink::HandMainMsgNet(uint16 nIndex,uint16 nSub, void* pData, DATASIZE nDataSize)
 {
 	switch (nSub)
 	{
@@ -330,7 +328,7 @@ bool CConnSerSink::HandMainMsgNet(uint16 nIndex,uint16 nSub, void* pData, uint16
 	return false;
 }
 
-bool CConnSerSink::HandMainMsgToRoom(uint16 nIndex,uint16 nSub, void* pData, uint16 nDataSize)
+bool CConnSerSink::HandMainMsgToRoom(uint16 nIndex,uint16 nSub, void* pData, DATASIZE nDataSize)
 {
 	uint16 nGid, nGsid,nSeatNo;
 	m_pUserInfo->GetGameInfo(nGid, nGsid,nSeatNo);
@@ -375,7 +373,7 @@ bool CConnSerSink::HandMainMsgToRoom(uint16 nIndex,uint16 nSub, void* pData, uin
 	return true;
 }
 
-bool CConnSerSink::HandMainMsgToGame(uint16 nIndex,uint16 nMain,uint16 nSub, void* pData, uint16 nDataSize)
+bool CConnSerSink::HandMainMsgToGame(uint16 nIndex,uint16 nMain,uint16 nSub, void* pData, DATASIZE nDataSize)
 {
 	uint16 nGameSerNo,nGameSerIndex,nGameSerSeatNo;
 	m_pUserInfo->GetGameInfo(nGameSerNo,nGameSerIndex,nGameSerSeatNo);
@@ -390,7 +388,7 @@ bool CConnSerSink::HandMainMsgToGame(uint16 nIndex,uint16 nMain,uint16 nSub, voi
 	return true;
 }
 
-bool CConnSerSink::HandMainMsgFromConnect(uint16 nIndex,uint16 nSub, void* pData, uint16 nDataSize)
+bool CConnSerSink::HandMainMsgFromConnect(uint16 nIndex,uint16 nSub, void* pData, DATASIZE nDataSize)
 {
 	switch (nSub)
 	{
