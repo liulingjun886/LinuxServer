@@ -31,7 +31,7 @@ server:$(SEROBJ)
 	$(CC) $(CFLAGS) $^ -o $@ $(LIB) -Wl,--export-dynamic
 
 %.so:./Game/%/*.cpp
-	g++ $(SHARE_FLAGS) $(CFLAGS) $^ -o $@ 
+	$(CC) $(SHARE_FLAGS) $(CFLAGS) $^ -o $@ 
 	
 clean:
 	rm -f ./debug/*.o core.* ./log/*
