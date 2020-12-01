@@ -2,6 +2,7 @@
 
 #include "../Defines.h"
 #include "../NetHandSink.h"
+#include "../include/TimerNode.h"
 
 class ConnSucess;
 
@@ -23,4 +24,5 @@ private:
 private:
 	uint16 	m_nConnNo;
 	uint8 	m_nTestNum;
+	CTimer	m_timer_Link;
 };

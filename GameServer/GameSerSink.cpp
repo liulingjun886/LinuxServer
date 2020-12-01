@@ -6,9 +6,15 @@
 
 extern CGameServer* g_pGameServer;
 
+enum TIME_ID
+{
+	TIME_TEST_LINK = 1,
+};
+
+
 CGameSerSink::CGameSerSink(CServices* pServices):CNetHandSink(pServices)
 {
-	
+	m_timer_Link.InitTimerObj(m_pNet, TIME_TEST_LINK);
 }
 
 CGameSerSink::~CGameSerSink()
@@ -29,9 +35,23 @@ void CGameSerSink::Close()
 	g_pGameServer->DelConnSrvIndex(m_nConnNo, m_pNet->GetServiceIndex());
 }
 
-bool CGameSerSink::HandTimeMsg(uint16 uTimeID)
+bool CGameSerSink::HandTimeMsg(uint16 nTimeID)
 {
-	return true;
+	switch(nTimeID)
+	{
+		case TIME_TEST_LINK:
+		{
+			++m_nTestNum;
+			if(m_nTestNum > 1)
+			{
+				m_pNet->Log("test link timeout!");
+				return false;
+			}
+			m_timer_Link.StartTimerSec(SERVER_TEST_TIME);
+			return true;
+		}
+	}
+	return false;
 }
 
 
@@ -64,11 +84,13 @@ bool CGameSerSink::HandMsgFromConnSrv(uint16 nIndex, uint16 nSub, void* pData, u
 			RegConnSer* pReg = (RegConnSer*)pData;
 			m_nConnNo = pReg->nSerNo;
 			g_pGameServer->AddConnInfo(pReg->nSerNo, m_pNet->GetServiceIndex());
+			HandTestNetConn();
+			m_timer_Link.StartTimerSec(SERVER_TEST_TIME);
 			return true;
 		}
 		case CS_SUB_MSG_TEST:
 		{
-			
+			HandTestNetConn();
 			return true;
 		}
 		default:

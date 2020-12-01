@@ -1,6 +1,12 @@
 #!/bin/bash
-./server 1 1 data_1 7788
+killall server
+sleep 2
+./server -t1 -s0 
 sleep 1 
-./server 2 1 conn_1 6666 8080
+./server -t2 -s0
 sleep 1
-./server 3 1 niu_1 11001 
+./server -t3 -s0
+sleep 1
+./server -t4 -s0 
+sleep 1
+./server -t5 -s0
