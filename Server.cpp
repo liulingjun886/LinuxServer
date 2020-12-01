@@ -40,38 +40,40 @@ void CServer::InitLogFile(const char*   pLogFile)
 	}
 }
 
+void CServer::SetDaemon()
+{
+	int pid, null;
+	char nullbuf[] = {0x2f,0x64,0x65,0x76,0x2f,0x6e,0x75,0x6c,0x6c,0x00};
+
+	pid = fork();
+	if(pid < 0)
+	{
+		printf("Create service failer!\n");
+		exit(0);
+	}
+
+	if(pid > 0)
+	{
+		exit(0);
+	}
+
+	setsid();
+	//chdir ("/");
+	null = open (nullbuf, O_RDWR);
+	dup2 (null, 0);
+	dup2 (null, 1);
+	dup2 (null, 2);
+	close (null);
+}
+
 CServer::~CServer()
 {
 	m_pCore->Destroy();
 }
 void CServer::Run()
 {	
-	if(m_nDeamon)
-	{
-		int pid, null;
-		char nullbuf[] = {0x2f,0x64,0x65,0x76,0x2f,0x6e,0x75,0x6c,0x6c,0x00};
-
-		pid = fork();
-		if(pid < 0)
-		{
-			printf("Create service failer!\n");
-			exit(0);
-		}
-
-		if(pid > 0)
-		{
-			exit(0);
-		}
-
-		setsid();
-		//chdir ("/");
-		null = open (nullbuf, O_RDWR);
-		dup2 (null, 0);
-		dup2 (null, 1);
-		dup2 (null, 2);
-		close (null);
-
-	}
+	if(1 == m_nDeamon)
+		SetDaemon();
 	
 	m_pCore->Run();
 }

@@ -9,17 +9,17 @@ CUpGradeGameLogic::~CUpGradeGameLogic()
 {
 }
 
-int CUpGradeGameLogic::GetCardNum(BYTE nCard)
+int CUpGradeGameLogic::GetCardNum(uint8 nCard)
 {
 	return (nCard&UG_VALUE_MASK)+1;
 }
 
-int CUpGradeGameLogic::GetCardKind(BYTE nCard)
+int CUpGradeGameLogic::GetCardKind(uint8 nCard)
 {
 	return nCard&UG_HUA_MASK;
 }
 
-int CUpGradeGameLogic::SortCards(BYTE nCards[],int nCardCount)
+int CUpGradeGameLogic::SortCards(uint8 nCards[],int nCardCount)
 {
 	for(int i = 0; i < nCardCount-1; i++)
 	{
@@ -50,7 +50,7 @@ int CUpGradeGameLogic::SortCards(BYTE nCards[],int nCardCount)
 	return 0;
 }
 
-int CUpGradeGameLogic::GetCardType(BYTE nCards[],int nCardCount,BYTE& nMaxCard)
+int CUpGradeGameLogic::GetCardType(uint8 nCards[],int nCardCount,uint8& nMaxCard)
 {
 	if(nCardCount != 5)
 		return 0;
@@ -89,7 +89,7 @@ int CUpGradeGameLogic::GetCardType(BYTE nCards[],int nCardCount,BYTE& nMaxCard)
 	return UG_NO_POINT;
 }
 
-int CUpGradeGameLogic::GetPoint(BYTE nCard)
+int CUpGradeGameLogic::GetPoint(uint8 nCard)
 {
 	switch (nCard)
 	{
@@ -104,38 +104,38 @@ int CUpGradeGameLogic::GetPoint(BYTE nCard)
 	}
 }
 
-void CUpGradeGameLogic::SwapCard(BYTE& nCard1,BYTE& nCard2)
+void CUpGradeGameLogic::SwapCard(uint8& nCard1,uint8& nCard2)
 {
 	if(nCard1 == nCard2)
 		return;
 
-	BYTE bTemp = nCard1;
+	uint8 bTemp = nCard1;
 	nCard1 = nCard2;
 	nCard2 = bTemp;
 }
 
-bool CUpGradeGameLogic::IsGoldBull(BYTE    nCards[])
+bool CUpGradeGameLogic::IsGoldBull(uint8    nCards[])
 {
 	if(GetCardNum(nCards[1]) >   0x09 && GetCardNum(nCards[4]) < 0x0D)
 		return true;
 	return false;
 }
 
-bool CUpGradeGameLogic::IsSilverBull(BYTE     nCards[])
+bool CUpGradeGameLogic::IsSilverBull(uint8     nCards[])
 {
 	if(GetCardNum(nCards[1]) >   0x08 && GetCardNum(nCards[4]) < 0x0D)
 		return true;
 	return false;
 }
 
-bool CUpGradeGameLogic::IsBombBull(BYTE    nCards[])
+bool CUpGradeGameLogic::IsBombBull(uint8    nCards[])
 {
 	if(GetCardNum(nCards[0]) == GetCardNum(nCards[3]) || GetCardNum(nCards[1]) == GetCardNum(nCards[4]))
 		return true;
 	return false;
 }
 
-bool CUpGradeGameLogic::IsFiveSmall(BYTE     nCards[])
+bool CUpGradeGameLogic::IsFiveSmall(uint8     nCards[])
 {
 	if(GetPoint(nCards[4]) > 4)
 		return false;
@@ -144,7 +144,7 @@ bool CUpGradeGameLogic::IsFiveSmall(BYTE     nCards[])
 	return true;
 }
 
-bool CUpGradeGameLogic::CompareCard(int nCardType1,BYTE nMaxCard1,int nCardType2,BYTE nMaxCard2)
+bool CUpGradeGameLogic::CompareCard(int nCardType1,uint8 nMaxCard1,int nCardType2,uint8 nMaxCard2)
 {
 	if(nCardType1 == nCardType2)
 	{
@@ -155,7 +155,7 @@ bool CUpGradeGameLogic::CompareCard(int nCardType1,BYTE nMaxCard1,int nCardType2
 	return nCardType1 > nCardType2;
 }
 
-void CUpGradeGameLogic::RandCards(BYTE nCards[],int nCardCount)
+void CUpGradeGameLogic::RandCards(uint8 nCards[],int nCardCount)
 {
 	for(int i = 0,j = nCardCount-1; i < nCardCount; ++i,--j)
 	{
@@ -166,7 +166,7 @@ void CUpGradeGameLogic::RandCards(BYTE nCards[],int nCardCount)
 	}
 }
 
-int CUpGradeGameLogic::GetMulByCardType(BYTE nCardType)
+int CUpGradeGameLogic::GetMulByCardType(uint8 nCardType)
 {
 	switch (nCardType)
 	{

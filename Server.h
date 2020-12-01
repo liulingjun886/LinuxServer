@@ -18,6 +18,8 @@ public:
 protected:
 	void InitLogFile(const char*   pLogFile);
 	virtual int Initialize() = 0;
+private:
+	void SetDaemon();
 protected:
 	CCore* m_pCore;
 	int m_nDeamon;

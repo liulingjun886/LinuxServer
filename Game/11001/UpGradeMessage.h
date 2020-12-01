@@ -1,5 +1,5 @@
 #pragma once
-#include "types.h"
+#include "../../Defines.h"
 
 enum S_C_PROTOL
 {
@@ -58,42 +58,42 @@ struct C_S_UserBet
 
 struct S_C_DisPatchCard
 {
-	BYTE nCards[5];
+	uint8 nCards[5];
 };
 
 struct S_C_UserBet 
 {
-	USHORT nSeatNo;
+	uint16 nSeatNo;
 	int nMul;
 };
 
 struct S_C_UserRobBank 
 {
-	USHORT nSeatNo;
+	uint16 nSeatNo;
 	int nRob;
 };
 
 struct S_C_ConfirmBank 
 {
-	USHORT nBankSeatNo;
+	uint16 nBankSeatNo;
 };
 
 struct S_C_UserShowCard 
 {
-	USHORT nSeatNo;
-	USHORT nCardType;
+	uint16 nSeatNo;
+	uint16 nCardType;
 	int nMuls;
-	BYTE nCards[5];
+	uint8 nCards[5];
 };
 
 struct UserWinInfo
 {
-	USHORT nSeatNo;
+	uint16 nSeatNo;
 	int nWin;
 };
 
 struct S_C_UserWininfo 
 {
-	USHORT nUserCount;
+	uint16 nUserCount;
 	UserWinInfo userWinInfo[1];
 };

@@ -1,6 +1,12 @@
 CC = g++
-VPATH = ./CenterServer:./ConntionServer:./DataBaseEnginer:./DataServer: \
-		./GameServer:./MemDataBaseEnginer:./UserServer
+CFLAGS = -g -Werror -o0
+SHARE_FLAGS = -fPIC -shared
+LIB = 	-L./lib -lcore \
+		-L/usr/lib64/mysql -lmysqlclient \
+		-lpthread -lhiredis -ldl
+
+VPATH = ./MemDataBaseEnginer:./DataBaseEnginer:./CenterServer: \
+		./UserServer:./DataServer:./GameServer:./ConntionServer
 
 CURR_SRC_FILES = $(wildcard ./*.cpp)
 MDE_SRC_FILES = $(wildcard ./MemDataBaseEnginer/*.cpp)
@@ -19,16 +25,16 @@ SEROBJ = $(CURR_SRC_FILES:./%.cpp=./debug/%.o) $(MDE_SRC_FILES:./MemDataBaseEngi
 
 
 ./debug/%.o:%.cpp
-	$(CC) -c -g -Wall $< -o $@
+	$(CC) -c $(CFLAGS) $< -o $@
 
 server:$(SEROBJ)
-	$(CC) -g -Wall -Werror -O0 $^ -o $@ -lpthread -lhiredis -ldl -L./lib -lcore -L/usr/lib64/mysql -lmysqlclient -Wl,--export-dynamic
+	$(CC) $(CFLAGS) $^ -o $@ $(LIB) -Wl,--export-dynamic
 
-%.so:./Game/%/Logic.cpp ./Game/%/UpGradeLogic.cpp
-	g++ -fPIC -shared -g -Wall $^ -o $@
+%.so:./Game/%/*.cpp
+	g++ $(SHARE_FLAGS) $(CFLAGS) $^ -o $@ 
 	
 clean:
-	rm -rf ./debug/*.o core.* log/*
+	rm -f ./debug/*.o core.* ./log/*
 
 all:clean server
 

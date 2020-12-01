@@ -1,6 +1,6 @@
 #pragma once
 
-#include "types.h"
+#include "../../Defines.h"
 
 #define	UG_HUA_MASK		0xF0
 #define	UG_VALUE_MASK	0x0F
@@ -31,20 +31,20 @@ public:
 	CUpGradeGameLogic();
 	~CUpGradeGameLogic();
 public:
-	static int GetCardType(BYTE nCards[],int nCardCount,BYTE& nMaxCard);
-	static bool CompareCard(int nCardType1,BYTE nMaxCard1,int nCardType2,BYTE nMaxCard2);
-	static void RandCards(BYTE nCards[],int nCardCount);
-	static int GetMulByCardType(BYTE nCardType);
+	static int GetCardType(uint8 nCards[],int nCardCount,uint8& nMaxCard);
+	static bool CompareCard(int nCardType1,uint8 nMaxCard1,int nCardType2,uint8 nMaxCard2);
+	static void RandCards(uint8 nCards[],int nCardCount);
+	static int GetMulByCardType(uint8 nCardType);
 private:
-	static int GetCardNum(BYTE nCard);
-	static int GetCardKind(BYTE nCard);
-	static int SortCards(BYTE nCards[],int nCardCount);
-	static int GetPoint(BYTE nCard);
-	static void SwapCard(BYTE& nCard1,BYTE& nCard2);
-	static bool IsGoldBull(BYTE	nCards[]);
-	static bool IsSilverBull(BYTE	   nCards[]);
-	static bool IsBombBull(BYTE	nCards[]);
-	static bool IsFiveSmall(BYTE	  nCards[]);
+	static int GetCardNum(uint8 nCard);
+	static int GetCardKind(uint8 nCard);
+	static int SortCards(uint8 nCards[],int nCardCount);
+	static int GetPoint(uint8 nCard);
+	static void SwapCard(uint8& nCard1,uint8& nCard2);
+	static bool IsGoldBull(uint8	nCards[]);
+	static bool IsSilverBull(uint8	   nCards[]);
+	static bool IsBombBull(uint8	nCards[]);
+	static bool IsFiveSmall(uint8	  nCards[]);
 	
 };
 

@@ -1,5 +1,7 @@
 #include <stdio.h>
-#include "ConnSerSink.h"
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 #include "../include/Core.h"
 #include "../include/ToolLock.h"
 #include "../commproto.h"
@@ -7,9 +9,7 @@
 #include "../UserServer/MemDataDef.h"
 #include "../DataServer/DataBaseDef.h"
 #include "../NetSinkObj.h"
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
+#include "ConnSerSink.h"
 #include "ConnectServer.h"
 
 

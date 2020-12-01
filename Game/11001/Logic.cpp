@@ -24,7 +24,7 @@ CLogic::~CLogic()
 	
 }
 
-bool CLogic::InitGameStation(void* pData, USHORT nDataSize)
+bool CLogic::InitGameStation(void* pData, uint16 nDataSize)
 {
 	m_nUserCount = m_pRoom->GetUserCount();
 	m_pCards.Init(m_nUserCount);
@@ -37,12 +37,12 @@ bool CLogic::InitGameStation(void* pData, USHORT nDataSize)
 	return true;
 }
 
-bool CLogic::GetGameStation(USHORT nSeatNo)
+bool CLogic::GetGameStation(uint16 nSeatNo)
 {
 	return true;
 }
 
-bool CLogic::HandNetMsg(USHORT nSeatNo,USHORT nSub, void* pData, USHORT nDataSize)
+bool CLogic::HandNetMsg(uint16 nSeatNo,uint16 nSub, void* pData, DATASIZE nDataSize)
 {
 	switch (nSub)
 	{
@@ -122,7 +122,7 @@ void CLogic::EndShowCard()
 	}
 }
 
-bool CLogic::HandTimeMsg(USHORT nTimeId)
+bool CLogic::HandTimeMsg(uint16 nTimeId)
 {
 
 	switch (nTimeId)
@@ -213,7 +213,7 @@ void CLogic::DispatchCard()
 	UpdateGameState(DISCARD);
 	m_timerBet.StopTimer();
 	
-	BYTE nCardArray[54] =
+	uint8 nCardArray[54] =
 	{
 		0x01, 0x02 ,0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, //方块 2 - A
 		0x11, 0x12 ,0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, //梅花 2 - A
@@ -298,7 +298,7 @@ void CLogic::UpdateGameState(int nState)
 }
 
 
-void CLogic::UserBet(USHORT nSeatNo,int nBet)
+void CLogic::UserBet(uint16 nSeatNo,int nBet)
 {
 	if(m_pBets[nSeatNo] > 0)
 		return;
@@ -323,7 +323,7 @@ void CLogic::UserBet(USHORT nSeatNo,int nBet)
 	DispatchCard();
 }
 
-void CLogic::UserRobBank(USHORT nSeatNo,int nRob)
+void CLogic::UserRobBank(uint16 nSeatNo,int nRob)
 {
 	if(m_nGameState != BANK)
 		return;
@@ -350,7 +350,7 @@ void CLogic::UserRobBank(USHORT nSeatNo,int nRob)
 	ConfirmBank();
 }
 
-void CLogic::UserShowCard(USHORT nSeatNo)
+void CLogic::UserShowCard(uint16 nSeatNo)
 {
 	if(m_nGameState != SHOWCARD)
 		return;

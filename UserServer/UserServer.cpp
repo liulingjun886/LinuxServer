@@ -20,6 +20,8 @@ CUserServer::~CUserServer()
 
 int	CUserServer::Initialize()
 {
+	InitLogFile("UserServer");
+
 	if(0 != ReadConfig("./config/config.ini"))
 	{
 		printf("readconfig failer!\n");
@@ -46,9 +48,7 @@ int	CUserServer::Initialize()
 		printf("AddTcpNetSer Failer!\n");
 		return -1;
 	}
-		
 
-	InitLogFile("UserServer");
 	return 0;
 }
 
