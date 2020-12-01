@@ -57,7 +57,7 @@ bool CUserCliSink::HandTimeMsg(uint16 nTimeID)
 	return true;
 }
 
-bool CUserCliSink::HandNetData(uint16 nSrcIndex, uint16 nMain, uint16 nSub, void* pData, uint32 nDataSize)
+bool CUserCliSink::HandNetData(uint16 nSrcIndex, uint16 nMain, uint16 nSub, void* pData, DATASIZE nDataSize)
 {
 	m_pNet->Log("Recv cmd %d, %d", nMain, nSub);
 	switch(nMain)
@@ -81,7 +81,7 @@ bool CUserCliSink::DisConnect()
 }
 
 
-bool CUserCliSink::HandMainMsgFromCenter(uint16 nSrcIndex, uint16 nSub, void* pData, uint32 nDataSize)
+bool CUserCliSink::HandMainMsgFromCenter(uint16 nSrcIndex, uint16 nSub, void* pData, DATASIZE nDataSize)
 {
 	switch(nSub)
 	{

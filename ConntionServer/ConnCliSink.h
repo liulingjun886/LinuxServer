@@ -12,15 +12,15 @@ public:
 	CConnCliSink(CServices* pNet);
 	~CConnCliSink();
 public:
-	void Init(uint32 nIp);
+	void Init(const char* szIp);
 	bool DisConnect();
 	void Close();
-	bool HandNetData(uint16,uint16, uint16, void*, uint32);
+	bool HandNetData(uint16,uint16, uint16, void*, DATASIZE);
 	bool HandTimeMsg(uint16 uTimeID);
 private:	
-	bool HandMsgFromCenterSrv(uint16, uint16, void*, uint16);
-	bool HandMsgFromGameSrv(uint16, uint16, void*, uint16);
-	bool HandMsgFromUserSrv(uint16, uint16, void*, uint16);
+	bool HandMsgFromCenterSrv(uint16, uint16, void*, DATASIZE);
+	bool HandMsgFromGameSrv(uint16, uint16, void*, DATASIZE);
+	bool HandMsgFromUserSrv(uint16, uint16, void*, DATASIZE);
 
 	void SendData(uint16, uint16, uint16, void*, DATASIZE);
 	void RegConnSrv();

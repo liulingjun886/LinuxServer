@@ -27,8 +27,9 @@ CConnCliSink::~CConnCliSink()
 	
 }
 
-void CConnCliSink::Init(uint32 nIp)
+void CConnCliSink::Init(const char* szIp)
 {
+
 }
 
 bool CConnCliSink::DisConnect()
@@ -44,7 +45,7 @@ void CConnCliSink::Close()
 }
 
 
-bool CConnCliSink::HandNetData(uint16 nIndex,uint16 nMain, uint16 nSub, void* pData, uint32 nDataSize)
+bool CConnCliSink::HandNetData(uint16 nIndex,uint16 nMain, uint16 nSub, void* pData, DATASIZE nDataSize)
 {
 	m_pNet->Log("Recv cmd %d, %d",nMain, nSub);
 	switch (nMain)
@@ -118,7 +119,7 @@ void CConnCliSink::ConnectSucess(ConnSucess* pConn)
 }
 
 
-bool CConnCliSink::HandMsgFromCenterSrv(uint16 nSrcIndex, uint16 nSub, void* pData, uint16 nDataSize)
+bool CConnCliSink::HandMsgFromCenterSrv(uint16 nSrcIndex, uint16 nSub, void* pData, DATASIZE nDataSize)
 {
 	switch(nSub)
 	{
@@ -156,7 +157,7 @@ bool CConnCliSink::HandMsgFromCenterSrv(uint16 nSrcIndex, uint16 nSub, void* pDa
 	return true;
 }
 
-bool CConnCliSink::HandMsgFromGameSrv(uint16 nSrcIndex, uint16 nSub, void* pData, uint16 nDataSize)
+bool CConnCliSink::HandMsgFromGameSrv(uint16 nSrcIndex, uint16 nSub, void* pData, DATASIZE nDataSize)
 {
 	switch (nSub)
 	{
@@ -190,7 +191,7 @@ bool CConnCliSink::HandMsgFromGameSrv(uint16 nSrcIndex, uint16 nSub, void* pData
 	return true;
 }
 
-bool CConnCliSink::HandMsgFromUserSrv(uint16 nSrcIndex, uint16 nSub, void* pData, uint16 nDataSize)
+bool CConnCliSink::HandMsgFromUserSrv(uint16 nSrcIndex, uint16 nSub, void* pData, DATASIZE nDataSize)
 {
 	switch(nSub)
 	{

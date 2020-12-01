@@ -60,8 +60,5 @@ private:
 	
 	CUserInfo* m_pUserInfo;
 	UID m_nUserId;
-	
-	
-	
 };
 

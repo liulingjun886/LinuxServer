@@ -60,7 +60,7 @@ void CDataCliSink::SendMsgToCenterSrv(uint16 nMain, uint16 nSub, void* pData, DA
 }
 
 
-bool CDataCliSink::HandNetData(uint16 nSrcIndex, uint16 nMain, uint16 nSub, void* pData, uint32 nDataSize)
+bool CDataCliSink::HandNetData(uint16 nSrcIndex, uint16 nMain, uint16 nSub, void* pData, DATASIZE nDataSize)
 {
 	m_pNet->Log("CLient Recv cmd %d, %d", nMain, nSub);
 	switch(nMain)
@@ -83,7 +83,7 @@ bool CDataCliSink::DisConnect()
 }
 
 
-bool CDataCliSink::HandMainMsgFromCenterSrv(uint16 nSrcIndex, uint16 nSub, void* pData, uint32 nDataSize)
+bool CDataCliSink::HandMainMsgFromCenterSrv(uint16 nSrcIndex, uint16 nSub, void* pData, DATASIZE nDataSize)
 {
 	switch(nSub)
 	{

@@ -55,7 +55,7 @@ bool CGameSerSink::HandTimeMsg(uint16 nTimeID)
 }
 
 
-bool CGameSerSink::HandNetData(uint16 nIndex, uint16 nMain, uint16 nSub, void* pData, uint32 nDataSize)
+bool CGameSerSink::HandNetData(uint16 nIndex, uint16 nMain, uint16 nSub, void* pData, DATASIZE nDataSize)
 {
 	switch(nMain)
 	{
@@ -75,7 +75,7 @@ bool CGameSerSink::HandTestNetConn()
 }
 
 
-bool CGameSerSink::HandMsgFromConnSrv(uint16 nIndex, uint16 nSub, void* pData, uint32 nDataSize)
+bool CGameSerSink::HandMsgFromConnSrv(uint16 nIndex, uint16 nSub, void* pData, DATASIZE nDataSize)
 {
 	switch(nSub)
 	{

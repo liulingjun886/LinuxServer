@@ -11,10 +11,10 @@ public:
 	~CUserCliSink();
 public:
 	virtual bool HandTimeMsg(uint16 nTimeID);
-	virtual bool HandNetData(uint16, uint16, uint16, void*, uint32);
+	virtual bool HandNetData(uint16, uint16, uint16, void*, DATASIZE);
 	virtual bool DisConnect();
 private:
-	bool HandMainMsgFromCenter(uint16,    uint16, void*, uint32);
+	bool HandMainMsgFromCenter(uint16,    uint16, void*, DATASIZE);
 private:
 	CTimer m_timer_Link;
 	uint16 m_nTestNum;

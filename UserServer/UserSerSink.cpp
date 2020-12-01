@@ -41,7 +41,7 @@ bool CUserSerSink::HandTimeMsg(uint16 nTimeID)
 	return false;
 }
 
-bool CUserSerSink::HandNetData(uint16 nSrcIndex, uint16 nMain, uint16 nSub, void* pData, uint32 nDataSize)
+bool CUserSerSink::HandNetData(uint16 nSrcIndex, uint16 nMain, uint16 nSub, void* pData, DATASIZE nDataSize)
 {
 	m_pNet->Log("Recv cmd %d, %d", nMain, nSub);
 	switch(nMain)
@@ -72,7 +72,7 @@ void CUserSerSink::Connect()
 	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_USERSER, US_SUB_MSG_CONN_SUCSS,&conn,sizeof(conn));
 }
 
-bool CUserSerSink::HandMainMSgGameSer(uint16 nSrcIndex, uint16 nSub, void* pData, uint32 nDataSize)
+bool CUserSerSink::HandMainMSgGameSer(uint16 nSrcIndex, uint16 nSub, void* pData, DATASIZE nDataSize)
 {
 	switch(nSub)
 	{
@@ -90,7 +90,7 @@ bool CUserSerSink::HandMainMSgGameSer(uint16 nSrcIndex, uint16 nSub, void* pData
 	return true;
 }
 
-bool CUserSerSink::HandMainMsgConnSer(uint16 nSrcIndex, uint16 nSub, void* pData, uint32 nDataSize)
+bool CUserSerSink::HandMainMsgConnSer(uint16 nSrcIndex, uint16 nSub, void* pData, DATASIZE nDataSize)
 {
 	switch(nSub)
 	{

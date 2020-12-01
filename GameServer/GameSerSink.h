@@ -13,12 +13,12 @@ public:
 	~CGameSerSink();
 public:
 	virtual bool HandTimeMsg(uint16 uTimeID);
-	virtual bool HandNetData(uint16, uint16, uint16, void*, uint32);
+	virtual bool HandNetData(uint16, uint16, uint16, void*, DATASIZE);
 	virtual void Connect();
 	virtual void Close();
 private:
 	bool HandTestNetConn();
-	bool HandMsgFromConnSrv(uint16, uint16, void*, uint32);
+	bool HandMsgFromConnSrv(uint16, uint16, void*, DATASIZE);
 private:
 	void ConnectSucess(ConnSucess* pConn);
 private:

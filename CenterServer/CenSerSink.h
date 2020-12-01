@@ -16,14 +16,14 @@ public:
 	~CCenSerSink();
 public:
 	virtual bool HandTimeMsg(uint16 uTimeID);
-	virtual bool HandNetData(uint16, uint16, uint16, void*, uint32);
+	virtual bool HandNetData(uint16, uint16, uint16, void*, DATASIZE);
 	virtual void Connect();
 	virtual void Close();
 private:
-	bool HandMainMsgFromUserSrv(uint16, uint16, void* , uint32);
-	bool HandMainMsgFromDataSrv(uint16, uint16, void* , uint32);
-	bool HandMainMsgFromGameSrv(uint16, uint16, void* , uint32);
-	bool HandMainMsgFromConnSrv(uint16, uint16, void* , uint32);
+	bool HandMainMsgFromUserSrv(uint16, uint16, void* , DATASIZE);
+	bool HandMainMsgFromDataSrv(uint16, uint16, void* , DATASIZE);
+	bool HandMainMsgFromGameSrv(uint16, uint16, void* , DATASIZE);
+	bool HandMainMsgFromConnSrv(uint16, uint16, void* , DATASIZE);
 
 	bool HandTestNetConn();
 	

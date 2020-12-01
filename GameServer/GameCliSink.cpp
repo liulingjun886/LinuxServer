@@ -42,7 +42,7 @@ bool CGameCliSink::DisConnect()
 	return true;
 }
 
-bool CGameCliSink::HandNetData(uint16 nIndex,uint16 nMain, uint16 nSub, void* pData, uint32 nDataSize)
+bool CGameCliSink::HandNetData(uint16 nIndex,uint16 nMain, uint16 nSub, void* pData, DATASIZE nDataSize)
 {
 	m_pNet->Log("Recv cmd %d, %d", nMain, nSub);
 	switch(nMain)
@@ -164,7 +164,7 @@ bool CGameCliSink::HandTimeMsg(uint16 uTimeID)
 	return true;
 }
 
-bool CGameCliSink::HandMainMsgRoom(uint16 nCsid,uint16 nSub, void* pData, uint16 nDataSize)
+bool CGameCliSink::HandMainMsgRoom(uint16 nCsid,uint16 nSub, void* pData, DATASIZE nDataSize)
 {
 	UserBaseInfo* pUserInfo = (UserBaseInfo*)pData;
 
@@ -251,7 +251,7 @@ bool CGameCliSink::HandMainMsgRoom(uint16 nCsid,uint16 nSub, void* pData, uint16
 	return true;
 }
 
-bool CGameCliSink::HandMsgFromCenterSrv(uint16 nIndex, uint16 nSub, void* pData, uint16 nDataSize)
+bool CGameCliSink::HandMsgFromCenterSrv(uint16 nIndex, uint16 nSub, void* pData, DATASIZE nDataSize)
 {
 	switch(nSub)
 	{
@@ -272,7 +272,7 @@ bool CGameCliSink::HandMsgFromCenterSrv(uint16 nIndex, uint16 nSub, void* pData,
 	return true;
 }
 
-bool CGameCliSink::HandMsgFromUserSrv(uint16 nIndex, uint16 nSub, void* pData, uint16 nDataSize)
+bool CGameCliSink::HandMsgFromUserSrv(uint16 nIndex, uint16 nSub, void* pData, DATASIZE nDataSize)
 {
 	switch(nSub)
 	{
@@ -292,7 +292,7 @@ bool CGameCliSink::HandMsgFromUserSrv(uint16 nIndex, uint16 nSub, void* pData, u
 	return true;
 }
 
-bool CGameCliSink::HandMsgFromDataSrv(uint16 nIndex, uint16 nSub, void* pData, uint16 nDataSize)
+bool CGameCliSink::HandMsgFromDataSrv(uint16 nIndex, uint16 nSub, void* pData, DATASIZE nDataSize)
 {
 	switch(nSub)
 	{

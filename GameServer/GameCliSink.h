@@ -13,15 +13,15 @@ public:
 public:
 	void Init(const char* szIp);
 	bool DisConnect();
-	bool HandNetData(uint16, uint16, uint16, void*, uint32);
+	bool HandNetData(uint16, uint16, uint16, void*, DATASIZE);
 	bool HandTimeMsg(uint16 uTimeID);
 private:
-	bool HandMainMsgRoom(uint16,uint16, void*, uint16);
-	bool HandMainMsgNet(uint16, uint16, void*, uint16);
+	bool HandMainMsgRoom(uint16,uint16, void*, DATASIZE);
+	bool HandMainMsgNet(uint16, uint16, void*, DATASIZE);
 
-	bool HandMsgFromCenterSrv(uint16, uint16, void*, uint16);
-	bool HandMsgFromUserSrv(uint16, uint16, void*, uint16);
-	bool HandMsgFromDataSrv(uint16, uint16, void*, uint16);
+	bool HandMsgFromCenterSrv(uint16, uint16, void*, DATASIZE);
+	bool HandMsgFromUserSrv(uint16, uint16, void*, DATASIZE);
+	bool HandMsgFromDataSrv(uint16, uint16, void*, DATASIZE);
 private:
 	bool HandMsgTestConn();
 	void ConnectSucess(ConnSucess* pConn);
