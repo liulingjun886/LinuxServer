@@ -55,15 +55,15 @@ bool CConnCliSink::HandNetData(uint16 nMain, uint16 nSub, CInputPacket& inPacket
 	{
 		case MAIN_MSG_CENTERSER:
 		{
-			return HandMsgFromCenterSrv(nSub, CInputPacket& inPacket);
+			return HandMsgFromCenterSrv(nSub, inPacket);
 		}
 		case MAIN_MSG_USERSER:
 		{
-			return HandMsgFromUserSrv(nSub, CInputPacket& inPacket);		
+			return HandMsgFromUserSrv(nSub, inPacket);		
 		}
 		case MAIN_MSG_GAMESER:
 		{
-			return HandMsgFromGameSrv(nSub,  CInputPacket& inPacket);
+			return HandMsgFromGameSrv(nSub,  inPacket);
 		}
 		default:
 			return false;
@@ -82,7 +82,10 @@ bool CConnCliSink::HandTimeMsg(uint16 uTimeID)
 			return false;
 		
 		m_timer_Link.StartTimerSec(CLIENT_TEST_TIME);
-		CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_CONNSER, CS_SUB_MSG_TEST);
+		COutputPacket out;
+		out.Begin(MAIN_MSG_CONNSER, CS_SUB_MSG_TEST);
+		out.End();
+		CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), out);
 		return true;
 	}
 	case TIME_CONN_RECONNECT:
@@ -101,16 +104,12 @@ bool CConnCliSink::HandTimeMsg(uint16 uTimeID)
 	return true;
 }
 
-void CConnCliSink::SendData(uint16 nIndex, uint16 nMain, uint16 nSub, void* pData, DATASIZE nDataSize)
-{
-	CNetSinkObj::SendData(m_pNet, nIndex, nMain, nSub, pData, nDataSize);
-}
-
 void CConnCliSink::RegConnSrv()
 {
-	RegConnSer ser;
-	ser.nSerNo = g_pConnectServer->GetSerNo();
-	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_CONNSER, CS_SUB_MSG_REG_CONN, &ser, sizeof(ser));
+	COutputPacket out;
+	out.WriteInt16(g_pConnectServer->GetSerNo());
+	out.End();
+	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(),out);
 }
 
 void CConnCliSink::ConnectSucess(CInputPacket& inPacket)
@@ -173,14 +172,14 @@ bool CConnCliSink::HandMsgFromGameSrv(uint16 nSub, CInputPacket& inPacket)
 		}
 		case GS_SUB_MSG_GAME2USER:
 		{
-			Game2User* pBuff = (Game2User*)pData;
-			SendData(pBuff->nIndex, pBuff->nMain, pBuff->nSub, pBuff+1, nDataSize - sizeof(Game2User));
+			//Game2User* pBuff = (Game2User*)pData;
+			//SendData(pBuff->nIndex, pBuff->nMain, pBuff->nSub, pBuff+1, nDataSize - sizeof(Game2User));
 			return true;
 		}
 		case GS_SUB_MSG_GAME2CONN:
 		{
-			InnserSync* pSync = (InnserSync*)pData;
-			m_pNet->PostData(pSync->nIndex, pSync->nType, pSync+1, nDataSize - sizeof(InnserSync));
+			//InnserSync* pSync = (InnserSync*)pData;
+			//m_pNet->PostData(pSync->nIndex, pSync->nType, pSync+1, nDataSize - sizeof(InnserSync));
 			return true;
 		}
 		default:
@@ -195,8 +194,8 @@ bool CConnCliSink::HandMsgFromUserSrv(uint16 nSub, CInputPacket& inPacket)
 	{
 		case US_SUB_MSG_CONN_SUCSS:
 		{
-			ConnSucess* pConn = (ConnSucess*)pData;
-			ConnectSucess(pConn);
+			//ConnSucess* pConn = (ConnSucess*)pData;
+			ConnectSucess(inPacket);
 			return true;
 		}
 		case US_SUB_MSG_TEST:

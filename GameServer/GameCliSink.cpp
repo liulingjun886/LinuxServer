@@ -277,8 +277,7 @@ bool CGameCliSink::HandMsgFromUserSrv(uint16 nSub, CInputPacket& inPacket)
 	{
 		case US_SUB_MSG_CONN_SUCSS:
 		{
-			ConnSucess * pConn = (ConnSucess * )pData;
-			ConnectSucess(pConn);
+			ConnectSucess(inPacket);
 			return true;
 		}
 		case US_SUB_MSG_TEST:

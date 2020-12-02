@@ -16,7 +16,7 @@ public:
 	virtual bool HandNetData(uint16, uint16, CInputPacket& inPacket);
 	virtual bool DisConnect();
 private:
-	void SendMsgToCenterSrv(uint16, uint16, void*, DATASIZE);
+	void SendMsgToCenterSrv(COutputPacket& out);
 	bool HandMainMsgFromCenterSrv(	  uint16, CInputPacket& inPacket);
 	void RegDataSrv();
 private:

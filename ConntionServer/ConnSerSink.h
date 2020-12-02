@@ -4,6 +4,7 @@
 #include "../NetHandSink.h"
 #include "../UserInfo.h"
 #include "../include/TimerNode.h"
+#include "../PacketParse.h"
 
 class CServices;
 
@@ -31,7 +32,7 @@ public:
 	CConnSerSink(CServices* m_pNetSer);
 	~CConnSerSink();
 public:
-	bool HandNetData(uint16,uint16, uint16, void*, DATASIZE);
+	bool HandNetData(uint16, uint16, CInputPacket& inPacket);
 	bool HandTimeMsg(uint16 uTimeId);
 	bool HandDataBaseRet(uint32 uType, void * pData, DATASIZE nDataSize);
 	bool HandMemDataRet(uint32 uType, void* pData, DATASIZE uDataSize);
@@ -43,16 +44,16 @@ public:
 private:
 	bool TestNetLink();
 
-	bool SendToMySelf(uint16, uint16, void* pData = NULL, DATASIZE nDataSize = 0);
-	bool SendToGameSer(uint16, uint16, uint16, void*, DATASIZE);
-	bool SendToCenterSer(uint16, uint16, void*, DATASIZE);
-	bool SendToUserSer(uint32, uint16, uint16, void*, DATASIZE);
-	bool SendToConnectSer(uint16, uint16, void*, DATASIZE);
+	bool SendToMySelf(COutputPacket& out);
+	bool SendToGameSer(uint16, COutputPacket& out);
+	bool SendToCenterSer(COutputPacket& out);
+	bool SendToUserSer(uint32, COutputPacket& out);
+	bool SendToConnectSer(COutputPacket& out);
 	
-	bool HandMainMsgNet(uint16, uint16, void*, DATASIZE);
-	bool HandMainMsgToRoom(uint16, uint16, void*, DATASIZE);
-	bool HandMainMsgToGame(uint16,uint16, uint16, void*, DATASIZE);
-	bool HandMainMsgFromConnect(uint16 nIndex,uint16 nSub, void* pData, DATASIZE nDataSize);
+	bool HandMainMsgNet(uint16, CInputPacket& inPacket);
+	bool HandMainMsgToRoom(uint16, CInputPacket& inPacket);
+	bool HandMainMsgToGame(uint16, uint16, CInputPacket& inPacket);
+	bool HandMainMsgFromConnect(uint16 nSub, CInputPacket& inPacket);
 private:
 	int m_nTestLink;
 	CTimer m_timerConnTest;

@@ -1,7 +1,25 @@
 #include "PacketParse.h"
 #include <string.h>
 
+typedef struct tagNetHead
+{
+	uint32 uDataSize;
+}NetHead;
+
+typedef struct tagNetMsgCommand
+{
+	uint16 uMain;
+	uint16 uSub;
+}NetMsgCommand;
+
+
+uint16 nHeadSize = sizeof(NetHead);
+uint16 nCommandSize = sizeof(NetMsgCommand);
+uint16 nMinDataSize = nHeadSize + nCommandSize;
+
+
 #define HEAD_SIZE nMinDataSize
+
 
 CPacketBase::CPacketBase()
 {
@@ -202,7 +220,10 @@ const char* CInputPacket::ReadString()
 	return (NULL == pTemp ? szDefault : pTemp);
 }
 
-
+const char* CInputPacket::ReadBinary(uint32 nLen)
+{
+	return CPacketBase::_ReadPoint(nLen);
+}
 
 
 
@@ -274,5 +295,10 @@ bool COutputPacket::WriteString(const char* szValue)
 bool COutputPacket::WriteString(const std::string& szValue)
 {
 	return WriteString(szValue.c_str());
+}
+
+bool COutputPacket::WriteBinary(const void* pData, uint32 nLen)
+{
+	return CPacketBase::_Write(pData, nLen);
 }
 

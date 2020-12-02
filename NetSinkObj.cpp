@@ -70,7 +70,7 @@ CNetSinkObj::~CNetSinkObj()
 
 void CNetSinkObj::SendData(CServices* pService,SERVICEINDEX nIndex, uint16 nMain,uint16 nSub,void* pData,DATASIZE nDataSize)
 {
-	if(nIndex == INVALID_SERIVCE_INDEX)
+	/*if(nIndex == INVALID_SERIVCE_INDEX)
 		return;
 	
 	DATASIZE nPacketSize = nMinDataSize+ nDataSize;
@@ -89,11 +89,11 @@ void CNetSinkObj::SendData(CServices* pService,SERVICEINDEX nIndex, uint16 nMain
 		memcpy(pCom + 1, pData, nDataSize);
 	}
 	
-	pService->PostData(nIndex, SEND_DATA_REQ, buff, nPacketSize);
+	pService->PostData(nIndex, SEND_DATA_REQ, buff, nPacketSize);*/
 	
 }
 
-void CNetSinkObj::SendData(CServices* pService,SERVICEINDEX nIndex, const COutputPacket& out)
+void CNetSinkObj::SendData(CServices* pService,SERVICEINDEX nIndex, COutputPacket& out)
 {
 	if(nIndex == INVALID_SERIVCE_INDEX)
 		return;
@@ -118,7 +118,7 @@ int CNetSinkObj::HandNetMsg(SERVICEINDEX nIndex, const char* pData, unsigned nDa
 	{
 		CInputPacket in;
 		in.Copy(pData, nPacketLen);
-		if(!m_pSink->HandNetData(nIndex, in.GetMainCmd(), in.GetSubCmd(), &in))
+		if(!m_pSink->HandNetData(in.GetMainCmd(), in.GetSubCmd(), in))
 		{
 			return -1;
 		}

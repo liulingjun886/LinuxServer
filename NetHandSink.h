@@ -1,5 +1,6 @@
 #pragma once
 #include "./Defines.h"
+#include "PacketParse.h"
 
 class CServices;
 
@@ -20,7 +21,7 @@ public:
 	virtual bool DisConnect(){ return false;}
 	virtual bool HandUserMsg(int nEvent, void* pData, uint16 uDataSize) {return false;}
 	virtual bool HandNetData(uint16, uint16, uint16, void*, uint32){return true;}
-	virtual bool HandNetData(uint16, uint16, CInputPacket* pInPack) {return true};
+	virtual bool HandNetData(uint16,uint16, CInputPacket& pInPack) {return true;};
 };
 
 

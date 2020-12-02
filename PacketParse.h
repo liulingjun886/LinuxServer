@@ -2,21 +2,6 @@
 #include "Defines.h"
 #include <string>
 
-typedef struct tagNetHead
-{
-	uint32 uDataSize;
-}NetHead;
-
-typedef struct tagNetMsgCommand
-{
-	uint16 uMain;
-	uint16 uSub;
-}NetMsgCommand;
-
-
-uint16 nHeadSize = sizeof(NetHead);
-uint16 nCommandSize = sizeof(NetMsgCommand);
-uint16 nMinDataSize = nHeadSize + nCommandSize;
 
 class CPacketBase
 {
@@ -61,6 +46,7 @@ public:
 	float ReadFloat();
 	double ReadDouble();
 	const char* ReadString();
+	const char* ReadBinary(uint32 nLen);
 };
 
 
@@ -81,4 +67,5 @@ public:
 	bool WriteDouble(double nValue);
 	bool WriteString(const char* szValue);
 	bool WriteString(const std::string& szValue);
+	bool WriteBinary(const void* pData, uint32 nLen);
 };

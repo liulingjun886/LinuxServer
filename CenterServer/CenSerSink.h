@@ -17,7 +17,7 @@ public:
 	~CCenSerSink();
 public:
 	virtual bool HandTimeMsg(uint16 uTimeID);
-	virtual bool HandNetData(uint16, uint16, CInputPacket * pInPack);
+	virtual bool HandNetData(uint16, uint16, CInputPacket& pInPack);
 	virtual void Connect();
 	virtual void Close();
 private:
