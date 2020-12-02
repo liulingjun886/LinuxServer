@@ -3,8 +3,7 @@
 #include "../Defines.h"
 #include "../NetHandSink.h"
 #include "../include/TimerNode.h"
-
-class ConnSucess;
+#include "../PacketParse.h"
 
 class CGameSerSink : public CNetHandSink
 {
@@ -13,14 +12,14 @@ public:
 	~CGameSerSink();
 public:
 	virtual bool HandTimeMsg(uint16 uTimeID);
-	virtual bool HandNetData(uint16, uint16, uint16, void*, DATASIZE);
+	virtual bool HandNetData(uint16, uint16, CInputPacket& inPacket);
 	virtual void Connect();
 	virtual void Close();
 private:
 	bool HandTestNetConn();
-	bool HandMsgFromConnSrv(uint16, uint16, void*, DATASIZE);
+	bool HandMsgFromConnSrv(uint16, CInputPacket& inPacket);
 private:
-	void ConnectSucess(ConnSucess* pConn);
+	void ConnectSucess(CInputPacket& inPacket);
 private:
 	uint16 	m_nConnNo;
 	uint8 	m_nTestNum;

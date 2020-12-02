@@ -55,12 +55,12 @@ bool CGameSerSink::HandTimeMsg(uint16 nTimeID)
 }
 
 
-bool CGameSerSink::HandNetData(uint16 nIndex, uint16 nMain, uint16 nSub, void* pData, DATASIZE nDataSize)
+bool CGameSerSink::HandNetData(uint16 nMain, uint16 nSub, CInputPacket& inPacket)
 {
 	switch(nMain)
 	{
 		case MAIN_MSG_CONNSER:
-			return HandMsgFromConnSrv(nIndex, nSub, pData, nDataSize);
+			return HandMsgFromConnSrv(nSub, inPacket);
 		default:
 			break;
 	}
@@ -70,20 +70,22 @@ bool CGameSerSink::HandNetData(uint16 nIndex, uint16 nMain, uint16 nSub, void* p
 bool CGameSerSink::HandTestNetConn()
 {
 	m_nTestNum = 0;
-	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_GAMESER, GS_SUB_MSG_TEST);
+	COutputPacket out;
+	out.Begin(MAIN_MSG_GAMESER, GS_SUB_MSG_TEST);
+	out.End();
+	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), out);
 	return true;
 }
 
 
-bool CGameSerSink::HandMsgFromConnSrv(uint16 nIndex, uint16 nSub, void* pData, DATASIZE nDataSize)
+bool CGameSerSink::HandMsgFromConnSrv(uint16 nSub, CInputPacket& inPacket)
 {
 	switch(nSub)
 	{
 		case CS_SUB_MSG_REG_CONN:
 		{
-			RegConnSer* pReg = (RegConnSer*)pData;
-			m_nConnNo = pReg->nSerNo;
-			g_pGameServer->AddConnInfo(pReg->nSerNo, m_pNet->GetServiceIndex());
+			uint16 nSrvNo = inPacket.ReadInt16();
+			g_pGameServer->AddConnInfo(nSrvNo, m_pNet->GetServiceIndex());
 			HandTestNetConn();
 			m_timer_Link.StartTimerSec(SERVER_TEST_TIME);
 			return true;

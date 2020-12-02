@@ -2,6 +2,7 @@
 #include "../Defines.h"
 #include "../NetHandSink.h"
 #include "../include/TimerNode.h"
+#include "../PacketParse.h"
 
 class CServices;
 class ConnSucess;
@@ -15,16 +16,16 @@ public:
 	void Init(const char* szIp);
 	bool DisConnect();
 	void Close();
-	bool HandNetData(uint16,uint16, uint16, void*, DATASIZE);
+	bool HandNetData(uint16, uint16, CInputPacket& inPacket);
 	bool HandTimeMsg(uint16 uTimeID);
 private:	
-	bool HandMsgFromCenterSrv(uint16, uint16, void*, DATASIZE);
-	bool HandMsgFromGameSrv(uint16, uint16, void*, DATASIZE);
-	bool HandMsgFromUserSrv(uint16, uint16, void*, DATASIZE);
+	bool HandMsgFromCenterSrv(uint16, CInputPacket& inPacket);
+	bool HandMsgFromGameSrv(uint16, CInputPacket& inPacket);
+	bool HandMsgFromUserSrv(uint16, CInputPacket& inPacket);
 
-	void SendData(uint16, uint16, uint16, void*, DATASIZE);
+	void SendData(uint16, COutputPacket& outPacket);
 	void RegConnSrv();
-	void ConnectSucess(ConnSucess* pConn);
+	void ConnectSucess(CInputPacket& inPacket);
 private:
 	uint16 m_nPeerSerType;
 	uint16 m_nPeerSerNo;
