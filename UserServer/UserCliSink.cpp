@@ -57,20 +57,21 @@ bool CUserCliSink::HandTimeMsg(uint16 nTimeID)
 	return true;
 }
 
-bool CUserCliSink::HandNetData(uint16 nSrcIndex, uint16 nMain, uint16 nSub, void* pData, DATASIZE nDataSize)
+bool CUserCliSink::HandNetData(uint16 nMain, uint16 nSub, CInputPacket& inPacket)
 {
 	m_pNet->Log("Recv cmd %d, %d", nMain, nSub);
 	switch(nMain)
 	{
 		case MAIN_MSG_CENTERSER:
 		{
-			return HandMainMsgFromCenter(nSrcIndex, nSub, pData, nDataSize);
+			return HandMainMsgFromCenter(nSub, inPacket);
 		}
 		default:
 			m_pNet->Log("invalid cmd main=%d,sub=%d", nMain,nSub);
 	}
 	return true;
 }
+
 
 bool CUserCliSink::DisConnect()
 {
@@ -80,8 +81,7 @@ bool CUserCliSink::DisConnect()
 	return true;
 }
 
-
-bool CUserCliSink::HandMainMsgFromCenter(uint16 nSrcIndex, uint16 nSub, void* pData, DATASIZE nDataSize)
+bool CUserCliSink::HandMainMsgFromCenter(    uint16 nSub, CInputPacket& inPacket)
 {
 	switch(nSub)
 	{
@@ -90,9 +90,11 @@ bool CUserCliSink::HandMainMsgFromCenter(uint16 nSrcIndex, uint16 nSub, void* pD
 			m_nTestNum = 0;
 			m_nReConnectCount = 0;
 			m_timer_Link.StartTimerSec(CLIENT_TEST_TIME);
-			RegConnSer ser;
-			ser.nSerNo = g_pUserServer->GetSerNo();
-			CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_USERSER, US_SUB_MSG_REGUSERSRV, &ser, sizeof(ser));
+
+			COutputPacket out;
+			out.Begin(MAIN_MSG_USERSER, US_SUB_MSG_REGUSERSRV);
+			out.WriteInt16(g_pUserServer->GetSerNo());
+			CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), out);
 			return true;
 		}
 		case CT_SUB_MSG_TEST:
@@ -103,4 +105,5 @@ bool CUserCliSink::HandMainMsgFromCenter(uint16 nSrcIndex, uint16 nSub, void* pD
 	}
 	return true;
 }
+
 

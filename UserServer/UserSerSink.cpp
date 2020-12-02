@@ -41,38 +41,44 @@ bool CUserSerSink::HandTimeMsg(uint16 nTimeID)
 	return false;
 }
 
-bool CUserSerSink::HandNetData(uint16 nSrcIndex, uint16 nMain, uint16 nSub, void* pData, DATASIZE nDataSize)
+bool CUserSerSink::HandNetData(uint16 nMain, uint16 nSub, CInputPacket& inPacket)
 {
 	m_pNet->Log("Recv cmd %d, %d", nMain, nSub);
 	switch(nMain)
 	{
 		case MAIN_MSG_GAMESER:
-			return HandMainMSgGameSer(nSrcIndex,nSub,pData,nDataSize);
+			return HandMainMSgGameSer(nSub, inPacket);
 		case MAIN_MSG_CONNSER:
-			return HandMainMsgConnSer(nSrcIndex,nSub,pData,nDataSize);
+			return HandMainMsgConnSer(nSub, inPacket);
 		default:
 			break;
 	}
 	return false;
 }
 
+
 bool CUserSerSink::HandTestNetConn()
 {
 	m_nTestNum = 0;
-	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_USERSER, US_SUB_MSG_TEST);
+	COutputPacket out;
+	out.Begin(MAIN_MSG_USERSER, US_SUB_MSG_TEST);
+	out.End();
+	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), out);
 	return true;
 }
 
 
 void CUserSerSink::Connect()
 {
-	ConnSucess conn;
-	conn.nSrvNo = g_pUserServer->GetSerNo();
-	conn.nSrvType = g_pUserServer->GetSerType();
-	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_USERSER, US_SUB_MSG_CONN_SUCSS,&conn,sizeof(conn));
+	COutputPacket out;
+	out.Begin(MAIN_MSG_USERSER, US_SUB_MSG_CONN_SUCSS);
+	out.WriteInt16( g_pUserServer->GetSerType());
+	out.WriteInt16( g_pUserServer->GetSerNo());
+	out.End();
+	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), out);
 }
 
-bool CUserSerSink::HandMainMSgGameSer(uint16 nSrcIndex, uint16 nSub, void* pData, DATASIZE nDataSize)
+bool CUserSerSink::HandMainMSgGameSer(uint16 nSub, CInputPacket& inPacket)
 {
 	switch(nSub)
 	{
@@ -90,7 +96,7 @@ bool CUserSerSink::HandMainMSgGameSer(uint16 nSrcIndex, uint16 nSub, void* pData
 	return true;
 }
 
-bool CUserSerSink::HandMainMsgConnSer(uint16 nSrcIndex, uint16 nSub, void* pData, DATASIZE nDataSize)
+bool CUserSerSink::HandMainMsgConnSer(uint16 nSub, CInputPacket& inPacket)
 {
 	switch(nSub)
 	{

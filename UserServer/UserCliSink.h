@@ -3,6 +3,7 @@
 #include "../include/TimerNode.h"
 #include "../Defines.h"
 #include "../NetHandSink.h"
+#include "../PacketParse.h"
 
 class CUserCliSink : public CNetHandSink
 {
@@ -11,10 +12,10 @@ public:
 	~CUserCliSink();
 public:
 	virtual bool HandTimeMsg(uint16 nTimeID);
-	virtual bool HandNetData(uint16, uint16, uint16, void*, DATASIZE);
+	virtual bool HandNetData(uint16, uint16, CInputPacket& inPacket);
 	virtual bool DisConnect();
 private:
-	bool HandMainMsgFromCenter(uint16,    uint16, void*, DATASIZE);
+	bool HandMainMsgFromCenter(    uint16, CInputPacket& inPacket);
 private:
 	CTimer m_timer_Link;
 	uint16 m_nTestNum;

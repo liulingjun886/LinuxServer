@@ -1,6 +1,7 @@
 #pragma once
 #include "../NetHandSink.h"
 #include "../include/TimerNode.h"
+#include "../PacketParse.h"
 
 class CServices;
 class ConnSucess;
@@ -13,18 +14,18 @@ public:
 public:
 	void Init(const char* szIp);
 	bool DisConnect();
-	bool HandNetData(uint16, uint16, uint16, void*, DATASIZE);
+	bool HandNetData(uint16, uint16, CInputPacket& inPacket);
 	bool HandTimeMsg(uint16 uTimeID);
 private:
-	bool HandMainMsgRoom(uint16,uint16, void*, DATASIZE);
-	bool HandMainMsgNet(uint16, uint16, void*, DATASIZE);
+	bool HandMainMsgRoom(uint16, CInputPacket& inPacket);
+	bool HandMainMsgNet(uint16, CInputPacket& inPacket);
 
-	bool HandMsgFromCenterSrv(uint16, uint16, void*, DATASIZE);
-	bool HandMsgFromUserSrv(uint16, uint16, void*, DATASIZE);
-	bool HandMsgFromDataSrv(uint16, uint16, void*, DATASIZE);
+	bool HandMsgFromCenterSrv(uint16, CInputPacket& inPacket);
+	bool HandMsgFromUserSrv(uint16, CInputPacket& inPacket);
+	bool HandMsgFromDataSrv(uint16, CInputPacket& inPacket);
 private:
 	bool HandMsgTestConn();
-	void ConnectSucess(ConnSucess* pConn);
+	void ConnectSucess(CInputPacket& inPacket);
 	void RegGameSrv();
 private:
 	uint16 		m_nTestNum;

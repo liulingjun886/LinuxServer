@@ -23,6 +23,13 @@ void CCenSerSink::Connect()
 {
 	m_pNet->Log("socket connected !");
 	m_nTestNum = 0;
+	COutputPacket out;
+	out.Begin(MAIN_MSG_CENTERSER, CT_SUB_MSG_CONN_SUCSS);
+	out.WriteInt16(g_pCenterServer->GetSerNo());
+	out.WriteInt16(g_pCenterServer->GetSerType());
+	out.End();
+	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(),out);
+	
 	ConnSucess conn;
 	conn.nSrvNo = g_pCenterServer->GetSerNo();
 	conn.nSrvType = g_pCenterServer->GetSerType();
@@ -48,27 +55,26 @@ void CCenSerSink::Close()
 	return;
 }
 
-
-bool CCenSerSink::HandNetData(uint16 nSrcIndex, uint16 nMain, uint16 nSub, void* pData, DATASIZE nDataSize)
+bool CCenSerSink::HandNetData(uint16 nMain, uint16 nSub, CInputPacket& InPack)
 {
 	m_pNet->Log("Recv cmd %d, %d", nMain, nSub);
 	switch(nMain)
 	{
 		case MAIN_MSG_CONNSER:
 		{
-			return HandMainMsgFromConnSrv(nSrcIndex, nSub, pData, nDataSize);
+			return HandMainMsgFromConnSrv(nSub, InPack);
 		}
 		case MAIN_MSG_GAMESER:
 		{
-			return HandMainMsgFromGameSrv(nSrcIndex, nSub, pData, nDataSize);
+			return HandMainMsgFromGameSrv(nSub, InPack);
 		}
 		case MAIN_MSG_USERSER:
 		{
-			return HandMainMsgFromUserSrv(nSrcIndex, nSub, pData, nDataSize);
+			return HandMainMsgFromUserSrv(nSub, InPack);
 		}
 		case MAIN_MSG_DATASER:
 		{
-			return HandMainMsgFromDataSrv(nSrcIndex, nSub, pData, nDataSize);
+			return HandMainMsgFromDataSrv(nSub, InPack);
 		}
 		default:
 		{
@@ -77,6 +83,7 @@ bool CCenSerSink::HandNetData(uint16 nSrcIndex, uint16 nMain, uint16 nSub, void*
 	}
 	return false;
 }
+
 
 bool CCenSerSink::HandTimeMsg(uint16 nTimeID)
 {
@@ -100,12 +107,15 @@ bool CCenSerSink::HandTimeMsg(uint16 nTimeID)
 bool CCenSerSink::HandTestNetConn()
 {
 	m_nTestNum = 0;
-	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_CENTERSER, CT_SUB_MSG_TEST);
+	COutputPacket out;
+	out.Begin(MAIN_MSG_CENTERSER, CT_SUB_MSG_TEST);
+	out.End();
+	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(),out);
 	return true;
 }
 
 
-bool CCenSerSink::HandMainMsgFromUserSrv(uint16 nSrcIndex, uint16 nSub, void* pData, DATASIZE nDataSize)
+bool CCenSerSink::HandMainMsgFromUserSrv(uint16 nSub, CInputPacket& inPacket)
 {
 	switch(nSub)
 	{
@@ -115,11 +125,11 @@ bool CCenSerSink::HandMainMsgFromUserSrv(uint16 nSrcIndex, uint16 nSub, void* pD
 		}
 		case US_SUB_MSG_REGUSERSRV:
 		{
-			RegConnSer* pSer = (RegConnSer*)pData;
-			if(0 != g_pCenterServer->s_szUserSer[pSer->nSerNo])
+			uint16 nSrvNo = inPacket.ReadInt16();
+			if(0 != g_pCenterServer->s_szUserSer[nSrvNo])
 				return false;
-			g_pCenterServer->s_szConnSer[pSer->nSerNo] = m_pNet->GetServiceIndex();
-			g_pCenterServer->m_mapLinkInfo[m_pNet->GetServiceIndex()] = &(g_pCenterServer->s_szConnSer[pSer->nSerNo]);
+			g_pCenterServer->s_szConnSer[nSrvNo] = m_pNet->GetServiceIndex();
+			g_pCenterServer->m_mapLinkInfo[m_pNet->GetServiceIndex()] = &(g_pCenterServer->s_szConnSer[nSrvNo]);
 			HandTestNetConn();
 			m_timer_Link.StartTimerSec(SERVER_TEST_TIME);
 			return true;
@@ -128,7 +138,7 @@ bool CCenSerSink::HandMainMsgFromUserSrv(uint16 nSrcIndex, uint16 nSub, void* pD
 	return false;
 }
 
-bool CCenSerSink::HandMainMsgFromDataSrv(uint16 nSrcIndex, uint16 nSub, void* pData, DATASIZE nDataSize)
+bool CCenSerSink::HandMainMsgFromDataSrv(uint16 nSub, CInputPacket& inPacket)
 {
 	switch(nSub)
 	{
@@ -138,12 +148,12 @@ bool CCenSerSink::HandMainMsgFromDataSrv(uint16 nSrcIndex, uint16 nSub, void* pD
 		}
 		case DS_SUB_MSG_REG_DATASRV:
 		{
-			RegConnSer* pSer = (RegConnSer*)pData;
-			if(0 != g_pCenterServer->s_szDataSer[pSer->nSerNo])
+			uint16 nSrvNo = inPacket.ReadInt16();
+			if(0 != g_pCenterServer->s_szDataSer[nSrvNo])
 				return false;
 
-			g_pCenterServer->s_szDataSer[pSer->nSerNo] = m_pNet->GetServiceIndex();
-			g_pCenterServer->m_mapLinkInfo[m_pNet->GetServiceIndex()] = &(g_pCenterServer->s_szDataSer[pSer->nSerNo]);
+			g_pCenterServer->s_szDataSer[nSrvNo] = m_pNet->GetServiceIndex();
+			g_pCenterServer->m_mapLinkInfo[m_pNet->GetServiceIndex()] = &(g_pCenterServer->s_szDataSer[nSrvNo]);
 			HandTestNetConn();
 			m_timer_Link.StartTimerSec(SERVER_TEST_TIME);
 			return true;
@@ -152,7 +162,7 @@ bool CCenSerSink::HandMainMsgFromDataSrv(uint16 nSrcIndex, uint16 nSub, void* pD
 	return false;
 }
 
-bool CCenSerSink::HandMainMsgFromGameSrv(uint16 nSrcIndex, uint16 nSub, void* pData, DATASIZE nDataSize)
+bool CCenSerSink::HandMainMsgFromGameSrv(uint16 nSub, CInputPacket& inPacket)
 {
 	switch(nSub)
 	{
@@ -162,17 +172,17 @@ bool CCenSerSink::HandMainMsgFromGameSrv(uint16 nSrcIndex, uint16 nSub, void* pD
 		}
 		case GS_SUB_MSG_REG_GAMESRV:
 		{
-			RegGameSer* pGameSer = (RegGameSer*)pData;
-			if(0 != g_pCenterServer->s_szGameSer[pGameSer->nSerNo])
+			uint16 nSrvNo = inPacket.ReadInt16();
+			if(0 != g_pCenterServer->s_szGameSer[nSrvNo])
 				return false;
 
-			g_pCenterServer->s_szGameSer[pGameSer->nSerNo] = m_pNet->GetServiceIndex();
-			g_pCenterServer->m_mapLinkInfo[m_pNet->GetServiceIndex()] = &(g_pCenterServer->s_szGameSer[pGameSer->nSerNo]);
+			g_pCenterServer->s_szGameSer[nSrvNo] = m_pNet->GetServiceIndex();
+			g_pCenterServer->m_mapLinkInfo[m_pNet->GetServiceIndex()] = &(g_pCenterServer->s_szGameSer[nSrvNo]);
 
 			GameInfo game;
-			game.szIp = pGameSer->szIp;
-			game.nPort = pGameSer->nPort;
-			game.nGameId = pGameSer->nGameID;
+			game.nGameId = inPacket.ReadInt32();
+			game.szIp = inPacket.ReadString();
+			game.nPort = inPacket.ReadInt16();
 			g_pCenterServer->m_mapGameInfo[m_pNet->GetServiceIndex()] = game;
 			HandTestNetConn();
 			m_timer_Link.StartTimerSec(SERVER_TEST_TIME);
@@ -184,7 +194,7 @@ bool CCenSerSink::HandMainMsgFromGameSrv(uint16 nSrcIndex, uint16 nSub, void* pD
 	return false;
 }
 
-bool CCenSerSink::HandMainMsgFromConnSrv(uint16 nSrcIndex, uint16 nSub, void* pData, DATASIZE nDataSize)
+bool CCenSerSink::HandMainMsgFromConnSrv(uint16 nSub, CInputPacket& inPacket)
 {
 	switch(nSub)
 	{
@@ -194,15 +204,9 @@ bool CCenSerSink::HandMainMsgFromConnSrv(uint16 nSrcIndex, uint16 nSub, void* pD
 		}
 		case CS_SUB_MSG_REG_CONN:
 		{
-			RegConnSer* pSer = (RegConnSer*)pData;
-			//if(0 != g_pCenterServer->s_szConnSer[pSer->nSerNo])
-			//{
-			//	m_pNet->Log("Connect %d Have Reged", pSer->nSerNo);
-			//	return false;
-			//}
-
-			g_pCenterServer->s_szConnSer[pSer->nSerNo] = m_pNet->GetServiceIndex();
-			g_pCenterServer->m_mapLinkInfo[m_pNet->GetServiceIndex()] = &(g_pCenterServer->s_szConnSer[pSer->nSerNo]);
+			uint16 nSerNo = inPacket.ReadInt16();
+			g_pCenterServer->s_szConnSer[nSerNo] = m_pNet->GetServiceIndex();
+			g_pCenterServer->m_mapLinkInfo[m_pNet->GetServiceIndex()] = &(g_pCenterServer->s_szConnSer[nSerNo]);
 			HandTestNetConn();
 			SendAllGameSerInfo();
 			m_timer_Link.StartTimerSec(SERVER_TEST_TIME);
@@ -237,21 +241,21 @@ void CCenSerSink::SendAllGameSerInfo()
 {
 	if(0 == g_pCenterServer->m_mapGameInfo.size())
 		return;
+
+	COutputPacket out;
+	out.Begin(MAIN_MSG_CENTERSER, CT_SUB_MSG_NEWGAMESER);
+	out.WriteInt16((uint16)g_pCenterServer->m_mapGameInfo.size());
 	
-	uint32 nSize = sizeof(RegGameSer) * g_pCenterServer->m_mapGameInfo.size() + sizeof(uint16);
-	char* pData = new char[nSize];
-	*(uint16*)pData = g_pCenterServer->m_mapGameInfo.size();
-	RegGameSer* pGame = (RegGameSer*)(pData+2);
 	std::map<uint16,GameInfo>::iterator it_game = g_pCenterServer->m_mapGameInfo.begin();
 	for(; it_game != g_pCenterServer->m_mapGameInfo.end(); ++it_game)
 	{
-		memcpy(pGame->szIp, it_game->second.szIp.c_str(),strlen(it_game->second.szIp.c_str()));
-		pGame->nPort = it_game->second.nPort;
-		pGame->nGameID = it_game->second.nGameId;
-		pGame->nSerNo = it_game->first;
-		pGame += 1;
+		out.WriteInt16(it_game->first);
+		out.WriteString(it_game->second.szIp);
+		out.WriteInt16(it_game->second.nPort);
+		out.WriteInt32(it_game->second.nGameId);
 	}
-	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_CENTERSER, CT_SUB_MSG_NEWGAMESER, pData, nSize);
+	out.End();
+	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), out);
 }
 
 

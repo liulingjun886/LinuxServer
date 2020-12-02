@@ -92,3 +92,9 @@ typedef struct tagUserReConnInfo
 	uint16 nCid;
 	uint16 nCsid;
 }UserReConnInfo;
+
+typedef struct tagSyncInfoToDataBase
+{
+	uint32 nEvType;
+	UID nUserId;
+}SyncInfoToDataBase;

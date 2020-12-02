@@ -9,7 +9,7 @@
 
 CDataServer* g_pDataServer = NULL;
 
-CDataServer::CDataServer():m_pMem(NULL)
+CDataServer::CDataServer():m_pMem(NULL),m_pData(NULL)
 {
 	g_pDataServer = this;
 }
@@ -17,6 +17,7 @@ CDataServer::CDataServer():m_pMem(NULL)
 CDataServer::~CDataServer()
 {
 	SAFE_DELTE(m_pMem);
+	SAFE_DELTE(m_pData);
 }
 
 int	 CDataServer::Initialize()

@@ -3,7 +3,7 @@
 #include "./include/types.h"
 #include <string>
 
-#define MAX_MSG_SIZE 2048
+#define MAX_MSG_SIZE 65536
 
 #define CLIENT_TEST_TIME 60
 #define SERVER_TEST_TIME 65

@@ -3,7 +3,7 @@ namespace DataBase
 {
 	enum TYPE_DATABASE_REQ
 	{
-		USER_LOGIN_REQ = 1
+		USER_LOGIN_REQ = 1,
 	};
 
 	enum TYPE_DATABASE_RET

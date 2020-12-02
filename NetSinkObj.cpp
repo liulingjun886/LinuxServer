@@ -16,23 +16,6 @@
 
 extern CServer* g_pSer;
 
-typedef struct tagNetHead
-{
-	uint16 uDataSize;
-}NetHead;
-
-typedef struct tagNetMsgCommand
-{
-	uint16 uMain;
-	uint16 uSub;
-}NetMsgCommand;
-
-
-uint16 nHeadSize = sizeof(NetHead);
-uint16 nCommandSize = sizeof(NetMsgCommand);
-uint16 nMinDataSize = nHeadSize + nCommandSize;
-
-
 CNetSinkObj::CNetSinkObj(CServices* pServices,int nConnType):
 	m_pSink(NULL)
 {
@@ -110,6 +93,18 @@ void CNetSinkObj::SendData(CServices* pService,SERVICEINDEX nIndex, uint16 nMain
 	
 }
 
+void CNetSinkObj::SendData(CServices* pService,SERVICEINDEX nIndex, const COutputPacket& out)
+{
+	if(nIndex == INVALID_SERIVCE_INDEX)
+		return;
+
+	if(out.data_len() > MAX_MSG_SIZE)
+		return;
+
+	pService->PostData(nIndex, SEND_DATA_REQ, out.data(), out.data_len());
+}
+
+
 /*
 	-1 出错
 	0	没有处理继续接收
@@ -117,7 +112,21 @@ void CNetSinkObj::SendData(CServices* pService,SERVICEINDEX nIndex, uint16 nMain
 */
 int CNetSinkObj::HandNetMsg(SERVICEINDEX nIndex, const char* pData, unsigned nDataCount)
 {
-	if(nDataCount < nMinDataSize)
+	int32 nPacketLen = CInputPacket::GetPacketLen(pData, nDataCount);
+
+	if(nPacketLen > 0)
+	{
+		CInputPacket in;
+		in.Copy(pData, nPacketLen);
+		if(!m_pSink->HandNetData(nIndex, in.GetMainCmd(), in.GetSubCmd(), &in))
+		{
+			return -1;
+		}
+	}
+
+	return nPacketLen;
+
+	/*if(nDataCount < nMinDataSize)
 		return 0;
 
 	NetHead* pHead = (NetHead*)pData;
@@ -128,12 +137,14 @@ int CNetSinkObj::HandNetMsg(SERVICEINDEX nIndex, const char* pData, unsigned nDa
 	NetMsgCommand* pCom = (NetMsgCommand*)(pHead + 1);
 	DATASIZE nDataSize = nPacketSize - nMinDataSize;
 
+	
+
 	if(!m_pSink->HandNetData(nIndex, pCom->uMain, pCom->uSub, pCom + 1, nDataSize))
 	{
 		return -1;
 	}
 	
-	return nPacketSize;
+	return nPacketSize;*/
 }
 
 

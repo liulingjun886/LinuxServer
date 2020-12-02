@@ -33,19 +33,21 @@ CDataSerSink::~CDataSerSink()
 
 void CDataSerSink::Connect()
 {
-	ConnSucess conn;
-	conn.nSrvNo = g_pDataServer->GetSerNo();
-	conn.nSrvType = g_pDataServer->GetSerType();
-	CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_DATASER, DS_SUB_MSG_CONN_SUCSS,&conn,sizeof(conn));
+	COutputPacket out;
+	out.Begin(MAIN_MSG_DATASER, DS_SUB_MSG_CONN_SUCSS);
+	out.WriteInt16(g_pDataServer->GetSerType());
+	out.WriteInt16(g_pDataServer->GetSerNo());
+	out.End();
+	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), out);
 }
 
-bool CDataSerSink::HandNetData(uint16 nIndex,uint16 nMain, uint16 nSub, void* pData, DATASIZE nDataSize)
+bool CDataSerSink::HandNetData(uint16 nMain, uint16 nSub, CInputPacket& inPacket)
 {
 	switch (nMain)
 	{
 	case MAIN_MSG_GAMESER:
 	{
-		return HandMainMsgFromGameSer(nIndex,nSub,pData,nDataSize);
+		return HandMainMsgFromGameSer(nSub,inPacket);
 	}
 	default:
 		break;
@@ -79,7 +81,7 @@ bool CDataSerSink::TestNetLink()
 	return true;
 }
 
-bool CDataSerSink::HandMainMsgFromGameSer(uint16 nIndex,uint16 nSub,void* pData,DATASIZE nDataSize)
+bool CDataSerSink::HandMainMsgFromGameSer(uint16 nSub, CInputPacket& inPacket)
 {
 	switch (nSub)
 	{
@@ -103,7 +105,10 @@ bool CDataSerSink::HandMainMsgFromGameSer(uint16 nIndex,uint16 nSub,void* pData,
 bool CDataSerSink::HandTestNetConn()
 {
 	m_nTestNum = 0;
-	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_DATASER, DS_SUB_MSG_TEST);
+	COutputPacket out;
+	out.Begin(MAIN_MSG_DATASER,DS_SUB_MSG_TEST);
+	out.End();
+	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), out);
 	return true;
 }
 

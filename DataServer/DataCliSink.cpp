@@ -54,20 +54,20 @@ bool CDataCliSink::HandTimeMsg(uint16 nTimeID)
 	return false;
 }
 
-void CDataCliSink::SendMsgToCenterSrv(uint16 nMain, uint16 nSub, void* pData, DATASIZE nDataSize)
+void CDataCliSink::SendMsgToCenterSrv(COutputPacket& out)
 {
-	CNetSinkObj::SendData(m_pNet,g_pDataServer->GetCenterIndex(), nMain, nSub, pData, nDataSize);
+	CNetSinkObj::SendData(m_pNet, g_pDataServer->GetCenterIndex(), out);
 }
 
 
-bool CDataCliSink::HandNetData(uint16 nSrcIndex, uint16 nMain, uint16 nSub, void* pData, DATASIZE nDataSize)
+bool CDataCliSink::HandNetData(uint16 nMain, uint16 nSub, CInputPacket& inPacket)
 {
 	m_pNet->Log("CLient Recv cmd %d, %d", nMain, nSub);
 	switch(nMain)
 	{
 		case MAIN_MSG_CENTERSER:
 		{
-			return HandMainMsgFromCenterSrv(nSrcIndex, nSub, pData, nDataSize);
+			return HandMainMsgFromCenterSrv(nSub, inPacket);
 		}
 		default:
 			break;
@@ -82,8 +82,17 @@ bool CDataCliSink::DisConnect()
 	return true;
 }
 
+void CDataCliSink::RegDataSrv()
+{
+	COutputPacket out;
+	out.Begin(MAIN_MSG_DATASER, DS_SUB_MSG_REG_DATASRV);
+	out.WriteInt16(g_pDataServer->GetSerNo());
+	out.End();
+	SendMsgToCenterSrv(out);
+}
 
-bool CDataCliSink::HandMainMsgFromCenterSrv(uint16 nSrcIndex, uint16 nSub, void* pData, DATASIZE nDataSize)
+
+bool CDataCliSink::HandMainMsgFromCenterSrv(uint16 nSub, CInputPacket& inPacket)
 {
 	switch(nSub)
 	{
@@ -98,9 +107,7 @@ bool CDataCliSink::HandMainMsgFromCenterSrv(uint16 nSrcIndex, uint16 nSub, void*
 			m_nReConnectCount = 0;
 			m_timer_reconnect.StopTimer();
 			m_timer_Link.StartTimerSec(CLIENT_TEST_TIME);
-			RegConnSer ser;
-			ser.nSerNo = g_pDataServer->GetSerNo();
-			CNetSinkObj::SendData(m_pNet, nSrcIndex, MAIN_MSG_DATASER, DS_SUB_MSG_REG_DATASRV, &ser, sizeof(ser));
+			RegDataSrv();
 			return true;
 		}
 		default:

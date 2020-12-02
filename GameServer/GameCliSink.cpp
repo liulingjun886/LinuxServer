@@ -42,22 +42,22 @@ bool CGameCliSink::DisConnect()
 	return true;
 }
 
-bool CGameCliSink::HandNetData(uint16 nIndex,uint16 nMain, uint16 nSub, void* pData, DATASIZE nDataSize)
+bool CGameCliSink::HandNetData(uint16 nMain, uint16 nSub, CInputPacket& inPacket)
 {
 	m_pNet->Log("Recv cmd %d, %d", nMain, nSub);
 	switch(nMain)
 	{
 		case MAIN_MSG_CENTERSER:
 		{
-			return HandMsgFromCenterSrv(nIndex, nSub, pData, nDataSize);
+			return HandMsgFromCenterSrv(nSub, inPacket);
 		}
 		case MAIN_MSG_USERSER:
 		{
-			return HandMsgFromUserSrv(nIndex, nSub, pData, nDataSize);
+			return HandMsgFromUserSrv(nSub, inPacket);
 		}
 		case MAIN_MSG_DATASER:
 		{
-			return HandMsgFromDataSrv(nIndex, nSub, pData, nDataSize);
+			return HandMsgFromDataSrv(nSub, inPacket);
 		}
 		default:
 			break;
@@ -164,9 +164,9 @@ bool CGameCliSink::HandTimeMsg(uint16 uTimeID)
 	return true;
 }
 
-bool CGameCliSink::HandMainMsgRoom(uint16 nCsid,uint16 nSub, void* pData, DATASIZE nDataSize)
+bool CGameCliSink::HandMainMsgRoom(uint16 nSub, CInputPacket& inPacket)
 {
-	UserBaseInfo* pUserInfo = (UserBaseInfo*)pData;
+	/*UserBaseInfo* pUserInfo = (UserBaseInfo*)pData;
 
 	switch (nSub)
 	{
@@ -247,18 +247,17 @@ bool CGameCliSink::HandMainMsgRoom(uint16 nCsid,uint16 nSub, void* pData, DATASI
 	}
 	default:
 		break;
-	}
+	}*/
 	return true;
 }
 
-bool CGameCliSink::HandMsgFromCenterSrv(uint16 nIndex, uint16 nSub, void* pData, DATASIZE nDataSize)
+bool CGameCliSink::HandMsgFromCenterSrv(uint16 nSub, CInputPacket& inPacket)
 {
 	switch(nSub)
 	{
 		case CT_SUB_MSG_CONN_SUCSS:
 		{
-			ConnSucess * pConn = (ConnSucess * )pData;
-			ConnectSucess(pConn);
+			ConnectSucess(inPacket);
 			RegGameSrv();
 			return true;
 		}
@@ -272,7 +271,7 @@ bool CGameCliSink::HandMsgFromCenterSrv(uint16 nIndex, uint16 nSub, void* pData,
 	return true;
 }
 
-bool CGameCliSink::HandMsgFromUserSrv(uint16 nIndex, uint16 nSub, void* pData, DATASIZE nDataSize)
+bool CGameCliSink::HandMsgFromUserSrv(uint16 nSub, CInputPacket& inPacket)
 {
 	switch(nSub)
 	{
@@ -292,14 +291,13 @@ bool CGameCliSink::HandMsgFromUserSrv(uint16 nIndex, uint16 nSub, void* pData, D
 	return true;
 }
 
-bool CGameCliSink::HandMsgFromDataSrv(uint16 nIndex, uint16 nSub, void* pData, DATASIZE nDataSize)
+bool CGameCliSink::HandMsgFromDataSrv(uint16 nSub, CInputPacket& inPacket)
 {
 	switch(nSub)
 	{
 		case DS_SUB_MSG_CONN_SUCSS:
 		{
-			ConnSucess * pConn = (ConnSucess * )pData;
-			ConnectSucess(pConn);
+			ConnectSucess(inPacket);
 			return true;
 		}
 		case DS_SUB_MSG_TEST:
@@ -318,24 +316,26 @@ bool CGameCliSink::HandMsgTestConn()
 	return true;
 }
 
-void CGameCliSink::ConnectSucess(ConnSucess* pConn)
+void CGameCliSink::ConnectSucess(CInputPacket& inPacket)
 {
 	m_nTestNum = 0;
 	m_nReConnectCount = 0;
 
-	m_nPeerSrvType = pConn->nSrvType;
-	m_nPeerSrvNo = pConn->nSrvNo;
+	m_nPeerSrvType = inPacket.ReadInt16();
+	m_nPeerSrvNo = inPacket.ReadInt16();
 	
 	m_timer_Link.StartTimerSec(CLIENT_TEST_TIME);
 }
 
 void CGameCliSink::RegGameSrv()
 {
-	RegGameSer srv;
-	srv.nGameID = g_pGameServer->GetGameId();
-	srv.nSerNo = g_pGameServer->GetSerNo();
-	srv.nPort = g_pGameServer->GetPort();
-	memcpy(srv.szIp,g_pGameServer->GetIp(),strlen(g_pGameServer->GetIp()));
-	CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_GAMESER, GS_SUB_MSG_REG_GAMESRV, &srv, sizeof(srv));
+	COutputPacket out;
+	out.Begin(MAIN_MSG_GAMESER, GS_SUB_MSG_REG_GAMESRV);
+	out.WriteInt16(g_pGameServer->GetSerNo());
+	out.WriteInt32(g_pGameServer->GetGameId());
+	out.WriteString(g_pGameServer->GetIp());
+	out.WriteInt16(g_pGameServer->GetPort());
+	out.End();
+	CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), out);
 }
 

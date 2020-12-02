@@ -3,6 +3,7 @@
 #include "../MemDataBaseEnginer/MemDataBaseEnger.h"
 #include "DataServer.h"
 #include "../include/TimerNode.h"
+#include "PacketParse.h"
 
 class CServices;
 
@@ -13,11 +14,11 @@ public:
 	~CDataSerSink();
 public:
 	void Connect();
-	bool HandNetData(uint16, uint16, uint16, void*, DATASIZE);
+	bool HandNetData(uint16, uint16, CInputPacket& inPacket);
 	bool HandTimeMsg(uint16 uTimeId);
 private:
 	bool TestNetLink();
-	bool HandMainMsgFromGameSer(uint16,uint16,void*,DATASIZE);
+	bool HandMainMsgFromGameSer(uint16,CInputPacket& inPacket);
 private:
 	bool HandTestNetConn();
 private:
