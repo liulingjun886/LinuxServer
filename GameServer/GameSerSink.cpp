@@ -97,9 +97,22 @@ bool CGameSerSink::HandMsgFromConnSrv(uint16 nSub, CInputPacket& inPacket)
 			HandTestNetConn();
 			return true;
 		}
+		case CS_SUB_MSG_USER2GAME:
+		{
+			HandMsgFromUserToGame(CInputPacket& inPacket);
+			return true;
+		}
 		default:
 			break;
 	}
 	return true;
+}
+
+
+void CGameSerSink::HandMsgFromUserToGame(CInputPacket& inPacket)
+{
+	SERVICEINDEX nIndex = inPacket.ReadInt16();
+	uint32 nDataSize = inPacket.ReadInt32();
+	m_pNet->PostData(nIndex, NET_MSG, inPacket.ReadBinary(nDataSize), nDataSize);
 }
 

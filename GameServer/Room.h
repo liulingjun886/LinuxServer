@@ -5,6 +5,7 @@
 #include "../commproto.h"
 #include "../include/SmartPoint.h"
 #include "../include/TimerNode.h"
+#include "../PacketParse.h"
 
 class CUserInfo;
 class CBaseLogic;
@@ -30,17 +31,11 @@ class CRoom :
 	uint16 m_nAllRound;
 	uint16 m_nCurRound;
 	bool m_bStarted;
-	//Users** m_pUsers;
-	//CUserInfo** m_pUsers;
 	CSmartArrayPoint<CUserInfo*> m_pUsers;
 	uint16 *m_pUserState;
 	CBaseLogic* m_pGameLogic;
-
-	
-	
 	static void* m_pHander;
 	static CBaseLogic* (*m_sFun)(CRoom*);
-	//char* m_p;
 public:
 	CRoom();
 	~CRoom();
@@ -51,7 +46,7 @@ public:
 public:
 	bool GameStart();
 	void GameFinish();
-	void SendDataToUser(uint16, uint16, uint16, void* pData = NULL, uint16 nDataSize = 0);
+	void SendDataToUser(uint16, COutputPacket&);
 	void SendDataToAll(uint16, uint16, void*, uint16,uint16 nSeatNo = -1);
 	uint16 GetUserCount() const;
 	CUserInfo* GetUsers(uint16 nSeatNo);

@@ -86,6 +86,12 @@ int  CConnectServer::ReadConfig(const char* szConfigFile)
 
 int	 CConnectServer::ConnectToGameServer(const GameInfo& info)
 {
+	std::vector<uint16>::iterator it = m_vecGameConnIndex[info.nGameNo].begin();
+	while(it != m_vecGameConnIndex[info.nGameNo].end())
+	{
+		
+	}
+
 	for(int i = 0; i < 31; i++)
 	{
 		uint16 nIndex = m_pCore->AddTcpNetCli(info.szIp.c_str(), info.nPort, false);

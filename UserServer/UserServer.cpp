@@ -20,7 +20,9 @@ CUserServer::~CUserServer()
 
 int	CUserServer::Initialize()
 {
-	InitLogFile("UserServer");
+	char szLogFile[128] = {0};
+	sprintf(szLogFile,"UserServer_%d", GetSerNo());
+	InitLogFile(szLogFile);
 
 	if(0 != ReadConfig("./config/config.ini"))
 	{

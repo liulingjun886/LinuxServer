@@ -389,9 +389,10 @@ bool CConnSerSink::HandMainMsgToGame(uint16 nMain,uint16 nSub, CInputPacket& inP
 	m_pUserInfo->GetGameInfo(nGameSerNo,nGameSerIndex,nGameSerSeatNo);
 
 	COutputPacket out;
+	out.Begin(MAIN_MSG_CONNSER,CS_SUB_MSG_USER2GAME);
 	out.WriteInt16(nGameSerIndex);
-	out.WriteInt16(nMain);
-	out.WriteInt16(nSub);
+	out.WriteInt32(inPacket.data_len() + (uint32)sizeof(uint16));
+	out.WriteInt16(nGameSerSeatNo);
 	out.WriteBinary(inPacket.data(), inPacket.data_len());
 	out.End();
 	SendToGameSer(nGameSerNo, out);

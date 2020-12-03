@@ -21,7 +21,7 @@ uint16 nMinDataSize = nHeadSize + nCommandSize;
 #define HEAD_SIZE nMinDataSize
 
 
-CPacketBase::CPacketBase()
+CPacketBase::CPacketBase():m_pData(NULL)
 {
 	
 }
@@ -33,7 +33,7 @@ CPacketBase::~CPacketBase()
 
 char* CPacketBase::data()
 {
-	return m_szBuf;
+	return m_pData;
 }
 
 uint32 CPacketBase::data_len()
@@ -46,7 +46,7 @@ bool CPacketBase::_Copy(const void* pBuf, uint32 nLen)
 	if(nLen > MAX_MSG_SIZE)
 		return false;
 	_Reset();
-	memcpy(m_szBuf, pBuf, nLen);
+	m_pData = (char*)pBuf;
 	m_nPacketSize = nLen;
 	return true;
 }
@@ -65,7 +65,6 @@ void CPacketBase::_End()
 
 void CPacketBase::_Reset()
 {
-	memset(m_szBuf, 0, sizeof(m_szBuf));
 	m_nCurrPos = HEAD_SIZE;
 	m_nPacketSize = HEAD_SIZE;
 }
@@ -76,10 +75,17 @@ bool CPacketBase::_Read(void* pBuf, uint32 nLen)
 	if(m_nCurrPos+nLen > m_nPacketSize)
 		return false;
 
-	memcpy(pBuf, &m_szBuf[m_nCurrPos], nLen);
+	memcpy(pBuf, &m_pData[m_nCurrPos], nLen);
 	m_nCurrPos += nLen;
 	return true;
 }
+
+char* CPacketBase::_ReadString()
+{
+	uint32 nLen = (uint32)strlen(&m_pData[m_nCurrPos]);
+	return _ReadPoint(nLen + 1);
+}
+
 
 char* CPacketBase::_ReadPoint(uint32 nLen)
 {
@@ -89,10 +95,7 @@ char* CPacketBase::_ReadPoint(uint32 nLen)
 	if(0 == nLen)
 		return NULL;
 	
-	if(nLen != strlen(&m_szBuf[m_nCurrPos]) + 1)
-		return NULL;
-	
-	char* pTemp = &m_szBuf[m_nCurrPos];
+	char* pTemp = &m_pData[m_nCurrPos];
 	m_nCurrPos += nLen;
 	return pTemp;
 }
@@ -103,7 +106,7 @@ bool CPacketBase::_Write(const void* pBuf, uint32 nLen)
 	if(m_nCurrPos+nLen > MAX_MSG_SIZE)
 		return false;
 
-	memcpy(&m_szBuf[m_nCurrPos], pBuf, nLen);
+	memcpy(&m_pData[m_nCurrPos], pBuf, nLen);
 	m_nCurrPos += nLen;
 	return true;
 }
@@ -112,7 +115,7 @@ bool CPacketBase::_ReadHeader(void* pBuf, uint32 nLen, uint32 nPos)
 {
 	if(nPos + nLen > HEAD_SIZE)
 		return false;
-	memcpy(pBuf, &m_szBuf[nPos], nLen);
+	memcpy(pBuf, &m_pData[nPos], nLen);
 	return true;
 }
 
@@ -120,7 +123,7 @@ bool CPacketBase::_WriteHeader(void* pBuf, uint32 nLen, uint32 nPos)
 {
 	if(nPos + nLen > HEAD_SIZE)
 		return false;
-	memcpy(&m_szBuf[nPos], pBuf, nLen);
+	memcpy(&m_pData[nPos], pBuf, nLen);
 	return true;
 }
 
@@ -220,8 +223,7 @@ double CInputPacket::ReadDouble()
 const char* CInputPacket::ReadString()
 {
 	static const char szDefault[] = "";
-	uint32 nLen = ReadInt32();
-	char* pTemp = CPacketBase::_ReadPoint(nLen);
+	char* pTemp = CPacketBase::_ReadString();
 	return (NULL == pTemp ? szDefault : pTemp);
 }
 
@@ -237,7 +239,7 @@ const char* CInputPacket::ReadBinary(uint32 nLen)
 
 COutputPacket::COutputPacket()
 {
-	
+	m_pData = &m_szBuf[0];
 }
 
 COutputPacket::~COutputPacket()
@@ -247,6 +249,7 @@ COutputPacket::~COutputPacket()
 
 void COutputPacket::Begin(uint16 nMain, uint16 nSub)
 {
+	memset(m_szBuf,0,sizeof(m_szBuf));
 	CPacketBase::_Begin(nMain, nSub);
 }
 
@@ -287,14 +290,11 @@ bool COutputPacket::WriteDouble(double nValue)
 
 bool COutputPacket::WriteString(const char* szValue)
 {
-	uint32 nLen = strlen(szValue);
-	if(!WriteInt32(nLen + 1))
-		return false;
+	uint32 nLen = 0;
+	if(NULL != szValue)
+		nLen = strlen(szValue);
 	
-	if(nLen > 0)
-		return CPacketBase::_Write(szValue, nLen) && WriteInt8('\0');
-	
-	return WriteInt8('\0');
+	return CPacketBase::_Write(szValue, nLen+1);
 }
 
 bool COutputPacket::WriteString(const std::string& szValue)
@@ -304,6 +304,9 @@ bool COutputPacket::WriteString(const std::string& szValue)
 
 bool COutputPacket::WriteBinary(const void* pData, uint32 nLen)
 {
+	if(NULL == pData)
+		return false;
+	
 	return CPacketBase::_Write(pData, nLen);
 }
 

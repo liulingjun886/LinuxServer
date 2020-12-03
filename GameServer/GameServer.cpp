@@ -12,7 +12,7 @@ CGameServer::CGameServer()
 
 CGameServer::~CGameServer()
 {
-	
+	CRoom::ReleaseGameLogic();
 }
 
 
@@ -36,6 +36,12 @@ int  CGameServer::ReadConfig(const char* szConfigFile)
 	m_szIp = iniFile.ReadString(szFild, "Host", "");
 	m_nPort = (uint16)iniFile.ReadInt(szFild, "Port", 0);
 	m_nGameId = iniFile.ReadInt(szFild, "GameID", 0);
+
+	if(!CRoom::LoadGameLogic(m_nGameId))
+	{
+		printf("LoadGameLogic Failer\n");
+		return -1;
+	}
 
 	if(0 == m_pCore->AddTcpNetSer(m_szIp.c_str(), m_nPort, false))
 		return -1;

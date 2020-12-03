@@ -110,8 +110,11 @@ bool CRoom::HandData(int e, SERVICEINDEX uFromSerId, void *pData, DATASIZE nData
 	{
 	case NET_MSG:
 	{
-		User2Game* pUserMsg = (User2Game*)pData;
-		if (!HandNetMsg(pUserMsg->nSeatNo, uFromSerId, pUserMsg->nMain, pUserMsg->nSub, pUserMsg + 1, nDataSize - sizeof(User2Game)))
+		uint16 nSeatNo = *(uint16*)pData;
+		CInputPacket in;
+		in.Copy((char*)pData + (uint32)sizeof(uint16), nDataSize - (DATASIZE)sizeof(uint16));
+
+		if(!HandNetMsg(nSeatNo, uFromSerId, in.GetMainCmd(), in.GetSubCmd(), in))
 		{
 			//char buf[MAX_MSG_SIZE] = { 0 };
 			//UserGameMsgHead* pHead = (UserGameMsgHead*)buf;
@@ -159,7 +162,7 @@ void CRoom::PreExitSelf()
 	Single_Get(CRoomManager)->DestroyRoom(m_nRoomId);
 }
 
-bool CRoom::HandNetMsg(uint16 nSeatNo,uint16 nIndex,uint16 uMain, uint16 uSub, void* pData, uint16 uDataSize)
+bool CRoom::HandNetMsg(uint16 nSeatNo,uint16 nIndex,uint16 uMain, uint16 uSub, CInputPacket& inPacket)
 {
 	switch (uMain)
 	{
@@ -169,11 +172,11 @@ bool CRoom::HandNetMsg(uint16 nSeatNo,uint16 nIndex,uint16 uMain, uint16 uSub, v
 			{
 			case SUB_MSG_JOIN:
 			{
-				return UserJoin(nSeatNo, nIndex, pData, uDataSize);
+				return UserJoin(nSeatNo, nIndex, inPacket);
 			}
 			case SUB_MSG_USER_RECONNECT:
 			{
-				UserReConnInfo* pConn = (UserReConnInfo*)pData;
+				UserReConnInfo* pConn = inPacket.ReadBinary(sizeof(UserReConnInfo));
 				CUserInfo* pUser = m_pUsers[nSeatNo];
 
 				if(pUser && pConn->nUserId == pUser->GetUserId())
@@ -212,7 +215,7 @@ bool CRoom::HandNetMsg(uint16 nSeatNo,uint16 nIndex,uint16 uMain, uint16 uSub, v
 		}
 		case MAIN_MSG_GAME:
 		{
-			m_pGameLogic->HandNetMsg(nSeatNo, uSub, pData, uDataSize);
+			m_pGameLogic->HandNetMsg(nSeatNo, uSub, NULL, 0);
 			break;
 		}
 		default:
@@ -292,39 +295,25 @@ bool CRoom::HandUserMsg(uint32 nType, void* pData, uint16 nDataSize)
 }
 
 
-void CRoom::SendDataToUser(uint16 nSeatNo, uint16 nMain, uint16 nSub, void* pData, uint16 nDataSize)
+void CRoom::SendDataToUser(uint16 nSeatNo, COutputPacket& outdata)
 {
 	if(nSeatNo >= m_nUserCount)
 		return;
+	
 	CUserInfo* pUser = m_pUsers[nSeatNo];
 	if(!pUser)
 		return;
 	
-	
 	uint16 nCid,nCsid;
 	pUser->GetConnInfo(nCid, nCsid);
 
-	//uint16 nIndex = CGameCliNetSink::GetConnSerById(nCid,GetServiceIndex()+nSeatNo);
-	/*
-	if(nMain == 6 && nSub == 10)
-	{
-		static CMutexLock m;
-		static int nGameOver = 0;
-		CToolLock lock(&m);
-		printf("nGameOver = %d\n",++nGameOver);
-	}*/
-	
-	char szBuff[MAX_MSG_SIZE] = { 0 };
-	
-	Game2User *szData = (Game2User*)szBuff;
-	szData->nIndex = nCsid;
-	szData->nMain = nMain;
-	szData->nSub = nSub;
-	if(nDataSize > 0)
-	{
-		memcpy(szData+1,pData,nDataSize);
-	}	
-	//CNetSinkObj::SendData(this,nIndex, MAIN_MSG_GAMESER, SUB_MSG_GAME4USER, szBuff, nDataSize + sizeof(Game2User));
+	COutputPacket out;
+	out.Begin(MAIN_MSG_GAMESER, GS_SUB_MSG_GAME2USER);
+	out.WriteInt16(nCsid);
+	out.WriteInt32(outdata.data_len());
+	out.WriteBinary(outdata.data(), out.data_len());
+	out.End();
+	CNetSinkObj::SendData(this,g_pGameServer->GetConnSrvIndex(nCid,GetServiceIndex()+nSeatNo), out);
 }
 
 void CRoom::SendDataToAll(uint16 nMain, uint16 nSub, void* pData, uint16 nDataSize,uint16 nSeatNo)
@@ -349,11 +338,11 @@ CUserInfo* CRoom::GetUsers(uint16 nSeatNo)
 	return m_pUsers[nSeatNo];
 }
 
-bool CRoom::UserJoin(uint16 nCsid, uint16 nIndex, void* pData, uint16 uDataSize)
+bool CRoom::UserJoin(uint16 nCsid, uint16 nIndex, CInputPacket& in)
 {
 	//char buff[MAX_MSG_SIZE] = { 0 };
 	int nSeatNo = -1;
-	UserBaseInfo* pInfo = (UserBaseInfo*)pData;
+	UserBaseInfo* pInfo = in.ReadBinary((uint32)sizeof(UserBaseInfo));
 	for (uint32 i = 0; i < m_pUsers.size(); i++)
 	{
 		if (m_pUsers[i] == NULL)
@@ -383,10 +372,14 @@ bool CRoom::UserJoin(uint16 nCsid, uint16 nIndex, void* pData, uint16 uDataSize)
 	}
 	else
 	{
+		COutputPacket out;
+		out.Begin(MAIN_MSG_GAMESER,GS_SUB_MSG_GAME2USER);
+		out.End();
+		
 		char szBuff[MAX_MSG_SIZE] = { 0 };
 		Game2User *szData = (Game2User*)szBuff;
 		szData->nIndex = nCsid;
-		szData->nMain = 1;//MAIN_MSG_ROOM_MANAGER;
+		szData->nMain = MAIN_MSG_ROOM;
 		szData->nSub = SUB_MSG_JOIN_FAIL;
 		//CNetSinkObj::SendData(this,nIndex, MAIN_MSG_GAMESER, SUB_MSG_GAME4USER, szBuff, sizeof(Game2User));
 	}

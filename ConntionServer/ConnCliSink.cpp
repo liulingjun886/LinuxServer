@@ -173,8 +173,10 @@ bool CConnCliSink::HandMsgFromGameSrv(uint16 nSub, CInputPacket& inPacket)
 		}
 		case GS_SUB_MSG_GAME2USER:
 		{
-			//Game2User* pBuff = (Game2User*)pData;
-			//SendData(pBuff->nIndex, pBuff->nMain, pBuff->nSub, pBuff+1, nDataSize - sizeof(Game2User));
+			SERVICEINDEX nIndex = inPacket.ReadInt16();
+			uint32 nDataSize = inPacket.ReadInt32();
+			char* pBinary = inPacket.ReadBinary(nDataSize);
+			CNetSinkObj::SendData(m_pNet, nIndex, pBinary, nDataSize);
 			return true;
 		}
 		case GS_SUB_MSG_GAME2CONN:

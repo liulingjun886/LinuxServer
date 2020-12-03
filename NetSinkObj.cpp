@@ -68,30 +68,13 @@ CNetSinkObj::~CNetSinkObj()
 	SAFE_DELTE(m_pSink)
 }
 
-/*void CNetSinkObj::SendData(CServices* pService,SERVICEINDEX nIndex, uint16 nMain,uint16 nSub,void* pData,DATASIZE nDataSize)
+void CNetSinkObj::SendData(CServices* pService,SERVICEINDEX nIndex, void* pData,DATASIZE nDataSize)
 {
 	if(nIndex == INVALID_SERIVCE_INDEX)
 		return;
+	pService->PostData(nIndex, SEND_DATA_REQ, pData, nDataSize);
 	
-	DATASIZE nPacketSize = nMinDataSize+ nDataSize;
-	if (nPacketSize > MAX_MSG_SIZE)
-		return;
-
-	char buff[MAX_MSG_SIZE] = {0};
-	NetHead* pHead = (NetHead*)buff;
-	pHead->uDataSize = nPacketSize;
-	NetMsgCommand* pCom = (NetMsgCommand*)(pHead+1);
-	pCom->uMain = nMain;
-	pCom->uSub = nSub;
-	
-	if (nDataSize > 0)
-	{
-		memcpy(pCom + 1, pData, nDataSize);
-	}
-	
-	pService->PostData(nIndex, SEND_DATA_REQ, buff, nPacketSize);
-	
-}*/
+}
 
 void CNetSinkObj::SendData(CServices* pService,SERVICEINDEX nIndex, COutputPacket& out)
 {

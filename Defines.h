@@ -88,6 +88,8 @@ enum Sub_Msg_ConnSer
 	CS_SUB_MSG_CONN_SUCSS = 1,
 	CS_SUB_MSG_TEST,
 	CS_SUB_MSG_REG_CONN,
+	CS_SUB_MSG_USER2Room,
+	CS_SUB_MSG_USER2GAME,
 };
 
 enum Sub_Msg_Room

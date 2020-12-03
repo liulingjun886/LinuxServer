@@ -20,6 +20,7 @@ private:
 	bool HandMsgFromConnSrv(uint16, CInputPacket& inPacket);
 private:
 	void ConnectSucess(CInputPacket& inPacket);
+	void HandMsgFromUserToGame(CInputPacket& inPacket);
 private:
 	uint16 	m_nConnNo;
 	uint8 	m_nTestNum;

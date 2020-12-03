@@ -18,11 +18,12 @@ protected:
 	void _Reset();
 	bool _Read(void* pBuf, uint32 nLen);
 	char* _ReadPoint(uint32 nLen);
+	char* _ReadString();
 	bool _Write(const void* pBuf, uint32 nLen);
 	bool _ReadHeader(void* pBuf, uint32 nLen, uint32 nPos);
 	bool _WriteHeader(void* pBuf, uint32 nLen, uint32 nPos);
-private:
-	char m_szBuf[MAX_MSG_SIZE];
+protected:
+	char*  m_pData;
 	uint32 m_nPacketSize;
 	uint32 m_nCurrPos;
 };
@@ -68,4 +69,6 @@ public:
 	bool WriteString(const char* szValue);
 	bool WriteString(const std::string& szValue);
 	bool WriteBinary(const void* pData, uint32 nLen);
+private:
+	char m_szBuf[MAX_MSG_SIZE];
 };
