@@ -107,6 +107,7 @@ bool CConnCliSink::HandTimeMsg(uint16 uTimeID)
 void CConnCliSink::RegConnSrv()
 {
 	COutputPacket out;
+	out.Begin(MAIN_MSG_CONNSER, CS_SUB_MSG_REG_CONN);
 	out.WriteInt16(g_pConnectServer->GetSerNo());
 	out.End();
 	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(),out);
@@ -142,10 +143,10 @@ bool CConnCliSink::HandMsgFromCenterSrv(uint16 nSub, CInputPacket& inPacket)
 			for(int i = 0; i < nNum; i++)
 			{
 				GameInfo info;
+				info.nGameNo = inPacket.ReadInt16();
 				info.szIp = inPacket.ReadString();
 				info.nPort = inPacket.ReadInt16();
 				info.nGameId = inPacket.ReadInt32();
-				info.nGameNo = inPacket.ReadInt16();
 				g_pConnectServer->ConnectToGameServer(info);
 			}
 			return true;

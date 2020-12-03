@@ -34,9 +34,12 @@ bool CDataCliSink::HandTimeMsg(uint16 nTimeID)
 			++m_nTestNum;
 			if(m_nTestNum > 1)
 				return false;
-			
+
+			COutputPacket out;
+			out.Begin(MAIN_MSG_DATASER, DS_SUB_MSG_TEST);
+			out.End();
+			CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), out);
 			m_timer_Link.StartTimerSec(CLIENT_TEST_TIME);
-			CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_DATASER, DS_SUB_MSG_TEST);
 			return true;
 		}
 		case TIME_RECONNECT:

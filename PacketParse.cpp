@@ -60,6 +60,7 @@ void CPacketBase::_Begin(uint16 nMain, uint16 nSub)
 void CPacketBase::_End()
 {
 	_WriteHeader(&m_nCurrPos, (uint32)sizeof(uint32), 0);
+	m_nPacketSize = m_nCurrPos;
 }
 
 void CPacketBase::_Reset()
@@ -109,7 +110,7 @@ bool CPacketBase::_Write(const void* pBuf, uint32 nLen)
 
 bool CPacketBase::_ReadHeader(void* pBuf, uint32 nLen, uint32 nPos)
 {
-	if(nPos + nLen >= HEAD_SIZE)
+	if(nPos + nLen > HEAD_SIZE)
 		return false;
 	memcpy(pBuf, &m_szBuf[nPos], nLen);
 	return true;
@@ -117,7 +118,7 @@ bool CPacketBase::_ReadHeader(void* pBuf, uint32 nLen, uint32 nPos)
 
 bool CPacketBase::_WriteHeader(void* pBuf, uint32 nLen, uint32 nPos)
 {
-	if(nPos + nLen >= HEAD_SIZE)
+	if(nPos + nLen > HEAD_SIZE)
 		return false;
 	memcpy(&m_szBuf[nPos], pBuf, nLen);
 	return true;
@@ -162,12 +163,16 @@ bool CInputPacket::Copy(const void* pBuf, uint32 nLen)
 
 uint16 CInputPacket::GetMainCmd()
 {
-	
+	uint16 nMain = 0;
+	_ReadHeader(&nMain, sizeof(uint16), 4);
+	return nMain;
 }
 
 uint16 CInputPacket::GetSubCmd()
 {
-
+	uint16 nSub = 0;
+	_ReadHeader(&nSub, sizeof(uint16), 6);
+	return nSub;
 }
 
 int8 CInputPacket::ReadInt8()

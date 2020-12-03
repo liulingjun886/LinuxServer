@@ -37,9 +37,12 @@ bool CUserCliSink::HandTimeMsg(uint16 nTimeID)
 				m_pNet->Log("test link times = %d", m_nTestNum);
 				return false;
 			}
-			
+
+			COutputPacket out;
+			out.Begin(MAIN_MSG_USERSER, US_SUB_MSG_TEST);
+			out.End();
+			CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), out);
 			m_timer_Link.StartTimerSec(CLIENT_TEST_TIME);
-			CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_USERSER, US_SUB_MSG_TEST);
 			return true;
 		}
 		case TIME_RECONNECT:
@@ -94,6 +97,7 @@ bool CUserCliSink::HandMainMsgFromCenter(    uint16 nSub, CInputPacket& inPacket
 			COutputPacket out;
 			out.Begin(MAIN_MSG_USERSER, US_SUB_MSG_REGUSERSRV);
 			out.WriteInt16(g_pUserServer->GetSerNo());
+			out.End();
 			CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), out);
 			return true;
 		}

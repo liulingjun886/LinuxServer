@@ -24,10 +24,12 @@ CGameSerSink::~CGameSerSink()
 
 void CGameSerSink::Connect()
 {
-	ConnSucess conn;
-	conn.nSrvNo = g_pGameServer->GetSerNo();
-	conn.nSrvType = g_pGameServer->GetSerType();
-	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_GAMESER, GS_SUB_MSG_CONN_SUCSS, &conn, sizeof(conn));
+	COutputPacket out;
+	out.Begin(MAIN_MSG_GAMESER, GS_SUB_MSG_CONN_SUCSS);
+	out.WriteInt16(g_pGameServer->GetSerType());
+	out.WriteInt16(g_pGameServer->GetSerNo());
+	out.End();
+	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), out);
 }
 
 void CGameSerSink::Close()

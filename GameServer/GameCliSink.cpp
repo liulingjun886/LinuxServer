@@ -143,8 +143,10 @@ bool CGameCliSink::HandTimeMsg(uint16 uTimeID)
 			m_pNet->Log("test link times = %d", m_nTestNum);
 			return false;
 		}
-		
-		CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), MAIN_MSG_GAMESER, GS_SUB_MSG_TEST);
+		COutputPacket out;
+		out.Begin(MAIN_MSG_GAMESER, GS_SUB_MSG_TEST);
+		out.End();
+		CNetSinkObj::SendData(m_pNet,m_pNet->GetServiceIndex(), out);
 		m_timer_Link.StartTimerSec(CLIENT_TEST_TIME);
 		break;
 	}

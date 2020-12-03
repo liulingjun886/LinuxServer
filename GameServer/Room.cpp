@@ -388,7 +388,7 @@ bool CRoom::UserJoin(uint16 nCsid, uint16 nIndex, void* pData, uint16 uDataSize)
 		szData->nIndex = nCsid;
 		szData->nMain = 1;//MAIN_MSG_ROOM_MANAGER;
 		szData->nSub = SUB_MSG_JOIN_FAIL;
-		CNetSinkObj::SendData(this,nIndex, MAIN_MSG_GAMESER, SUB_MSG_GAME4USER, szBuff, sizeof(Game2User));
+		//CNetSinkObj::SendData(this,nIndex, MAIN_MSG_GAMESER, SUB_MSG_GAME4USER, szBuff, sizeof(Game2User));
 	}
 	
 	return true;

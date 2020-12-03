@@ -30,10 +30,10 @@ void CCenSerSink::Connect()
 	out.End();
 	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(),out);
 	
-	ConnSucess conn;
-	conn.nSrvNo = g_pCenterServer->GetSerNo();
-	conn.nSrvType = g_pCenterServer->GetSerType();
-	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_CENTERSER, CT_SUB_MSG_CONN_SUCSS,&conn,sizeof(conn));
+	//ConnSucess conn;
+	//conn.nSrvNo = g_pCenterServer->GetSerNo();
+	//conn.nSrvType = g_pCenterServer->GetSerType();
+	//CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(), MAIN_MSG_CENTERSER, CT_SUB_MSG_CONN_SUCSS,&conn,sizeof(conn));
 }
 
 void CCenSerSink::Close()

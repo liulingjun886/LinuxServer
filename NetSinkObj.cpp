@@ -68,9 +68,9 @@ CNetSinkObj::~CNetSinkObj()
 	SAFE_DELTE(m_pSink)
 }
 
-void CNetSinkObj::SendData(CServices* pService,SERVICEINDEX nIndex, uint16 nMain,uint16 nSub,void* pData,DATASIZE nDataSize)
+/*void CNetSinkObj::SendData(CServices* pService,SERVICEINDEX nIndex, uint16 nMain,uint16 nSub,void* pData,DATASIZE nDataSize)
 {
-	/*if(nIndex == INVALID_SERIVCE_INDEX)
+	if(nIndex == INVALID_SERIVCE_INDEX)
 		return;
 	
 	DATASIZE nPacketSize = nMinDataSize+ nDataSize;
@@ -89,9 +89,9 @@ void CNetSinkObj::SendData(CServices* pService,SERVICEINDEX nIndex, uint16 nMain
 		memcpy(pCom + 1, pData, nDataSize);
 	}
 	
-	pService->PostData(nIndex, SEND_DATA_REQ, buff, nPacketSize);*/
+	pService->PostData(nIndex, SEND_DATA_REQ, buff, nPacketSize);
 	
-}
+}*/
 
 void CNetSinkObj::SendData(CServices* pService,SERVICEINDEX nIndex, COutputPacket& out)
 {
@@ -113,7 +113,7 @@ void CNetSinkObj::SendData(CServices* pService,SERVICEINDEX nIndex, COutputPacke
 int CNetSinkObj::HandNetMsg(SERVICEINDEX nIndex, const char* pData, unsigned nDataCount)
 {
 	int32 nPacketLen = CInputPacket::GetPacketLen(pData, nDataCount);
-
+	
 	if(nPacketLen > 0)
 	{
 		CInputPacket in;
