@@ -30,6 +30,7 @@ bool CRoom::LoadGameLogic(int nGameId)
 	m_pHander = dlopen(szFileName, RTLD_LAZY);
 	if(!m_pHander)
 		return false;
+	
 	m_sFun = (CBaseLogic* (*)(CRoom*))dlsym(m_pHander, "CreateLogic");
 	if(!m_sFun)
 		return false;
@@ -176,7 +177,7 @@ bool CRoom::HandNetMsg(uint16 nSeatNo,uint16 nIndex,uint16 uMain, uint16 uSub, C
 			}
 			case SUB_MSG_USER_RECONNECT:
 			{
-				UserReConnInfo* pConn = inPacket.ReadBinary(sizeof(UserReConnInfo));
+				UserReConnInfo* pConn = (UserReConnInfo*)inPacket.ReadBinary(sizeof(UserReConnInfo));
 				CUserInfo* pUser = m_pUsers[nSeatNo];
 
 				if(pUser && pConn->nUserId == pUser->GetUserId())
@@ -215,7 +216,7 @@ bool CRoom::HandNetMsg(uint16 nSeatNo,uint16 nIndex,uint16 uMain, uint16 uSub, C
 		}
 		case MAIN_MSG_GAME:
 		{
-			m_pGameLogic->HandNetMsg(nSeatNo, uSub, NULL, 0);
+			m_pGameLogic->HandNetMsg(nSeatNo, uSub, inPacket);
 			break;
 		}
 		default:
@@ -316,13 +317,13 @@ void CRoom::SendDataToUser(uint16 nSeatNo, COutputPacket& outdata)
 	CNetSinkObj::SendData(this,g_pGameServer->GetConnSrvIndex(nCid,GetServiceIndex()+nSeatNo), out);
 }
 
-void CRoom::SendDataToAll(uint16 nMain, uint16 nSub, void* pData, uint16 nDataSize,uint16 nSeatNo)
+void CRoom::SendDataToAll(COutputPacket& out,uint16 nSeatNo)
 {	
 	for(int i = 0; i < m_nUserCount; i++)
 	{
 		if(i == nSeatNo)
 			continue;
-		SendDataToUser(i,nMain,nSub,pData,nDataSize);
+		SendDataToUser(i,out);
 	}
 }
 
@@ -342,7 +343,7 @@ bool CRoom::UserJoin(uint16 nCsid, uint16 nIndex, CInputPacket& in)
 {
 	//char buff[MAX_MSG_SIZE] = { 0 };
 	int nSeatNo = -1;
-	UserBaseInfo* pInfo = in.ReadBinary((uint32)sizeof(UserBaseInfo));
+	UserBaseInfo* pInfo = (UserBaseInfo*)in.ReadBinary((uint32)sizeof(UserBaseInfo));
 	for (uint32 i = 0; i < m_pUsers.size(); i++)
 	{
 		if (m_pUsers[i] == NULL)
@@ -472,7 +473,12 @@ void CRoom::SendRoomInfoToUser(uint16 nSeatNo)
 	pRoomInfo->nUserCount = m_nUserCount;
 	pRoomInfo->nRound = m_nAllRound;
 	pRoomInfo->nCurRound = m_nCurRound;	
-	SendDataToUser(nSeatNo, MAIN_MSG_ROOM, SUB_MSG_ROOMINFO, buf, sizeof(RoomInfo));
+
+	COutputPacket out;
+	out.Begin(MAIN_MSG_ROOM, SUB_MSG_ROOMINFO);
+	out.WriteBinary(buf, (uint32)sizeof(RoomInfo));
+	out.End();
+	SendDataToUser(nSeatNo, out);
 }
 
 void CRoom::SendAllUsersInfoToUser(uint16 nSeatNo)

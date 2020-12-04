@@ -2,6 +2,7 @@
 #include "../include/IniFile.h"
 #include <algorithm>
 #include <stdio.h>
+#include "Room.h"
 
 CGameServer* g_pGameServer = NULL;
 

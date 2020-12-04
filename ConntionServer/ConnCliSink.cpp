@@ -175,7 +175,7 @@ bool CConnCliSink::HandMsgFromGameSrv(uint16 nSub, CInputPacket& inPacket)
 		{
 			SERVICEINDEX nIndex = inPacket.ReadInt16();
 			uint32 nDataSize = inPacket.ReadInt32();
-			char* pBinary = inPacket.ReadBinary(nDataSize);
+			char* pBinary = (char*)inPacket.ReadBinary(nDataSize);
 			CNetSinkObj::SendData(m_pNet, nIndex, pBinary, nDataSize);
 			return true;
 		}

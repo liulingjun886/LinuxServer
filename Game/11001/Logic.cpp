@@ -42,23 +42,19 @@ bool CLogic::GetGameStation(uint16 nSeatNo)
 	return true;
 }
 
-bool CLogic::HandNetMsg(uint16 nSeatNo,uint16 nSub, void* pData, DATASIZE nDataSize)
+bool CLogic::HandNetMsg(uint16 nSeatNo, uint16 nSub, CInputPacket& inPacket)
 {
 	switch (nSub)
 	{
 		case C_S_USERROBBANK:
 		{
-			if(nDataSize != sizeof(C_S_RobBank))
-				break;
-			C_S_RobBank* pBank = (C_S_RobBank*)pData;
+			C_S_RobBank* pBank = (C_S_RobBank*)inPacket.ReadBinary(sizeof(C_S_RobBank));
 			UserRobBank(nSeatNo, pBank->nOper);
 			break;
 		}
 		case C_S_USERBET:
 		{
-			if(nDataSize != sizeof(C_S_UserBet))
-				break;
-			C_S_UserBet *pBet = (C_S_UserBet *)pData;
+			C_S_UserBet *pBet = (C_S_UserBet*)inPacket.ReadBinary(sizeof(C_S_UserBet));
 			UserBet(nSeatNo, pBet->nMul);
 			break;
 		}
@@ -105,7 +101,10 @@ void CLogic::EndBet()
 void CLogic::EndDispatchCard()
 {
 	UpdateGameState(SHOWCARD);
-	m_pRoom->SendDataToAll(MAIN_MSG_GAME,S_C_USERSHOWCARD,NULL,0);
+	COutputPacket out;
+	out.Begin(MAIN_MSG_GAME,S_C_USERSHOWCARD);
+	out.End();
+	m_pRoom->SendDataToAll(out);
 	m_timerShowCard.StartTimerSec(10);
 }
 
@@ -183,28 +182,40 @@ bool CLogic::GameBegin()
 	m_pBank.Reset(0);
 	m_bShowCards.Reset(0);
 	UpdateGameState(READY);
-	m_pRoom->SendDataToAll(MAIN_MSG_GAME, S_C_GAMEBEGIN, NULL, 0);
+	COutputPacket out;
+	out.Begin(MAIN_MSG_GAME, S_C_GAMEBEGIN);
+	out.End();
+	m_pRoom->SendDataToAll(out);
 	m_timerReady.StartTimerSec(3);
 	return true;
 }
 
 void CLogic::GameOver()
 {
-	m_pRoom->SendDataToAll(MAIN_MSG_GAME, S_C_GAMEOVER, NULL, 0);
+	COutputPacket out;
+	out.Begin(MAIN_MSG_GAME, S_C_GAMEOVER);
+	out.End();
+	m_pRoom->SendDataToAll(out);
 }
 
 
 void CLogic::RobBank()
 {
 	UpdateGameState(BANK);
-	m_pRoom->SendDataToAll(MAIN_MSG_GAME, S_C_BEGINROBBANK, NULL, 0);
+	COutputPacket out;
+	out.Begin(MAIN_MSG_GAME, S_C_BEGINROBBANK);
+	out.End();
+	m_pRoom->SendDataToAll(out);
 	m_timerBanker.StartTimerSec(10);
 }
 
 void CLogic::BeginBet()
 {
 	UpdateGameState(BET);
-	m_pRoom->SendDataToAll(MAIN_MSG_GAME, S_C_BEGINBET, NULL, 0);
+	COutputPacket out;
+	out.Begin(MAIN_MSG_GAME, S_C_BEGINBET);
+	out.End();
+	m_pRoom->SendDataToAll(out);
 	m_timerBet.StartTimerSec(20);
 }
 
@@ -238,12 +249,16 @@ void CLogic::DispatchCard()
 	
 	//TODO:发送牌数据
 	S_C_DisPatchCard nCards;
+	COutputPacket out;
 	for(int i = 0; i < m_nUserCount; i++)
 	{
 		if(!m_pRoom->GetUsers(i))
 			continue;
 		memcpy(&nCards,m_pCards[i],sizeof(nCards));
-		m_pRoom->SendDataToUser(i, MAIN_MSG_GAME, S_C_DISPATCHCARD, &nCards, sizeof(nCards));
+		out.Begin(MAIN_MSG_GAME, S_C_DISPATCHCARD);
+		out.WriteBinary(&nCards, sizeof(nCards));
+		out.End();
+		m_pRoom->SendDataToUser(i, out);
 	}
 	m_timerDispatchCard.StartTimerSec(3);
 }
@@ -287,7 +302,13 @@ void CLogic::CompareCard()
 		++nUserCount;
 	}
 	pWinInfo->nUserCount = nUserCount;
-	m_pRoom->SendDataToAll(MAIN_MSG_GAME, S_C_GAMEFINISH, buff, sizeof(UserWinInfo)*nUserCount+sizeof(pWinInfo->nUserCount));
+
+	COutputPacket out;
+	out.Begin(MAIN_MSG_GAME, S_C_GAMEFINISH);
+	out.WriteBinary(buff, (uint32)(sizeof(UserWinInfo)*nUserCount+sizeof(pWinInfo->nUserCount)));
+	out.End();
+	m_pRoom->SendDataToAll(out);
+	
 	m_pRoom->GameFinish();
 }
 
@@ -307,7 +328,12 @@ void CLogic::UserBet(uint16 nSeatNo,int nBet)
 	S_C_UserBet bet;
 	bet.nSeatNo = nSeatNo;
 	bet.nMul = nBet;
-	m_pRoom->SendDataToAll(MAIN_MSG_GAME, S_C_USERBET, &bet, sizeof(S_C_UserBet));
+	
+	COutputPacket out;
+	out.Begin(MAIN_MSG_GAME, S_C_USERBET);
+	out.WriteBinary(&bet, (uint32)sizeof(S_C_UserBet));
+	out.End();
+	m_pRoom->SendDataToAll(out);
 	
 	for(int i = 0; i < m_nUserCount; i++)
 	{
@@ -336,7 +362,12 @@ void CLogic::UserRobBank(uint16 nSeatNo,int nRob)
 	S_C_UserRobBank robBank;
 	robBank.nSeatNo = nSeatNo;
 	robBank.nRob = nRob;
-	m_pRoom->SendDataToAll(MAIN_MSG_GAME, S_C_USERROBBANK, &robBank, sizeof(S_C_UserRobBank));
+
+	COutputPacket out;
+	out.Begin(MAIN_MSG_GAME, S_C_USERROBBANK);
+	out.WriteBinary(&robBank, (uint32)sizeof(S_C_UserRobBank));
+	out.End();
+	m_pRoom->SendDataToAll(out);
 
 	for(int i = 0; i < m_nUserCount; i++)
 	{
@@ -367,9 +398,12 @@ void CLogic::UserShowCard(uint16 nSeatNo)
 	userShowCard.nCardType = m_pCardType[nSeatNo];
 	userShowCard.nMuls = CUpGradeGameLogic::GetMulByCardType(userShowCard.nCardType);
 	memcpy(&userShowCard.nCards,m_pCards[nSeatNo],sizeof(userShowCard.nCards));
-	m_pRoom->SendDataToAll(MAIN_MSG_GAME,S_C_USERSHOWCARD,&userShowCard,sizeof(S_C_UserShowCard));
 
-	
+	COutputPacket out;
+	out.Begin(MAIN_MSG_GAME,S_C_USERSHOWCARD);
+	out.WriteBinary(&userShowCard, (uint32)sizeof(S_C_UserShowCard));
+	out.End();
+	m_pRoom->SendDataToAll(out);
 
 	for(int i = 0; i < m_nUserCount; i++)
 	{
@@ -405,7 +439,12 @@ void CLogic::ConfirmBank()
 
 	S_C_ConfirmBank confirmBank;
 	confirmBank.nBankSeatNo = m_nBank;
-	m_pRoom->SendDataToAll(MAIN_MSG_GAME, S_C_CONFIRMBANK, &confirmBank, sizeof(S_C_ConfirmBank));
+
+	COutputPacket out;
+	out.Begin(MAIN_MSG_GAME, S_C_CONFIRMBANK);
+	out.WriteBinary(&confirmBank, (uint32)sizeof(S_C_ConfirmBank));
+	out.End();
+	m_pRoom->SendDataToAll(out);
 	
 	m_timerShowBanker.StartTimerSec(1);
 	

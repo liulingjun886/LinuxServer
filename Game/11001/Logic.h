@@ -35,7 +35,7 @@ public:
 public:
 	bool InitGameStation(void* pData, uint16 nDataSize);
 	bool GetGameStation(uint16 uSeatNo);
-	bool HandNetMsg(uint16 uSeatNo, uint16 nSub, void* pData, DATASIZE uDataSize);
+	bool HandNetMsg(uint16 uSeatNo, uint16 uSub, CInputPacket& inPacket);
 	bool HandTimeMsg(uint16 uTimeId);
 	bool GameBegin();
 	void GameOver();

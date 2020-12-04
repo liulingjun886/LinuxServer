@@ -11,12 +11,11 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <time.h>
 
 CServer::CServer():m_nDeamon(0)
 {
 	m_pCore = CCore::CreateSingle();
-	int nCpuNum = sysconf(_SC_NPROCESSORS_ONLN);
-	m_pCore->SetThreadNum(nCpuNum*2);
 }
 
 int	 CServer::Init(unsigned short nSerType,unsigned short nSerNo)
@@ -25,6 +24,10 @@ int	 CServer::Init(unsigned short nSerType,unsigned short nSerNo)
 		return -1;
 	m_nSerType = nSerType;
 	m_nSerNo = nSerNo;
+	
+	int nCpuNum = sysconf(_SC_NPROCESSORS_ONLN);
+	m_pCore->SetThreadNum(nCpuNum*2);
+	
 	return Initialize();
 }
 
@@ -74,7 +77,8 @@ void CServer::Run()
 {	
 	if(1 == m_nDeamon)
 		SetDaemon();
-	
+
+	srand(time(NULL));
 	m_pCore->Run();
 }
 
