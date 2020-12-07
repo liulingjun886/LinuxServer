@@ -1,5 +1,6 @@
 #include "PacketParse.h"
 #include <string.h>
+#include <assert.h>
 
 typedef struct tagNetHead
 {
@@ -31,15 +32,37 @@ CPacketBase::~CPacketBase()
 	
 }
 
-char* CPacketBase::data()
+char* CPacketBase::Get_Packet()
 {
 	return m_pData;
 }
 
-uint32 CPacketBase::data_len()
+uint32 CPacketBase::Packet_Len()
 {
 	return m_nPacketSize;
 }
+
+
+char* 	CPacketBase::RestPacket()
+{
+	return &m_pData[m_nCurrPos];
+}
+
+uint32	CPacketBase::Rest_Len()
+{
+	return m_nPacketSize - m_nCurrPos;
+}
+
+char* 	CPacketBase::Data()
+{
+	return &m_pData[HEAD_SIZE];
+}
+
+uint32 	CPacketBase::Data_Len()
+{
+	return m_nPacketSize - HEAD_SIZE;
+}
+
 
 bool CPacketBase::_Copy(const void* pBuf, uint32 nLen)
 {
@@ -161,6 +184,7 @@ int32 CInputPacket::GetPacketLen(const char* pData, uint32 nDataLen)
 
 bool CInputPacket::Copy(const void* pBuf, uint32 nLen)
 {
+	assert(NULL != pBuf);
 	return CPacketBase::_Copy(pBuf, nLen);
 }
 

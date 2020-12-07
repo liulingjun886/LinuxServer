@@ -311,8 +311,8 @@ void CRoom::SendDataToUser(uint16 nSeatNo, COutputPacket& outdata)
 	COutputPacket out;
 	out.Begin(MAIN_MSG_GAMESER, GS_SUB_MSG_GAME2USER);
 	out.WriteInt16(nCsid);
-	out.WriteInt32(outdata.data_len());
-	out.WriteBinary(outdata.data(), out.data_len());
+	out.WriteInt32(outdata.Packet_Len());
+	out.WriteBinary(outdata.Get_Packet(), out.Packet_Len());
 	out.End();
 	CNetSinkObj::SendData(this,g_pGameServer->GetConnSrvIndex(nCid,GetServiceIndex()+nSeatNo), out);
 }

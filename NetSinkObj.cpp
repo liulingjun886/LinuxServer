@@ -81,10 +81,10 @@ void CNetSinkObj::SendData(CServices* pService,SERVICEINDEX nIndex, COutputPacke
 	if(nIndex == INVALID_SERIVCE_INDEX)
 		return;
 
-	if(out.data_len() > MAX_MSG_SIZE)
+	if(out.Packet_Len() > MAX_MSG_SIZE)
 		return;
 
-	pService->PostData(nIndex, SEND_DATA_REQ, out.data(), out.data_len());
+	pService->PostData(nIndex, SEND_DATA_REQ, out.Get_Packet(), out.Packet_Len());
 }
 
 

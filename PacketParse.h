@@ -9,19 +9,25 @@ public:
 	CPacketBase();
 	~CPacketBase();
 public:
-	char* data();
-	uint32 data_len();
+	char* 	Get_Packet();
+	uint32 	Packet_Len();
+
+	char* 	RestPacket();
+	uint32	Rest_Len();
+
+	char* 	Data();
+	uint32 	Data_Len();
 protected:
-	bool _Copy(const void* pBuf, uint32 nLen);
-	void _Begin(uint16 nMain, uint16 nSub);
-	void _End();
-	void _Reset();
-	bool _Read(void* pBuf, uint32 nLen);
-	char* _ReadPoint(uint32 nLen);
-	char* _ReadString();
-	bool _Write(const void* pBuf, uint32 nLen);
-	bool _ReadHeader(void* pBuf, uint32 nLen, uint32 nPos);
-	bool _WriteHeader(void* pBuf, uint32 nLen, uint32 nPos);
+	bool 	_Copy(const void* pBuf, uint32 nLen);
+	void 	_Begin(uint16 nMain, uint16 nSub);
+	void 	_End();
+	void 	_Reset();
+	bool 	_Read(void* pBuf, uint32 nLen);
+	char* 	_ReadPoint(uint32 nLen);
+	char* 	_ReadString();
+	bool 	_Write(const void* pBuf, uint32 nLen);
+	bool 	_ReadHeader(void* pBuf, uint32 nLen, uint32 nPos);
+	bool	_WriteHeader(void* pBuf, uint32 nLen, uint32 nPos);
 protected:
 	char*  m_pData;
 	uint32 m_nPacketSize;
@@ -37,15 +43,15 @@ public:
 public:
 	static int32 GetPacketLen(const char* pData, uint32 nDataLen);
 public:
-	bool Copy(const void* pBuf, uint32 nLen);
-	uint16 GetMainCmd();
-	uint16 GetSubCmd();
-	int8 ReadInt8();
-	int16 ReadInt16();
-	int32 ReadInt32();
-	int64 ReadInt64();
-	float ReadFloat();
-	double ReadDouble();
+	bool 	Copy(const void* pBuf, uint32 nLen);
+	uint16 	GetMainCmd();
+	uint16 	GetSubCmd();
+	int8 	ReadInt8();
+	int16 	ReadInt16();
+	int32 	ReadInt32();
+	int64 	ReadInt64();
+	float 	ReadFloat();
+	double 	ReadDouble();
 	const char* ReadString();
 	const char* ReadBinary(uint32 nLen);
 };
