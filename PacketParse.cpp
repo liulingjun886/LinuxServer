@@ -290,10 +290,11 @@ bool COutputPacket::WriteDouble(double nValue)
 
 bool COutputPacket::WriteString(const char* szValue)
 {
-	uint32 nLen = 0;
-	if(NULL != szValue)
-		nLen = strlen(szValue);
+
+	if(NULL == szValue)
+		return CPacketBase::_Write("", 1);
 	
+	uint32 nLen = strlen(szValue);
 	return CPacketBase::_Write(szValue, nLen+1);
 }
 
