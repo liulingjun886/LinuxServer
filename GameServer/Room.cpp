@@ -109,13 +109,13 @@ bool CRoom::HandData(int e, SERVICEINDEX uFromSerId, void *pData, DATASIZE nData
 {
 	switch (e)
 	{
-	case NET_MSG:
-	{
-		uint16 nSeatNo = *(uint16*)pData;
+	case USER_NET_MSG:
+	{		
+		UID nUserId = *(UID*)pData;
 		CInputPacket in;
-		in.Copy((char*)pData + (uint32)sizeof(uint16), nDataSize - (DATASIZE)sizeof(uint16));
+		in.Copy((char*)pData + (uint32)sizeof(UID), nDataSize - (DATASIZE)sizeof(UID));
 
-		if(!HandNetMsg(nSeatNo, uFromSerId, in.GetMainCmd(), in.GetSubCmd(), in))
+		if(!HandNetMsg(nUserId, uFromSerId, in.GetMainCmd(), in.GetSubCmd(), in))
 		{
 			//char buf[MAX_MSG_SIZE] = { 0 };
 			//UserGameMsgHead* pHead = (UserGameMsgHead*)buf;

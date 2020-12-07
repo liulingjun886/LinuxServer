@@ -87,37 +87,37 @@ bool CConnSerSink::HandNetData(uint16 nMain, uint16 nSub, CInputPacket& inPacket
 
 	switch (nMain)
 	{
-	//case MAIN_MSG_NET:
-	//{
-	//	return HandMainMsgNet(nIndex,nSub,pData,nDataSize);
-	//}
-	//case MAIN_MSG_LOGIN:
-	//{
-	//	if(nDataSize != sizeof(DataBase::UserLoginReq))
-	//		return false;
-	//	if(NULL != m_pUserInfo)
-	//		return false;
-		//DataBase::UserLoginReq* pReq = (DataBase::UserLoginReq*)pData;
-		//CCliNetSink::PostDataBaseReq(m_pNet,DataBase::USER_LOGIN_REQ,pData,nDataSize);
-	//	return true;
-	//}
-	//case MAIN_MSG_ROOM_MANAGER:
-	//{
-	//	return HandMainMsgToRoom(nIndex,nSub,pData,nDataSize);
-	//}
+//	case MAIN_MSG_NET:
+//	{
+//		return HandMainMsgNet(nIndex,nSub,pData,nDataSize);
+//	}
+//	case MAIN_MSG_LOGIN:
+//	{
+//		if(nDataSize != sizeof(DataBase::UserLoginReq))
+//			return false;
+//		if(NULL != m_pUserInfo)
+//			return false;
+//		DataBase::UserLoginReq* pReq = (DataBase::UserLoginReq*)pData;
+//		CCliNetSink::PostDataBaseReq(m_pNet,DataBase::USER_LOGIN_REQ,pData,nDataSize);
+//		return true;
+//	}
+//	case MAIN_MSG_ROOM_MANAGER:
+//	{
+//		return HandMainMsgToRoom(nIndex,nSub,pData,nDataSize);
+//	}
 	case MAIN_MSG_ROOM:
 	case MAIN_MSG_GAME:
 	{
 		return HandMainMsgToGame(nMain,nSub,inPacket);
 	}
-	//case MAIN_MSG_CONNECT:
-	//{
-	//	return HandMainMsgFromConnect(nIndex,nSub,pData,nDataSize);
-	//}
-	//case MAIN_ERROR:
-	//{
-	//	return false;
-	//}
+//	case MAIN_MSG_CONNECT:
+//	{
+//		return HandMainMsgFromConnect(nIndex,nSub,pData,nDataSize);
+//	}
+//	case MAIN_ERROR:
+//	{
+//		return false;
+//	}
 	default:
 		break;
 	}
@@ -389,10 +389,9 @@ bool CConnSerSink::HandMainMsgToGame(uint16 nMain,uint16 nSub, CInputPacket& inP
 	m_pUserInfo->GetGameInfo(nGameSerNo,nGameSerIndex,nGameSerSeatNo);
 
 	COutputPacket out;
-	out.Begin(MAIN_MSG_CONNSER,CS_SUB_MSG_USER2GAME);
+	out.Begin(MAIN_MSG_CONNSER,CS_SUB_MSG_USER2ROOM);
 	out.WriteInt16(nGameSerIndex);
-	out.WriteInt32(inPacket.Packet_Len() + (uint32)sizeof(uint16));
-	out.WriteInt16(nGameSerSeatNo);
+	out.WriteInt32(m_nUserId);
 	out.WriteBinary(inPacket.Get_Packet(), inPacket.Packet_Len());
 	out.End();
 	SendToGameSer(nGameSerNo, out);

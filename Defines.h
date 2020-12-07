@@ -18,6 +18,7 @@
 enum USER_EVENT
 {
 	USER_MSG = MAX_SYS_MSG+1,	//用户消息
+	USER_NET_MSG,				//玩家网络消息
 	DATA_BASE_REQ,				//数据库请求
 	DATA_BASE_RET,				//数据库结果
 	MEM_DATA_BASE_REQ,			//缓存请求
@@ -88,7 +89,7 @@ enum Sub_Msg_ConnSer
 	CS_SUB_MSG_CONN_SUCSS = 1,
 	CS_SUB_MSG_TEST,
 	CS_SUB_MSG_REG_CONN,
-	CS_SUB_MSG_USER2Room,
+	CS_SUB_MSG_USER2ROOM,
 	CS_SUB_MSG_USER2GAME,
 };
 

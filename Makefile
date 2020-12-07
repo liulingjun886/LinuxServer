@@ -23,6 +23,7 @@ GS_SRC_FILES 	= $(wildcard ./GameServer/*.cpp)
 CS_SRC_FILES 	= $(wildcard ./ConntionServer/*.cpp)
 
 
+
 SEROBJ = $(CURR_SRC_FILES:./%.cpp=./debug/%.o) $(MDE_SRC_FILES:./MemDataBaseEnginer/%.cpp=./debug/%.o) \
 		$(DBE_SRC_FILES:./DataBaseEnginer/%.cpp=./debug/%.o) $(CT_SRC_FILES:./CenterServer/%.cpp=./debug/%.o) \
 		$(US_SRC_FILES:./UserServer/%.cpp=./debug/%.o) $(DS_SRC_FILES:./DataServer/%.cpp=./debug/%.o) \
