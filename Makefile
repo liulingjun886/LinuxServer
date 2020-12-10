@@ -5,13 +5,13 @@ VPATH = ./MemDataBaseEnginer:./DataBaseEnginer:./CenterServer: \
 
 CFLAGS = -g -Werror -O0
 
-SOFLAGS = -fPIC -shared
-
 LIBS = 	-L./lib -lcore \
 		-L/usr/lib64/mysql -lmysqlclient \
 		-lpthread -lhiredis -ldl
 
 LDFLAGS = -Wl,--export-dynamic \
+
+SOFLAGS = -fPIC -shared
 
 CURR_SRC_FILES 	= $(wildcard ./*.cpp)
 MDE_SRC_FILES  	= $(wildcard ./MemDataBaseEnginer/*.cpp)
