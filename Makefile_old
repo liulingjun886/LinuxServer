@@ -1,3 +1,5 @@
+#此Makefile不带依赖文件自动推导功能
+
 CXX = g++
 
 VPATH = ./MemDataBaseEnginer:./DataBaseEnginer:./CenterServer: \
@@ -22,28 +24,26 @@ DS_SRC_FILES 	= $(wildcard ./DataServer/*.cpp)
 GS_SRC_FILES 	= $(wildcard ./GameServer/*.cpp)
 CS_SRC_FILES 	= $(wildcard ./ConntionServer/*.cpp)
 
+
+
 SEROBJ = $(CURR_SRC_FILES:./%.cpp=./debug/%.o) $(MDE_SRC_FILES:./MemDataBaseEnginer/%.cpp=./debug/%.o) \
 		$(DBE_SRC_FILES:./DataBaseEnginer/%.cpp=./debug/%.o) $(CT_SRC_FILES:./CenterServer/%.cpp=./debug/%.o) \
 		$(US_SRC_FILES:./UserServer/%.cpp=./debug/%.o) $(DS_SRC_FILES:./DataServer/%.cpp=./debug/%.o) \
 		$(GS_SRC_FILES:./GameServer/%.cpp=./debug/%.o) $(CS_SRC_FILES:./ConntionServer/%.cpp=./debug/%.o) \
 
-./debug/%.d:%.cpp
-	@set -e; rm -f $@; $(CXX) -MM $< -o $@.$$$$; \
-    sed 's,\($*\)\.o[ :]*,debug/\1.o : ,g' < $@.$$$$ > $@; \
-	echo '	$(CXX) -c $(CFLAGS) $$< -o $$@' >> $@; \
-    rm -f $@.$$$$
+
+./debug/%.o:%.cpp
+	$(CXX) -c $(CFLAGS) $< -o $@
 
 server:$(SEROBJ)
 	$(CXX) $(CFLAGS) $^ -o $@ $(LDFLAGS) $(LIBS)
 
 %.so:./Game/%/*.cpp
 	$(CXX) $(SOFLAGS) $(CFLAGS) $^ -o $@ 
-
--include $(SEROBJ:.o=.d)
-
+	
 clean:
-	rm -f ./debug/* ./core.* ./log/*
+	rm -f ./debug/*.o core.* ./log/*
 
 all:clean server
 
-.PHONY:all clean 
+.PHONY:all clean
