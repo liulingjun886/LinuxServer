@@ -33,10 +33,9 @@ $(GS_SRC_FILES:./GameServer/%.cpp=./debug/%.o) \
 $(CS_SRC_FILES:./ConntionServer/%.cpp=./debug/%.o) \
 
 ./debug/%.d:%.cpp
-	@set -e; rm -f $@; $(CXX) -MM $< -o $@.$$$$; \
-    sed 's,\($*\).o[ :]*,debug/\1.o : ,g' < $@.$$$$ > $@; \
-	echo '	$(CXX) -c $(CFLAGS) $$< -o $$@' >> $@; \
-    rm -f $@.$$$$
+	@set -e; rm -f $@; $(CXX) -MM $< -o $@; \
+    sed -i 's,\($*\).o[ :]*,debug/\1.o : ,g' $@; \
+	echo '	$(CXX) -c $(CFLAGS) $$< -o $$@' >> $@; 
 
 server:$(SEROBJ)
 	$(CXX) $(CFLAGS) $^ -o $@ $(LDFLAGS) $(LIBS)
