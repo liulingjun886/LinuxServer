@@ -24,6 +24,10 @@ struct RegConnSer
 	uint16 nSerNo;
 };
 
+
+
+
+
 typedef struct tagCreateRoomInfo
 {
 	uint32 nGameId;

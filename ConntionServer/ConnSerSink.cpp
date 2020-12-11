@@ -18,22 +18,18 @@ extern CConnectServer* g_pConnectServer;
 enum TIME_ID
 {
 	TIME_CONN_IS_LINK = 1,
+	TIME_LOGIN,
 };
 
 CConnSerSink::CConnSerSink(CServices* pNet) :CNetHandSink(pNet),m_nTestLink(0)
 {
-	m_pUserInfo = NULL;
 	m_timerConnTest.InitTimerObj(m_pNet, TIME_CONN_IS_LINK);
+	m_timer_Login.InitTimerObj(m_pNet, TIME_LOGIN);
 }
 
 
 CConnSerSink::~CConnSerSink()
 {
-
-	if(m_pUserInfo)
-		delete m_pUserInfo;
-	
-	m_pUserInfo = NULL;
 }
 
 void CConnSerSink::Init(const char* szIp)
@@ -49,35 +45,14 @@ void CConnSerSink::Connect()
 	out.Begin(MAIN_MSG_CONNSER, CS_SUB_MSG_CONN_SUCSS);
 	out.End();
 	SendToMySelf(out);
+
+	m_timer_Login.StartTimerSec(3);
 }
 
 bool CConnSerSink::DisConnect()
 {
 
-	if(NULL == m_pUserInfo)
-		return false;
-
-	Mem::UserLogOutMemReq req;
-	req.nUserId = m_pUserInfo->GetUserId();
-	req.nSerNo = g_pConnectServer->GetSerNo();
-	req.nSockNo = m_pNet->GetServiceIndex();
-	//CCliNetSink::PostMemDataBaseReq(m_pNet,Mem::USER_LOGOUT_REQ, &req, sizeof(Mem::UserLogOutMemReq));
-
-	uint16 nGid,nGsid,nSeatNo;
-	m_pUserInfo->GetGameInfo(nGid,nGsid,nSeatNo);
 	
-	if(nGid>0)
-	{
-		COutputPacket out;
-		out.Begin(MAIN_MSG_CONNSER, SUB_MSG_USER4GAME);
-		out.WriteInt16(nGsid);
-		out.WriteInt16(MAIN_MSG_ROOM);
-		out.WriteInt16(SUB_MSG_USER_DISCONNECT);
-		out.WriteInt32(nSeatNo);
-		out.End();
-		
-		SendToGameSer(nGid,out);
-	}
 	return false;
 }
 
@@ -87,37 +62,16 @@ bool CConnSerSink::HandNetData(uint16 nMain, uint16 nSub, CInputPacket& inPacket
 
 	switch (nMain)
 	{
-//	case MAIN_MSG_NET:
-//	{
-//		return HandMainMsgNet(nIndex,nSub,pData,nDataSize);
-//	}
-//	case MAIN_MSG_LOGIN:
-//	{
-//		if(nDataSize != sizeof(DataBase::UserLoginReq))
-//			return false;
-//		if(NULL != m_pUserInfo)
-//			return false;
-//		DataBase::UserLoginReq* pReq = (DataBase::UserLoginReq*)pData;
-//		CCliNetSink::PostDataBaseReq(m_pNet,DataBase::USER_LOGIN_REQ,pData,nDataSize);
-//		return true;
-//	}
-//	case MAIN_MSG_ROOM_MANAGER:
-//	{
-//		return HandMainMsgToRoom(nIndex,nSub,pData,nDataSize);
-//	}
+	case MAIN_MSG_HALL:
+	{
+		m_timer_Login.StopTimer();
+		return HandMainMsgToHall(nMain,nSub,inPacket);
+	}
 	case MAIN_MSG_ROOM:
 	case MAIN_MSG_GAME:
 	{
 		return HandMainMsgToGame(nMain,nSub,inPacket);
 	}
-//	case MAIN_MSG_CONNECT:
-//	{
-//		return HandMainMsgFromConnect(nIndex,nSub,pData,nDataSize);
-//	}
-//	case MAIN_ERROR:
-//	{
-//		return false;
-//	}
 	default:
 		break;
 	}
@@ -132,15 +86,33 @@ bool CConnSerSink::HandTimeMsg(uint16 uTimeId)
 	{
 		return TestNetLink();
 	}
+	case TIME_LOGIN:
+	{
+		break;
+	}
 	default:
 		break;
 	}
-	return true;
+	return false;
 }
 
 void CConnSerSink::Close()
 {
 	
+	COutputPacket userleave;
+	userleave.Begin(MAIN_MSG_CONNSER, CS_SUB_MSG_USER_CLOSE);
+	userleave.WriteInt32(m_nUserId);
+	userleave.WriteInt16(g_pConnectServer->GetSerNo());
+	userleave.WriteInt16(m_pNet->GetServiceIndex());
+	SendToUserSer(m_nUserId, userleave);
+	
+	COutputPacket offline;
+	offline.Begin(MAIN_MSG_CONNSER, CS_SUB_MSG_USER_CLOSE);
+	offline.WriteInt32(m_nUserId);
+	offline.WriteInt16(g_pConnectServer->GetSerNo());
+	offline.WriteInt16(m_pNet->GetServiceIndex());
+	offline.End();
+	SendToGameSer(m_nGameSrvNo,offline);
 }
 
 bool CConnSerSink::TestNetLink()
@@ -192,13 +164,13 @@ bool CConnSerSink::SendToConnectSer(COutputPacket& out)
 }
 
 
-bool CConnSerSink::HandDataBaseRet(uint32 nType, void * pData, DATASIZE nDataSize)
+bool CConnSerSink::HandDataBaseRet(uint32 nType, CInputPacket& inPacket)
 {
 	switch (nType)
 	{
 		case DataBase::USER_LOGIN_RET:
 		{
-			DataBase::UserLoginRet* pRet = (DataBase::UserLoginRet*)pData;
+			DataBase::UserLoginRet* pRet = (DataBase::UserLoginRet*)inPacket.ReadBinary(inPacket.Rest_Len());
 			
 			m_pUserInfo = new CUserInfo;
 			m_pUserInfo->SetUserBaseInfo(pRet->nUserId, pRet->nSex, pRet->szName, pRet->szHeadUrl);
@@ -216,53 +188,24 @@ bool CConnSerSink::HandDataBaseRet(uint32 nType, void * pData, DATASIZE nDataSiz
 	return true;
 }
 
-bool CConnSerSink::HandMemDataRet(uint32 nType, void* pData, DATASIZE uDataSize)
+bool CConnSerSink::HandMemDataRet(uint32 nType, CInputPacket& inPacket)
 {
-/*	switch (nType)
+	switch (nType)
 	{
 		case Mem::USER_LOGIN_RET:
 		{
-			Mem::UserLoginMemRet* pRet = (Mem::UserLoginMemRet*)pData;
-			m_pUserInfo->UpdateGameInfo(pRet->nGid, pRet->nGSid, pRet->nGsno);
-			SendToMySelf(MAIN_MSG_CONNSER,SUB_MSG_LOGIN, m_pUserInfo->GetUserBaseInfo(),sizeof(UserBaseInfo));
-			
-			if(pRet->nCid > 0)
-			{
-				
-				if(pRet->nCid == g_pConnectServer->GetSerNo())
-				{
-					UserDoubleLogin login;
-					login.nUserId = m_pUserInfo->GetUserId();
-					login.nCid = pRet->nCid;
-					login.nCsid = pRet->nCSid;
-					m_pNet->PostData(pRet->nCSid, EN_DOUBLE_LOGIN, &login, sizeof(UserDoubleLogin));
-				}
-				else
-				{
-					UserDoubleLogin login;
-					login.nUserId = m_pUserInfo->GetUserId();
-					login.nCid = pRet->nCid;
-					login.nCsid = pRet->nCSid;
-					//uint16 nIndex = g_pConnectServer->GetCenterServerIndex();
-					//SendToCenterSer(MAIN_MSG_CONNECT, SUB_MSG_USER_DOUBLELOGIN, &login, sizeof(UserDoubleLogin));
-					SendToConnectSer(MAIN_MSG_CONNSER, SUB_MSG_USER_DOUBLELOGIN, &login, sizeof(UserDoubleLogin));
-				}
-			}
+			m_nGameSrvNo = inPacket.ReadInt16();
+			m_nGameSrvIndex = inPacket.ReadInt16();
 
-			if(pRet->nGid > 0)
+			if(m_nGameSrvIndex > 0)
 			{
-				char szBuff[MAX_MSG_SIZE] = {0};
-				User2Game* pUg = (User2Game*)szBuff;
-				pUg->nMain = MAIN_MSG_ROOM;
-				pUg->nSub = SUB_MSG_USER_RECONNECT;
-				pUg->nIndex = pRet->nGSid;
-				pUg->nSeatNo = pRet->nGsno;
-				
-				UserReConnInfo* pConn = (UserReConnInfo*)(pUg+1);
-				pConn->nUserId = m_pUserInfo->GetUserId();
-				pConn->nCid = g_pConnectServer->GetSerNo();
-				pConn->nCsid = m_pNet->GetServiceIndex();
-				SendToGameSer(pRet->nGid, MAIN_MSG_CONNSER, SUB_MSG_USER_RELOGIN, szBuff, 	sizeof(User2Game)+sizeof(UserReConnInfo));
+				COutputPacket out;
+				out.Begin(MAIN_MSG_CONNSER,SUB_MSG_USER_RELOGIN);
+				out.WriteInt32(m_nUserId);
+				out.WriteInt16(g_pConnectServer->GetSerNo());
+				out.WriteInt16(m_pNet->GetServiceIndex());
+				out.End();
+				SendToGameSer(m_nGameSrvNo, out);
 			}
 			break;
 		}
@@ -270,24 +213,27 @@ bool CConnSerSink::HandMemDataRet(uint32 nType, void* pData, DATASIZE uDataSize)
 		{
 			break;
 		}
-	}*/
+	}
 	return true;
 }
 
 bool CConnSerSink::HandUserMsg(int nEvent, void * pData, DATASIZE nDataSize)
 {
-
 	switch (nEvent)
 	{
 		case DATA_BASE_RET:
 		{
-			uint32 *pType = (uint32*)pData;
-			return HandDataBaseRet(*pType, pType+1,  nDataSize-sizeof(uint32));
+			CInputPacket in;
+			in.Copy(pData, nDataSize, false);
+			uint32 nEvType = in.ReadInt32();
+			return HandDataBaseRet(nEvType, in);
 		}
 		case MEM_DATA_BASE_RET:
 		{
-			uint32 *pType = (uint32*)pData;
-			return HandMemDataRet(*pType, pType+1,  nDataSize-sizeof(uint32));
+			CInputPacket in;
+			in.Copy(pData, nDataSize, false);
+			uint32 nEvType = in.ReadInt32();
+			return HandMemDataRet(nEvType, in);
 		}
 		case EN_DOUBLE_LOGIN:
 		{
@@ -387,16 +333,30 @@ bool CConnSerSink::HandMainMsgToGame(uint16 nMain,uint16 nSub, CInputPacket& inP
 {
 	uint16 nGameSerNo,nGameSerIndex,nGameSerSeatNo;
 	m_pUserInfo->GetGameInfo(nGameSerNo,nGameSerIndex,nGameSerSeatNo);
-
+	UID nUserId = inPacket.ReadInt32();
+	if(nUserId != m_pUserInfo->GetUserId())
+		return false;
+	
 	COutputPacket out;
 	out.Begin(MAIN_MSG_CONNSER,CS_SUB_MSG_USER2ROOM);
 	out.WriteInt16(nGameSerIndex);
-	out.WriteInt32(m_nUserId);
 	out.WriteBinary(inPacket.Get_Packet(), inPacket.Packet_Len());
 	out.End();
 	SendToGameSer(nGameSerNo, out);
 	return true;
 }
+
+bool CConnSerSink::HandMainMsgToHall(uint16, uint16, CInputPacket& inPacket)
+{
+	UID nUserId = inPacket.ReadInt32();
+	COutputPacket out;
+	out.Begin(MAIN_MSG_CONNSER,CS_SUB_MSG_USER_LOGIN_HALL);
+	out.WriteInt32(nUserId);
+	out.WriteInt16(m_pNet->GetServiceIndex());
+	out.End();
+	SendToUserSer(g_pConnectServer->GetUserServerIndex(nUserId), out);
+}
+
 
 bool CConnSerSink::HandMainMsgFromConnect(uint16 nSub, CInputPacket& inPacket)
 {

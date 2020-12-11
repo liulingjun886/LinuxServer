@@ -34,8 +34,10 @@ public:
 public:
 	bool HandNetData(uint16, uint16, CInputPacket& inPacket);
 	bool HandTimeMsg(uint16 uTimeId);
-	bool HandDataBaseRet(uint32 uType, void * pData, DATASIZE nDataSize);
-	bool HandMemDataRet(uint32 uType, void* pData, DATASIZE uDataSize);
+	
+	bool HandDataBaseRet(uint32 uType, CInputPacket& inPacket);
+	bool HandMemDataRet(uint32 uType, CInputPacket& inPacket);
+	
 	bool HandUserMsg(int nEvent, void * pData, DATASIZE uDataSize);
 	void Close();
 	void Init(const char* szIp);
@@ -54,12 +56,16 @@ private:
 	bool HandMainMsgToRoom(uint16, CInputPacket& inPacket);
 	bool HandMainMsgToGame(uint16, uint16, CInputPacket& inPacket);
 	bool HandMainMsgFromConnect(uint16 nSub, CInputPacket& inPacket);
+	bool HandMainMsgToHall(uint16, uint16, CInputPacket& inPacket);
 private:
 	int m_nTestLink;
 	CTimer m_timerConnTest;
 	const char* m_szIp;
+
+	CTimer m_timer_Login;
 	
-	CUserInfo* m_pUserInfo;
 	UID m_nUserId;
+	uint16 m_nGameSrvNo;
+	uint16 m_nGameSrvIndex;
 };
 

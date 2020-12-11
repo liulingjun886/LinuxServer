@@ -90,17 +90,27 @@ bool CGameSerSink::HandMsgFromConnSrv(uint16 nSub, CInputPacket& inPacket)
 			g_pGameServer->AddConnInfo(nSrvNo, m_pNet->GetServiceIndex());
 			HandTestNetConn();
 			m_timer_Link.StartTimerSec(SERVER_TEST_TIME);
-			return true;
+			break;
 		}
 		case CS_SUB_MSG_TEST:
 		{
 			HandTestNetConn();
-			return true;
+			break;
+		}
+		case CS_SUB_MSG_USER4HALL:
+		{
+			HandMsgFromUserForHall(inPacket);
+			break;
+		}
+		case CS_SUB_MSG_USER4ROOM:
+		{
+			HandMsgFromUserForRoom(inPacket);
+			break;
 		}
 		case CS_SUB_MSG_USER2ROOM:
 		{
 			HandMsgFromUserToGame(inPacket);
-			return true;
+			break;
 		}
 		default:
 			break;
@@ -114,4 +124,21 @@ void CGameSerSink::HandMsgFromUserToGame(CInputPacket& inPacket)
 	SERVICEINDEX nIndex = inPacket.ReadInt16();
 	m_pNet->PostData(nIndex, USER_NET_MSG, (void*)inPacket.RestPacket(), inPacket.Rest_Len());
 }
+
+void CGameSerSink::HandMsgFromUserForRoom(CInputPacket& inPacket)
+{
+	UID nUserId = inPacket.ReadInt32();
+	SERVICEINDEX nIndex = g_pGameServer->GetUserServiceIndex(nUserId);
+	m_pNet->PostData(nIndex, USER_NET_MSG, inPacket.RestPacket(), inPacket.Rest_Len());
+	//m_pNet->PostData(nIndex, USER_NET_MSG, (void*)inPacket.RestPacket(), inPacket.Rest_Len());
+}
+
+void CGameSerSink::HandMsgFromUserForHall(CInputPacket& inPacket)
+{
+	UID nUserId = inPacket.ReadInt32();
+
+	SERVICEINDEX nIndex = g_pGameServer->GetUserServiceIndex(nUserId);
+	m_pNet->PostData(nIndex, USER_NET_MSG, inPacket.RestPacket(), inPacket.Rest_Len());
+}
+
 

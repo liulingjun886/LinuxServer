@@ -29,6 +29,8 @@ public:
 
 	void		DisconnectToRemoteSrv(uint16 nSrvType, uint16 nSrvNo, uint16 nIndex);
 
+	SERVICEINDEX GetUserServiceIndex(UID nUid);
+
 private:
 	int  		ReadConfig(const char* szConfigFile);
 	int 		ConnectToCenterSrv(const char* szIp, uint16 nPort);
@@ -57,4 +59,7 @@ private:
 
 	//存储连接服务器的相关信息
 	std::vector<uint16> m_szConnSerInfo[MAX_USER_DATA_SRV_NUM];
+
+	//用户管理服务保存
+	std::vector<SERVICEINDEX> m_vecUserManager;
 };

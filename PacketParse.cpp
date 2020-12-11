@@ -64,13 +64,15 @@ uint32 	CPacketBase::Data_Len()
 }
 
 
-bool CPacketBase::_Copy(const void* pBuf, uint32 nLen)
+bool CPacketBase::_Copy(const void* pBuf, uint32 nLen, bool bHead)
 {
 	if(nLen > MAX_MSG_SIZE)
 		return false;
 	_Reset();
 	m_pData = (char*)pBuf;
 	m_nPacketSize = nLen;
+	if(!bHead)
+		m_nCurrPos = 0;
 	return true;
 }
 void CPacketBase::_Begin(uint16 nMain, uint16 nSub)
@@ -182,10 +184,10 @@ int32 CInputPacket::GetPacketLen(const char* pData, uint32 nDataLen)
 }
 
 
-bool CInputPacket::Copy(const void* pBuf, uint32 nLen)
+bool CInputPacket::Copy(const void* pBuf, uint32 nLen, bool bHead)
 {
 	assert(NULL != pBuf);
-	return CPacketBase::_Copy(pBuf, nLen);
+	return CPacketBase::_Copy(pBuf, nLen, bHead);
 }
 
 uint16 CInputPacket::GetMainCmd()
@@ -246,13 +248,22 @@ double CInputPacket::ReadDouble()
 
 const char* CInputPacket::ReadString()
 {
-	static const char szDefault[] = "";
-	char* pTemp = CPacketBase::_ReadString();
-	return (NULL == pTemp ? szDefault : pTemp);
+	return ReadBinary();
 }
+
+const char* CInputPacket::ReadBinary()
+{
+	uint32 nLen = 0;
+	CPacketBase::_Read(&nLen,sizeof(uint32));
+	return ReadBinary(nLen);
+}
+
 
 const char* CInputPacket::ReadBinary(uint32 nLen)
 {
+	if(0 == nLen)
+		return NULL;
+	
 	return CPacketBase::_ReadPoint(nLen);
 }
 
@@ -316,10 +327,10 @@ bool COutputPacket::WriteString(const char* szValue)
 {
 
 	if(NULL == szValue)
-		return CPacketBase::_Write("", 1);
+		szValue = "";
 	
-	uint32 nLen = strlen(szValue);
-	return CPacketBase::_Write(szValue, nLen+1);
+	uint32 nLen = strlen(szValue)+1;
+	return WriteBinary(szValue, nLen);
 }
 
 bool COutputPacket::WriteString(const std::string& szValue)
@@ -332,6 +343,6 @@ bool COutputPacket::WriteBinary(const void* pData, uint32 nLen)
 	if(NULL == pData)
 		return false;
 	
-	return CPacketBase::_Write(pData, nLen);
+	return CPacketBase::_Write(&nLen, sizeof(uint32)) && CPacketBase::_Write(pData, nLen);
 }
 

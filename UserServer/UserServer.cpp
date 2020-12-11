@@ -100,17 +100,13 @@ bool CUserServer::PostMemDataBaseReq(CServices* pServices,void* pData, DATASIZE 
 
 bool CUserServer::PostMemDataBaseRet(CServices* pServices,SERVICEINDEX nToSerId,SERVICEINDEX nCsid, uint32 nTypeId, void* pData, DATASIZE nDataSize)
 {
-	/*static DATASIZE nHeadSize = sizeof(DataCenter) + sizeof(uint32);
-	char* buff[MAX_MSG_SIZE] = {0};
-	DataCenter* pCenter = (DataCenter*)buff;
-	pCenter->nCsid = nCsid;
-	uint32* pType = (uint32*)(pCenter+1);
-	*pType = nTypeId;
-	if (nDataSize > 0)
-	{
-		memcpy(pType+1, pData, nDataSize);
-	}
-	CNetSinkObj::SendData(pServices,  nToSerId, MAIN_MSG_USERSER, US_SUB_MSG_MEM_BASE_RET,buff, nHeadSize + nDataSize);*/
+	COutputPacket out;
+	out.Begin(MAIN_MSG_USERSER,US_SUB_MSG_MEM_BASE_RET);
+	out.WriteInt16(nCsid);
+	out.WriteInt32(nTypeId);
+	out.WriteBinary(pData, nDataSize);
+	out.End();
+	CNetSinkObj::SendData(pServices, nToSerId, out);
 	return true;
 }
 

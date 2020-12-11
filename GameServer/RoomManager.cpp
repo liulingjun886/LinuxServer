@@ -30,7 +30,6 @@ int CRoomManager::AddRoom(uint16 nIndex)
 	int nRoomId = 0;
 	do 
 	{
-		CToolLock lock(&m_rwlock);
 		++sCurRoomid;
 		if(sCurRoomid >= 100000)
 			sCurRoomid = 1;
@@ -53,7 +52,7 @@ void CRoomManager::DestroyRoom(int nRoomId)
 	if(nRoomId < 100000)
 		return;
 	map<int, uint16>::iterator it;
-	CToolLock lock(&m_rwlock);
+
 	it = m_room_manager.find(nRoomId);
 	if (it != m_room_manager.end())
 	{
@@ -64,7 +63,7 @@ void CRoomManager::DestroyRoom(int nRoomId)
 uint16 CRoomManager::GetRoom(int nRoomId)
 {
 	map<int, uint16>::iterator it;
-	CToolLock lock(&m_rwlock,1);
+
 	it = m_room_manager.find(nRoomId);
 	if (it != m_room_manager.end())
 	{

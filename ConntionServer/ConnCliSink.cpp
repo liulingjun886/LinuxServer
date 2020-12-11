@@ -34,9 +34,7 @@ void CConnCliSink::Init(const char* szIp)
 
 bool CConnCliSink::DisConnect()
 {	
-	if(SRV_TYPE_GAME == m_nPeerSerType)
-		return false;
-	
+	g_pConnectServer->DisconnectToServer(m_nPeerSerType, m_nPeerSerNo, m_pNet->GetServiceIndex());
 	m_timer_Link.StopTimer();
 	m_timer_reconnect.StartTimerSec(CLIENT_RECONN_TIME);
 	return true;
@@ -44,7 +42,7 @@ bool CConnCliSink::DisConnect()
 
 void CConnCliSink::Close()
 {
-	g_pConnectServer->DisconnectToServer(m_nPeerSerType, m_nPeerSerNo, m_pNet->GetServiceIndex());
+	
 }
 
 
@@ -197,14 +195,19 @@ bool CConnCliSink::HandMsgFromUserSrv(uint16 nSub, CInputPacket& inPacket)
 	{
 		case US_SUB_MSG_CONN_SUCSS:
 		{
-			//ConnSucess* pConn = (ConnSucess*)pData;
 			ConnectSucess(inPacket);
-			return true;
+			break;
 		}
 		case US_SUB_MSG_TEST:
 		{
 			m_nTestNum = 0;
-			return true;
+			break;
+		}
+		case US_SUB_MSG_MEM_BASE_RET:
+		{
+			SERVICEINDEX nIndex = inPacket.ReadInt16();
+			m_pNet->PostData(nIndex, MEM_DATA_BASE_RET, inPacket.RestPacket(), inPacket.Rest_Len());
+			break;
 		}
 		default:
 			break;

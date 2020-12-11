@@ -18,7 +18,7 @@ public:
 	char* 	Data();
 	uint32 	Data_Len();
 protected:
-	bool 	_Copy(const void* pBuf, uint32 nLen);
+	bool 	_Copy(const void* pBuf, uint32 nLen, bool bHead);
 	void 	_Begin(uint16 nMain, uint16 nSub);
 	void 	_End();
 	void 	_Reset();
@@ -43,7 +43,7 @@ public:
 public:
 	static int32 GetPacketLen(const char* pData, uint32 nDataLen);
 public:
-	bool 	Copy(const void* pBuf, uint32 nLen);
+	bool 	Copy(const void* pBuf, uint32 nLen, bool bHaed = true);
 	uint16 	GetMainCmd();
 	uint16 	GetSubCmd();
 	int8 	ReadInt8();
@@ -53,6 +53,7 @@ public:
 	float 	ReadFloat();
 	double 	ReadDouble();
 	const char* ReadString();
+	const char* ReadBinary();
 	const char* ReadBinary(uint32 nLen);
 };
 
