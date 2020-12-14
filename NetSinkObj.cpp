@@ -28,7 +28,7 @@ CNetSinkObj::CNetSinkObj(CServices* pServices,int nConnType):
 		}
 		case 2: //玩家服务器
 		{
-			if(nConnType == SOCK_CONN_SER)
+			if(SOCK_CONN_SER == nConnType)
 				m_pSink = new CUserSerSink(pServices);
 			else
 				m_pSink = new CUserCliSink(pServices);
@@ -36,7 +36,7 @@ CNetSinkObj::CNetSinkObj(CServices* pServices,int nConnType):
 		}
 		case 3: //数据服务器
 		{
-			if(nConnType == SOCK_CONN_SER)
+			if(SOCK_CONN_SER == nConnType)
 				m_pSink = new CDataSerSink(pServices);
 			else
 				m_pSink = new CDataCliSink(pServices);
@@ -44,7 +44,7 @@ CNetSinkObj::CNetSinkObj(CServices* pServices,int nConnType):
 		}
 		case 4: //游戏服务器
 		{
-			if(nConnType == SOCK_CONN_SER)
+			if(SOCK_CONN_SER == nConnType)
 				m_pSink = new CGameSerSink(pServices);
 			else
 				m_pSink = new CGameCliSink(pServices);
@@ -52,7 +52,7 @@ CNetSinkObj::CNetSinkObj(CServices* pServices,int nConnType):
 		}
 		case 5: //连接服务器
 		{
-			if(nConnType == SOCK_CONN_SER)
+			if(SOCK_CONN_SER == nConnType)
 				m_pSink = new CConnSerSink(pServices);
 			else
 				m_pSink = new CConnCliSink(pServices);
