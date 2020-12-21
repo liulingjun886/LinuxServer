@@ -61,8 +61,8 @@ enum SYS_EVENTS
 	LOG_MSG,			//写日志
 	NET_MSG,			//网络消息
 	NET_CONNECT,		//连接成功
+	TIME_MSG,			//时间消息
 	NET_RECONNECT, 		//重连消息
 	SEND_DATA_REQ,		//发送数据请求
-	TIME_MSG,			//时间消息
 	MAX_SYS_MSG,		//用户消息
 };

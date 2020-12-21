@@ -16,9 +16,6 @@ protected:
 	virtual void Initialized();
 	
 	/*
-		消息处理函数,如果pData有值，默认处理完后会释放掉
-		如果不需要释放，在处理函数中加上 nSize=0 则不会释放
-
 		返回值：false 服务会退出 true 正常处理
 		函数参数：
 		nType : 消息类型
