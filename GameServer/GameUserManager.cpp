@@ -22,7 +22,7 @@ CGameUserManager::~CGameUserManager()
 	m_mapUsers.clear();
 }
 
-void CGameUserManager::Initialized()
+void CGameUserManager::Activated()
 {
 	m_time_clear.StartTimerSec(3600);
 }
@@ -41,7 +41,7 @@ bool CGameUserManager::HandData(int nType, SERVICEINDEX nSrcIndex, void *pData, 
 		}
 		case TIME_MSG:
 		{
-			TIMEERID * nTimeId = *(TIMEERID*)pData;
+			TIMEERID nTimeId = *(TIMEERID*)pData;
 			HandTimeMsg(nTimeId);
 			break;
 		}
@@ -52,7 +52,7 @@ bool CGameUserManager::HandData(int nType, SERVICEINDEX nSrcIndex, void *pData, 
 CGameUser* CGameUserManager::GetUser(UID nUid)
 {
 	CGameUser* pUser = NULL;
-	USERMAP::iterator it = m_mapUsers.find(nUserId);
+	USERMAP::iterator it = m_mapUsers.find(nUid);
 	if(it != m_mapUsers.end())
 	{
 		pUser = it->second;
@@ -63,7 +63,7 @@ CGameUser* CGameUserManager::GetUser(UID nUid)
 		pUser = new CGameUser(nUid);
 		if(NULL != pUser)
 		{
-			m_mapUsers[nUserId] = pUser;
+			m_mapUsers[nUid] = pUser;
 		}	
 	}
 	return pUser;
@@ -91,7 +91,7 @@ void CGameUserManager::HandUserNetMsg(SERVICEINDEX nSrcIndex,CInputPacket& inPac
 			break;
 		}
 	}
-	return true;
+	return;
 }
 
 void CGameUserManager::ClearOffLineUser()
@@ -149,9 +149,13 @@ void CGameUserManager::HandUserMsgFromConnSrv(SERVICEINDEX nSrcIndex, uint16 nSu
 	switch(nSub)
 	{
 		case CS_SUB_MSG_USER_LOGIN_HALL:
+			break;
+		default:
+			break;
 	}
+	
 	UID nUid = inPacket.ReadInt32();
 	
-	CGameUser*	
+	//CGameUser*	
 }
 

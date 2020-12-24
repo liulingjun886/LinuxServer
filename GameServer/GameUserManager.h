@@ -1,8 +1,8 @@
 #pragma once
-#include "../include/Sevices.h"
+#include "../include/Services.h"
 #include "../include/TimerNode.h"
 #include "../Defines.h"
-#include "PacketParse.h"
+#include "../PacketParse.h"
 #include <map>
 
 class CGameUser;
@@ -14,9 +14,9 @@ public:
 	~CGameUserManager();
 protected:
 	bool HandData(int nType, SERVICEINDEX nSrcIndex, void *pData, DATASIZE nSize);
-	void Initialized();
+	void Activated();
 private:
-	void HandUserNetMsg(CInputPacket& inPacket);
+	void HandUserNetMsg(SERVICEINDEX nSrcIndex,CInputPacket& inPacket);
 	void HandTimeMsg(TIMEERID nTimeID);
 	void HandUserMsgFromConnSrv(SERVICEINDEX nSrcIndex,uint16 nSub,CInputPacket& inPacket);
 	void ClearOffLineUser();

@@ -113,7 +113,7 @@ bool CUserSerSink::HandMainMsgConnSer(uint16 nSub, CInputPacket& inPacket)
 		case CS_SUB_MSG_USER_LOGIN_HALL:
 		{
 			
-			g_pUserServer->PostMemDataBaseReq(m_pNet, void * pData, DATASIZE uDataSize)
+			//g_pUserServer->PostMemDataBaseReq(m_pNet, void * pData, DATASIZE uDataSize)
 			break;
 		}
 	}

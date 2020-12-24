@@ -8,12 +8,12 @@ public:
 	virtual ~CServices();
 protected:
 	/*
-		Initialized 代表该服务成为一个合法服务
-		注意所有与 GetServiceIndex() 相关的数据设置初始化请在 Initialized 函数中进行
-		定时器不能在构造函数中启动，请在 Initialized 函数中启动 
+		Activated 代表该服务成为一个合法服务
+		注意所有与 GetServiceIndex() 相关的数据设置初始化请在 Activated 函数中进行
+		定时器不能在构造函数中启动，请在 Activated 函数中启动 
 		如有需要请在子类重写
 	*/
-	virtual void Initialized();
+	virtual void Activated();
 	
 	/*
 		返回值：false 服务会退出 true 正常处理

@@ -106,28 +106,7 @@ int CNetSinkObj::HandNetMsg(SERVICEINDEX nIndex, const char* pData, unsigned nDa
 			return -1;
 		}
 	}
-
 	return nPacketLen;
-
-	/*if(nDataCount < nMinDataSize)
-		return 0;
-
-	NetHead* pHead = (NetHead*)pData;
-	DATASIZE nPacketSize = pHead->uDataSize;
-	if(nDataCount < nPacketSize)
-		return 0;
-
-	NetMsgCommand* pCom = (NetMsgCommand*)(pHead + 1);
-	DATASIZE nDataSize = nPacketSize - nMinDataSize;
-
-	
-
-	if(!m_pSink->HandNetData(nIndex, pCom->uMain, pCom->uSub, pCom + 1, nDataSize))
-	{
-		return -1;
-	}
-	
-	return nPacketSize;*/
 }
 
 
