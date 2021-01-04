@@ -27,7 +27,7 @@ CConnectServer::~CConnectServer()
 int	 CConnectServer::Initialize()
 {
 	char szLogFile[128] = {0};
-	sprintf(szLogFile,"Conn_%d",GetSerNo());
+	sprintf(szLogFile,"ConnServer_%d",GetSerNo());
 	InitLogFile(szLogFile);
 	
 	if(0 != ReadConfig("./config/config.ini"))
