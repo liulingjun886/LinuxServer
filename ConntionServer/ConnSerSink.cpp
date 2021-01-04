@@ -172,14 +172,14 @@ bool CConnSerSink::HandDataBaseRet(uint32 nType, CInputPacket& inPacket)
 		{
 			DataBase::UserLoginRet* pRet = (DataBase::UserLoginRet*)inPacket.ReadBinary(inPacket.Rest_Len());
 			
-			m_pUserInfo = new CUserInfo;
-			m_pUserInfo->SetUserBaseInfo(pRet->nUserId, pRet->nSex, pRet->szName, pRet->szHeadUrl);
-			m_pUserInfo->UpdateConnInfo(g_pConnectServer->GetSerNo(), m_pNet->GetServiceIndex());
-
-			Mem::UserLoginMemReq req;
-			req.nUserId = m_pUserInfo->GetUserId();
-			req.nSerNo = g_pConnectServer->GetSerNo();
-			req.nSockNo = m_pNet->GetServiceIndex();
+//			m_pUserInfo = new CUserInfo;
+//			m_pUserInfo->SetUserBaseInfo(pRet->nUserId, pRet->nSex, pRet->szName, pRet->szHeadUrl);
+//			m_pUserInfo->UpdateConnInfo(g_pConnectServer->GetSerNo(), m_pNet->GetServiceIndex());
+//
+//			Mem::UserLoginMemReq req;
+//			req.nUserId = m_pUserInfo->GetUserId();
+//			req.nSerNo = g_pConnectServer->GetSerNo();
+//			req.nSockNo = m_pNet->GetServiceIndex();
 			break;
 		}
 		default:
@@ -238,31 +238,30 @@ bool CConnSerSink::HandUserMsg(int nEvent, void * pData, DATASIZE nDataSize)
 		case EN_DOUBLE_LOGIN:
 		{
 			UID *pUid = (UID*)(pData);
-			if(m_pUserInfo && *pUid == m_pUserInfo->GetUserId())
-			{
-				COutputPacket out;
-				out.Begin(MAIN_MSG_CONNSER, SUB_MSG_DOUBLE_LOGIN);
-				out.End();
-				SendToMySelf(out);
-				m_pNet->PostData(m_pNet->GetServiceIndex(), EXIT_MSG);
-			}
+//			if(m_pUserInfo && *pUid == m_pUserInfo->GetUserId())
+//			{
+//				COutputPacket out;
+//				out.Begin(MAIN_MSG_CONNSER, SUB_MSG_DOUBLE_LOGIN);
+//				out.End();
+//				SendToMySelf(out);
+//				m_pNet->PostData(m_pNet->GetServiceIndex(), EXIT_MSG);
+//			}
 			break;
 		}
 		case EN_SYNC_GAME_SER_INFO:
 		{
 			UserGameSerInfo* pInfo = (UserGameSerInfo*)(pData);
-			if(m_pUserInfo && m_pUserInfo->GetUserId() == pInfo->nUserId)
-			{
-				m_pUserInfo->UpdateGameInfo(pInfo->nGid, pInfo->nGsid, pInfo->nSeatNo);
-			}
+//			if(m_pUserInfo && m_pUserInfo->GetUserId() == pInfo->nUserId)
+//			{
+//				m_pUserInfo->UpdateGameInfo(pInfo->nGid, pInfo->nGsid, pInfo->nSeatNo);
+//			}
 			break;
 		}
 		case EN_RECONNECT_FAIL:
 		{
-			Mem::UserQuitGameReq req;
-			req.nUserId = m_pUserInfo->GetUserId();
-			//CCliNetSink::PostMemDataBaseReq(m_pNet,Mem::USER_QUIT_GAME_REQ, &req, sizeof(Mem::UserQuitGameReq));
-			m_pUserInfo->UpdateGameInfo(0, 0, 0);
+//			Mem::UserQuitGameReq req;
+//			req.nUserId = m_pUserInfo->GetUserId();
+//			m_pUserInfo->UpdateGameInfo(0, 0, 0);
 			break;
 		}
 		default:
@@ -289,7 +288,7 @@ bool CConnSerSink::HandMainMsgNet(uint16 nSub, CInputPacket& inPacket)
 bool CConnSerSink::HandMainMsgToRoom(uint16 nSub, CInputPacket& inPacket)
 {
 	uint16 nGid, nGsid,nSeatNo;
-	m_pUserInfo->GetGameInfo(nGid, nGsid,nSeatNo);
+//	m_pUserInfo->GetGameInfo(nGid, nGsid,nSeatNo);
 	if(nGid>0)
 	{
 		return true;
@@ -300,7 +299,7 @@ bool CConnSerSink::HandMainMsgToRoom(uint16 nSub, CInputPacket& inPacket)
 	out.WriteInt16(m_pNet->GetServiceIndex());
 	out.WriteInt16(MAIN_MSG_GAMESER);
 	out.WriteInt16(nSub);
-	out.WriteBinary(m_pUserInfo->GetUserBaseInfo(), (uint32)sizeof(UserBaseInfo));
+//	out.WriteBinary(m_pUserInfo->GetUserBaseInfo(), (uint32)sizeof(UserBaseInfo));
 	
 	uint16 nSerNo = 0;
 	if(SUB_MSG_CREATE == nSub)
@@ -332,10 +331,10 @@ bool CConnSerSink::HandMainMsgToRoom(uint16 nSub, CInputPacket& inPacket)
 bool CConnSerSink::HandMainMsgToGame(uint16 nMain,uint16 nSub, CInputPacket& inPacket)
 {
 	uint16 nGameSerNo,nGameSerIndex,nGameSerSeatNo;
-	m_pUserInfo->GetGameInfo(nGameSerNo,nGameSerIndex,nGameSerSeatNo);
+	//m_pUserInfo->GetGameInfo(nGameSerNo,nGameSerIndex,nGameSerSeatNo);
 	UID nUserId = inPacket.ReadInt32();
-	if(nUserId != m_pUserInfo->GetUserId())
-		return false;
+//	if(nUserId != m_pUserInfo->GetUserId())
+//		return false;
 	
 	COutputPacket out;
 	out.Begin(MAIN_MSG_CONNSER,CS_SUB_MSG_USER2ROOM);

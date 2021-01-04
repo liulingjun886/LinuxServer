@@ -12,8 +12,8 @@ class CRoomManager : public CServices
 	Single(CRoomManager)
 protected:
 	bool HandData(int nType, SERVICEINDEX nSrcIndex, void *pData, DATASIZE nSize);
-private:
-	int AddRoom(int nRoomId,SERVICEINDEX nRoomIndex);
+public:
+	int AddRoom(uint16 nIndex);
 	void DestroyRoom(int nRoomId);
 	uint16 GetRoom(int);
 private:

@@ -71,3 +71,8 @@ uint16 CRoomManager::GetRoom(int nRoomId)
 	}
 	return 0;
 }
+
+bool CRoomManager::HandData(int nType, SERVICEINDEX nSrcIndex, void *pData, DATASIZE nSize)
+{
+	
+}
