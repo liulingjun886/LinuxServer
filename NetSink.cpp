@@ -16,3 +16,9 @@ CNetSink* CNetSink::CreateNetSink(CServices* pServices,int nType)
 {
 	return new CNetSinkObj(pServices,nType);
 }
+
+void CNetSink::DestroyNetSink(CNetSink* pSink)
+{
+	delete pSink;
+}
+

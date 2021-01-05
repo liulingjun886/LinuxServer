@@ -22,7 +22,8 @@ CCenterServer::CCenterServer()
 
 CCenterServer::~CCenterServer()
 {
-	
+	m_mapGameInfo.clear();
+	m_mapLinkInfo.clear();
 }
 
 int  CCenterServer::ReadConfig(const char* szConfigFile)

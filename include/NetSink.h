@@ -15,6 +15,7 @@ public:
 	CNetSink();
 	virtual ~CNetSink();
 	static CNetSink* CreateNetSink(CServices* pServices,int nType);
+	static void DestroyNetSink(CNetSink* pSink);
 public:
 	virtual void Init(const char* szIp) = 0;
 	virtual void Connect() = 0;

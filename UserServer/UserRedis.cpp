@@ -17,7 +17,14 @@ CUserRedis::CUserRedis(CServices* pService):CRedis(pService)
 
 CUserRedis::~CUserRedis()
 {
-	
+	for (int i = 0; i < PRO_MAX; i++)
+	{
+		if(NULL != m_RedisPro[i])
+		{
+			delete[] m_RedisPro[i];
+			m_RedisPro[i] = NULL;
+		}
+	}
 }
 
 void CUserRedis::RegRedisScript(int nType,const char* szStr)

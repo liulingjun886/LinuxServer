@@ -14,7 +14,7 @@ typedef short int16;
 typedef char int8;
 typedef unsigned char uint8;
 
-#define MAX_SERVICE_NUM 0xFFFF
+#define MAX_SERVICE_NUM 65536
 #define INVALID_SERIVCE_INDEX 0
 
 #define MAX_LOG_SIZE 512
@@ -54,6 +54,11 @@ public:\
 		T::GetInstance()->Destroy();\
 	}
 
+#define MEMPOOL_NEW(TYPE,var) \
+		TYPE* var = NULL; \
+		void* ptr = Single_Get(CCore)->Allocate(sizeof(TYPE)); \
+		if(ptr) \
+			var = new (ptr) TYPE;
 
 enum SYS_EVENTS
 {

@@ -36,8 +36,10 @@ void CServer::InitLogFile(const char*   pLogFile)
 	if(strcmp(pLogFile,"0"))
 	{
 		char szFileName[128] = {0};
-		printf("%s/log/%s\n",get_current_dir_name(),pLogFile);
-		sprintf(szFileName,"%s/log/%s",get_current_dir_name(),pLogFile);
+		char* szDir = get_current_dir_name();
+		printf("%s/log/%s\n",szDir,pLogFile);
+		sprintf(szFileName,"%s/log/%s",szDir,pLogFile);
+		free(szDir);
 		m_pCore->InitLogFileName(szFileName);
 		m_nDeamon = 1;
 	}
