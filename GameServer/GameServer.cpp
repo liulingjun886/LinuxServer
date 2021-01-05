@@ -92,7 +92,9 @@ int  CGameServer::ReadConfig(const char* szConfigFile)
 	{
 		CGameUserManager* pUserManager = new CGameUserManager;
 		if(!Single_Get(CCore)->AddService(pUserManager))
+		{
 			return -1;
+		}
 		m_vecUserManager.push_back(pUserManager->GetServiceIndex());
 	}
 	

@@ -22,17 +22,23 @@ void CDataBaseEnginer::SetServiceNum(int nNum)
 {
 	if(nNum <= 0)
 		return;
+	
 	m_nServiceNum = nNum;
 	m_pIndex = new SERVICEINDEX[m_nServiceNum];
 
 	for(int i = 0; i < m_nServiceNum; i++)
 	{
 		CDataBaseService* pService = new CDataBaseService;
-		if (!pService || !Single_Get(CCore)->AddService(pService))
+		if (!pService)
 		{
 			exit(0);
 		}
 
+		if(!Single_Get(CCore)->AddService(pService))
+		{
+			exit(0);
+		}
+		
 		if(!pService->Init())
 		{
 			printf("DataBaseService Init Failer\n");
