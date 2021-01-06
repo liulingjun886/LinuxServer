@@ -119,6 +119,15 @@ void CConnCliSink::ConnectSucess(CInputPacket& inPacket)
 	m_timer_Link.StartTimerSec(CLIENT_TEST_TIME);
 }
 
+void CConnCliSink::UploadSrvInfo()
+{
+	COutputPacket out;
+	out.Begin(MAIN_MSG_CONNSER, CS_SUB_MSG_UPLOADINFO);
+	out.WriteInt32(Single_Get(CCore)->GetServiceNum());
+	out.End();
+	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(),out);
+}
+
 
 bool CConnCliSink::HandMsgFromCenterSrv(uint16 nSub, CInputPacket& inPacket)
 {
@@ -133,6 +142,7 @@ bool CConnCliSink::HandMsgFromCenterSrv(uint16 nSub, CInputPacket& inPacket)
 		case CT_SUB_MSG_TEST:
 		{
 			m_nTestNum = 0;
+			UploadSrvInfo();
 			return true;
 		}
 		case CT_SUB_MSG_NEWGAMESER:

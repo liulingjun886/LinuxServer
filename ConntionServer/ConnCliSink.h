@@ -26,6 +26,7 @@ private:
 	void SendData(uint16, COutputPacket& outPacket);
 	void RegConnSrv();
 	void ConnectSucess(CInputPacket& inPacket);
+	void UploadSrvInfo();
 private:
 	uint16 m_nPeerSerType;
 	uint16 m_nPeerSerNo;

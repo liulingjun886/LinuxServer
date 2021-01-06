@@ -20,7 +20,10 @@ public:
 
 	//添加一个服务 服务必须继承自 CServices
 	bool AddService(CServices* pServices);
-	
+
+	//获取当前服务数量
+	uint32 GetServiceNum();
+
 	//添加一个listen 套接字接收连接
 	SERVICEINDEX AddTcpNetSer(const char* szIp, unsigned short nPort, bool IsIpV6 = false);
 	
