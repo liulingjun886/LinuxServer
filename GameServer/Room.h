@@ -34,6 +34,7 @@ class CRoom :
 	CSmartArrayPoint<CUserInfo*> m_pUsers;
 	uint16 *m_pUserState;
 	CBaseLogic* m_pGameLogic;
+	
 	static void* m_pHander;
 	static CBaseLogic* (*m_sFun)(CRoom*);
 public:

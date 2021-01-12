@@ -3,9 +3,7 @@
 #include <algorithm>
 #include <stdio.h>
 #include "Room.h"
-#include "GameUserManager.h"
-
-#define MAX_USER_SERICES_NUM 0XFF
+#include "GameUserEnginer.h"
 
 CGameServer* g_pGameServer = NULL;
 
@@ -25,6 +23,10 @@ int	 CGameServer::Initialize()
 	char szLogFile[128] = {0};
 	sprintf(szLogFile,"GameServer_%d",GetSerNo());
 	InitLogFile(szLogFile);
+
+	Single_Create(CGameUserEnginer);
+	if(!Single_Get(CGameUserEnginer)->Init())
+		return -1;
 	
 	return ReadConfig("./config/config.ini");
 }
@@ -40,6 +42,8 @@ int  CGameServer::ReadConfig(const char* szConfigFile)
 	m_szIp = iniFile.ReadString(szFild, "Host", "");
 	m_nPort = (uint16)iniFile.ReadInt(szFild, "Port", 0);
 	m_nGameId = iniFile.ReadInt(szFild, "GameID", 0);
+
+	
 
 	if(!CRoom::LoadGameLogic(m_nGameId))
 	{
@@ -86,18 +90,7 @@ int  CGameServer::ReadConfig(const char* szConfigFile)
 		nPort = (uint16)iniFile.ReadInt(szFild, "Port", 0);
 		if(0 != ConnectToDataSrv(szIp.c_str(), nPort))
 			return -1;
-	}
-
-	for(uint32 i = 0; i < MAX_USER_SERICES_NUM; i++)
-	{
-		CGameUserManager* pUserManager = new CGameUserManager;
-		if(!Single_Get(CCore)->AddService(pUserManager))
-		{
-			return -1;
-		}
-		m_vecUserManager.push_back(pUserManager->GetServiceIndex());
-	}
-	
+	}	
 	return 0;
 }
 
@@ -248,13 +241,3 @@ int CGameServer::ConnectToDataSrv(const char* szIp, uint16 nPort)
 	m_vecDataSerIndex.push_back(nIndex);
 	return 0;
 }
-
-SERVICEINDEX CGameServer::GetUserServiceIndex(UID nUid)
-{
-	uint32 nSize = (uint32)m_vecUserManager.size();
-	if(0 == nSize)
-		return INVALID_SERIVCE_INDEX;
-
-	return m_vecUserManager[nUid%nSize];
-}
-

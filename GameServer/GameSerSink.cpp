@@ -3,6 +3,7 @@
 #include "GameServer.h"
 #include "../include/Services.h"
 #include "../NetSinkObj.h"
+#include "GameUserEnginer.h"
 
 extern CGameServer* g_pGameServer;
 
@@ -128,7 +129,7 @@ void CGameSerSink::HandMsgFromUserToGame(CInputPacket& inPacket)
 void CGameSerSink::HandMsgFromUserForRoom(CInputPacket& inPacket)
 {
 	UID nUserId = inPacket.ReadInt32();
-	SERVICEINDEX nIndex = g_pGameServer->GetUserServiceIndex(nUserId);
+	SERVICEINDEX nIndex = Single_Get(CGameUserEnginer)->GetUserManagerIndex(nUserId);
 	m_pNet->PostData(nIndex, USER_NET_MSG, inPacket.RestPacket(), inPacket.Rest_Len());
 	//m_pNet->PostData(nIndex, USER_NET_MSG, (void*)inPacket.RestPacket(), inPacket.Rest_Len());
 }
@@ -137,7 +138,7 @@ void CGameSerSink::HandMsgFromUserForHall(CInputPacket& inPacket)
 {
 	UID nUserId = inPacket.ReadInt32();
 
-	SERVICEINDEX nIndex = g_pGameServer->GetUserServiceIndex(nUserId);
+	SERVICEINDEX nIndex = Single_Get(CGameUserEnginer)->GetUserManagerIndex(nUserId);
 	m_pNet->PostData(nIndex, USER_NET_MSG, inPacket.RestPacket(), inPacket.Rest_Len());
 }
 

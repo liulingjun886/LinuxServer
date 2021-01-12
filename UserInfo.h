@@ -40,22 +40,22 @@ struct UserSerInfo
 
 class CUserInfo
 {
-	public:
-		CUserInfo();
-		~CUserInfo();
-	public:
-		UID GetUserId();
+public:
+	CUserInfo();
+	~CUserInfo();
+public:
+	UID GetUserId();
 
-		void UpdateConnInfo(uint16 nCid,uint16 nCsid);
-		void UpdateGameInfo(uint16 nGid,uint16 nGsid, uint16 nGsno);
+	void UpdateConnInfo(uint16 nCid,uint16 nCsid);
+	void UpdateGameInfo(uint16 nGid,uint16 nGsid, uint16 nGsno);
 
-		void GetConnInfo(uint16& nCid,uint16& nCsid);
-		void GetGameInfo(uint16& nGid,uint16& nGsid, uint16& nGsno);
+	void GetConnInfo(uint16& nCid,uint16& nCsid);
+	void GetGameInfo(uint16& nGid,uint16& nGsid, uint16& nGsno);
 
-		void SetUserBaseInfo(UID nUserId,char bSex=0,char const *szName=NULL,char const *szHeadUrl=NULL);
-		UserBaseInfo* GetUserBaseInfo();
-	private:
-		UserBaseInfo m_tagBaseInfo;
-		UserCoinInfo m_tagCoinInfo;
-		UserSerInfo m_tagSerInfo;
+	void SetUserBaseInfo(UID nUserId,char bSex=0,char const *szName=NULL,char const *szHeadUrl=NULL);
+	UserBaseInfo* GetUserBaseInfo();
+private:
+	UserBaseInfo m_tagBaseInfo;
+	UserCoinInfo m_tagCoinInfo;
+	UserSerInfo m_tagSerInfo;
 };
