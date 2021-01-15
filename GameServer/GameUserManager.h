@@ -25,6 +25,7 @@ private:
 	void LeaveRoom();
 private:
 	CGameUser* GetUser(UID nUid);
+	void UserLogin();
 private:
 	typedef std::map<UID,CGameUser*> USERMAP;
 	USERMAP m_mapUsers;

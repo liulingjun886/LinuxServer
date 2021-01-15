@@ -23,6 +23,7 @@ private:
 	void HandMsgFromUserToGame(CInputPacket& inPacket);
 	void HandMsgFromUserForRoom(CInputPacket& inPacket);
 	void HandMsgFromUserForHall(CInputPacket& inPacket);
+	void HandMsgFromUser(CInputPacket& inPacket);
 private:
 	uint16 	m_nConnNo;
 	uint8 	m_nTestNum;

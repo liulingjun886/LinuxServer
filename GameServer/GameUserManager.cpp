@@ -1,6 +1,8 @@
 #include "GameUserManager.h"
 #include "GameUser.h"
 
+#define SECSPERHOUR 3600
+
 enum TIME_ID
 {
 	TIME_ID_CLEAR_OFFLINE_USER=1,
@@ -24,7 +26,7 @@ CGameUserManager::~CGameUserManager()
 
 void CGameUserManager::Activated()
 {
-	m_time_clear.StartTimerSec(3600);
+	m_time_clear.StartTimerSec(SECSPERHOUR);
 }
 
 

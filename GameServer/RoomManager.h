@@ -7,6 +7,7 @@
 #include "../include/Services.h"
 using namespace std;
 
+
 class CRoomManager : public CServices
 {
 	Single(CRoomManager)

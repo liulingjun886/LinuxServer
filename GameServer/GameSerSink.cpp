@@ -113,6 +113,11 @@ bool CGameSerSink::HandMsgFromConnSrv(uint16 nSub, CInputPacket& inPacket)
 			HandMsgFromUserToGame(inPacket);
 			break;
 		}
+		case CS_SUB_MSG_USER:
+		{
+			HandMsgFromUser(inPacket);
+			break;
+		}
 		default:
 			break;
 	}
@@ -142,4 +147,14 @@ void CGameSerSink::HandMsgFromUserForHall(CInputPacket& inPacket)
 	m_pNet->PostData(nIndex, USER_NET_MSG, inPacket.RestPacket(), inPacket.Rest_Len());
 }
 
+void CGameSerSink::HandMsgFromUser(CInputPacket& inPacket)
+{
+	UID nUserId = inPacket.ReadInt32();
+	SERVICEINDEX nIndex = inPacket.ReadInt16();
+
+	if(INVALID_SERIVCE_INDEX == nIndex)
+		nIndex = Single_Get(CGameUserEnginer)->GetUserManagerIndex(nUserId);
+
+	m_pNet->PostData(nIndex, USER_NET_MSG, inPacket.RestPacket(), inPacket.Rest_Len());
+}
 
