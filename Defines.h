@@ -33,6 +33,8 @@ enum USER_EVENT
 	MAX_MSG
 };
 
+
+
 enum SERVER_TYPE
 {
 	SRV_TYPE_CENTER = 1,
