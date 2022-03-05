@@ -1,10 +1,10 @@
 #include "ConnCliSink.h"
 #include <stdio.h>
+#include "../include/core/Core.h"
+#include "../include/core/Services.h"
 #include "../commproto.h"
-#include "../include/Core.h"
 #include "../UserServer/MemDataDef.h"
 #include "../NetSinkObj.h"
-#include "../include/Services.h"
 #include "ConnectServer.h"
 
 extern CConnectServer* g_pConnectServer;

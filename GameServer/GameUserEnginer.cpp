@@ -1,6 +1,6 @@
 #include "GameUserEnginer.h"
 #include "GameUserManager.h"
-#include "../include/Core.h"
+#include "../include/core/Core.h"
 
 Single_Init(CGameUserEnginer)
 
