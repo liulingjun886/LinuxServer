@@ -1,5 +1,5 @@
 #include "ConnectServer.h"
-#include "../include/IniFile.h"
+#include "../include/core/IniFile.h"
 #include <algorithm>
 #include <stdio.h>
 

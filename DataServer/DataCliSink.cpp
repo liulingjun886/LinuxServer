@@ -1,7 +1,7 @@
 #include "DataCliSink.h"
 #include "../Defines.h"
 #include "../NetSinkObj.h"
-#include "../include/Services.h"
+#include "../include/core/Services.h"
 #include "../commproto.h"
 
 extern CDataServer* g_pDataServer;

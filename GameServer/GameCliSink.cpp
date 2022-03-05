@@ -3,7 +3,7 @@
 #include "RoomManager.h"
 #include "../commproto.h"
 #include "Room.h"
-#include "../include/Core.h"
+#include "../include/core/Core.h"
 #include "../UserInfo.h"
 #include "../UserServer/MemDataDef.h"
 #include "../NetSinkObj.h"

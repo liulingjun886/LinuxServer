@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include "DataSerSink.h"
-#include "../include/Core.h"
-#include "../include/ToolLock.h"
+#include "../include/core/Core.h"
+#include "../include/core/ToolLock.h"
 #include "../commproto.h"
-#include "../include/Services.h"
+#include "../include/core/Services.h"
 #include "DataBaseDef.h"
 #include "../NetSinkObj.h"
 #include <sys/socket.h>

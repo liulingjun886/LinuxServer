@@ -1,5 +1,5 @@
 #include "CenterServer.h"
-#include "../include/IniFile.h"
+#include "../include/core/IniFile.h"
 #include <stdio.h>
 
 

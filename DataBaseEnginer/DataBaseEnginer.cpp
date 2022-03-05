@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include "DataBaseEnginer.h"
-#include "../include/Services.h"
+#include "../include/core/Services.h"
 #include "DataBaseService.h"
-#include "../include/Core.h"
+#include "../include/core/Core.h"
 #include <unistd.h>
 #include <stdlib.h>
 #include "../NetSinkObj.h"

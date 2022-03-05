@@ -1,9 +1,9 @@
 #include "DataServer.h"
-#include "../include/IniFile.h"
+#include "../include/core/IniFile.h"
 #include "../MemDataBaseEnginer/MemDataBaseEnger.h"
 #include "../DataBaseEnginer/DataBaseEnginer.h"
 #include <stdio.h>
-#include "../include/Services.h"
+#include "../include/core/Services.h"
 #include "../NetSinkObj.h"
 #include <stdio.h>
 

@@ -1,5 +1,5 @@
-#include "./include/NetSink.h"
-#include "./include/Services.h"
+#include "./include/core/NetSink.h"
+#include "./include/core/Services.h"
 #include "NetSinkObj.h"
 
 CNetSink::CNetSink()

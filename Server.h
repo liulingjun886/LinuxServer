@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "./include/Core.h"
+#include "./include/core/Core.h"
 #include "Defines.h"
 
 class CServer

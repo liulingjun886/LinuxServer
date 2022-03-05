@@ -6,7 +6,7 @@
 #include "Room.h"
 #include "../commproto.h"
 #include <stdio.h>
-#include "../include/Core.h"
+#include "../include/core/Core.h"
 
 #include "GameServer.h"
 

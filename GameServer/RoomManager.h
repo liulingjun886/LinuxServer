@@ -1,10 +1,10 @@
 #pragma once
 #include <map>
 #include <vector>
-#include "../include/ToolLock.h"
+#include "../include/core/ToolLock.h"
 #include <assert.h>
 #include "../Defines.h"
-#include "../include/Services.h"
+#include "../include/core/Services.h"
 using namespace std;
 
 

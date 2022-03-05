@@ -1,7 +1,7 @@
 #include <assert.h>
 #include "./Defines.h"
 #include "Server.h"
-#include "./include/Core.h"
+#include "./include/core/Core.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>

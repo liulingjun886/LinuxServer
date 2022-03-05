@@ -1,6 +1,6 @@
 #pragma once
 
-#include "./include/NetSink.h"
+#include "./include/core/NetSink.h"
 #include "PacketParse.h"
 
 class CServices;

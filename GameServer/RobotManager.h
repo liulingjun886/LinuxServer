@@ -3,7 +3,7 @@
 #include <map>
 #include "Robot.h"
 #include <assert.h>
-#include "../include/ToolLock.h"
+#include "../include/core/ToolLock.h"
 
 class CRobotManager : public CServices
 {

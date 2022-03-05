@@ -1,6 +1,6 @@
 #pragma once
 
-#include "./include/types.h"
+#include "./include/core/types.h"
 #include <string>
 
 #define MAX_MSG_SIZE 65536

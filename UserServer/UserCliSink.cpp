@@ -1,6 +1,6 @@
 #include "UserCliSink.h"
 #include "../NetSinkObj.h"
-#include "../include/Services.h"
+#include "../include/core/Services.h"
 #include "../commproto.h"
 
 extern CUserServer* g_pUserServer;

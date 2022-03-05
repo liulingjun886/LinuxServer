@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 #include "../Server.h"
-#include "../include/ToolLock.h"
+#include "../include/core/ToolLock.h"
 
 class CGameServer : public CServer
 {

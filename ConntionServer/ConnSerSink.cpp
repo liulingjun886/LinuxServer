@@ -2,10 +2,10 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include "../include/Core.h"
-#include "../include/ToolLock.h"
+#include "../include/core/Core.h"
+#include "../include/core/ToolLock.h"
 #include "../commproto.h"
-#include "../include/Services.h"
+#include "../include/core/Services.h"
 #include "../UserServer/MemDataDef.h"
 #include "../DataServer/DataBaseDef.h"
 #include "../NetSinkObj.h"

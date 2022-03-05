@@ -1,6 +1,6 @@
 #include "UserServer.h"
-#include "../include/IniFile.h"
-#include "../include/Services.h"
+#include "../include/core/IniFile.h"
+#include "../include/core/Services.h"
 #include "../NetSinkObj.h"
 #include "../MemDataBaseEnginer/MemDataBaseEnger.h"
 #include <stdio.h>
