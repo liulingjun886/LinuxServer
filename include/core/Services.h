@@ -1,16 +1,20 @@
 #pragma once
 #include "types.h"
 
+class CMsgQueue;
+
 class CServices 
 {
+	friend class CMsgQueue;
+	friend class CServiceManager;
 public:
 	CServices();
 	virtual ~CServices();
 protected:
 	/*
-		Activated 代表该服务成为一个合法服务
-		注意所有与 GetServiceIndex() 相关的数据设置初始化请在 Activated 函数中进行
-		定时器不能在构造函数中启动，请在 Activated 函数中启动 
+		Initialized 代表该服务成为一个合法服务
+		注意所有与 GetServiceIndex() 相关的数据设置初始化请在 Initialized 函数中进行
+		定时器不能在构造函数中启动，请在 Initialized 函数中启动 
 		如有需要请在子类重写
 	*/
 	virtual void Activated();
@@ -38,5 +42,5 @@ public:
 	//日志输出
 	void Log(const char* szFormat,...);
 private:
-	void* p;
+	CMsgQueue* m_pMsg;
 };

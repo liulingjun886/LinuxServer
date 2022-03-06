@@ -11,6 +11,7 @@ class CServices;
 
 class CTimerNode
 {
+	friend class CTimerEnginer_New;
 public:
 	CTimerNode();
 	~CTimerNode();

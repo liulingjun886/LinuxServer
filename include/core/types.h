@@ -55,10 +55,10 @@ public:\
 	}
 
 #define MEMPOOL_NEW(TYPE,var) \
-		TYPE* var = NULL; \
-		void* _ptr_ = Single_Get(CCore)->Allocate(sizeof(TYPE)); \
-		if(_ptr_) \
-			var = new (_ptr_) TYPE;
+	TYPE* var = NULL; \
+	void* ptr = Single_Get(CCore)->Allocate(sizeof(TYPE)); \
+	if(ptr) \
+		var = new (ptr) TYPE;
 
 enum SYS_EVENTS
 {

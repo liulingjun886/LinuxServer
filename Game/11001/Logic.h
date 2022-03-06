@@ -1,8 +1,8 @@
 #pragma once
 #include "../BaseLogic.h"
 #include "../../Defines.h"
-#include "../../include/SmartPoint.h"
-#include "../../include/TimerNode.h"
+#include "../../include/core/SmartPoint.h"
+#include "../../include/core/TimerNode.h"
 
 class CLogic :
 	public CBaseLogic
