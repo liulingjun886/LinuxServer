@@ -5,7 +5,7 @@
 #include "ToolLock.h"
 
 class CNetSink;
-typedef CNetSink* (*CreateNetSink)(CServices* pServices);
+typedef CNetSink* (*FucCreateNetSink)(CServices* pServices);
 
 class CPoller:
 	public CServices

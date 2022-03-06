@@ -3,64 +3,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include "Server.h"
+#include "NetHandSink.h"
 
-#include "./CenterServer/CenSerSink.h"
-#include "./UserServer/UserCliSink.h"
-#include "./UserServer/UserSerSink.h"
-#include "./DataServer/DataSerSink.h"
-#include "./DataServer/DataCliSink.h"
-#include "./GameServer/GameSerSink.h"
-#include "./GameServer/GameCliSink.h"
-#include "./ConntionServer/ConnSerSink.h"
-#include "./ConntionServer/ConnCliSink.h"
 
 extern CServer* g_pSer;
 
 CNetSinkObj::CNetSinkObj(CNetHandSink* pSink):
 	m_pSink(pSink)
 {
-	/*switch (g_pSer->GetSerType())
-	{
-		case 1: //中心服
-		{
-			m_pSink = new CCenSerSink(pServices);
-			break;
-		}
-		case 2: //玩家服务器
-		{
-			if(SOCK_CONN_SER == nConnType)
-				m_pSink = new CUserSerSink(pServices);
-			else
-				m_pSink = new CUserCliSink(pServices);
-			break;
-		}
-		case 3: //数据服务器
-		{
-			if(SOCK_CONN_SER == nConnType)
-				m_pSink = new CDataSerSink(pServices);
-			else
-				m_pSink = new CDataCliSink(pServices);
-			break;
-		}
-		case 4: //游戏服务器
-		{
-			if(SOCK_CONN_SER == nConnType)
-				m_pSink = new CGameSerSink(pServices);
-			else
-				m_pSink = new CGameCliSink(pServices);
-			break;
-		}
-		case 5: //连接服务器
-		{
-			if(SOCK_CONN_SER == nConnType)
-				m_pSink = new CConnSerSink(pServices);
-			else
-				m_pSink = new CConnCliSink(pServices);
-			break;
-		}
-	}
 	
-	assert(m_pSink != NULL);*/
 }
 
 CNetSinkObj::~CNetSinkObj()

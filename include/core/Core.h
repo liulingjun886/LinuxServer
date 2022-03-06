@@ -24,16 +24,16 @@ public:
 	uint32 GetServiceNum();
 	
 	//添加一个listen 套接字接收连接
-	SERVICEINDEX AddTcpNetSer(const char* szIp, unsigned short nPort, CreateNetSink pCreateNetSink, bool IsIpV6 = false);
+	SERVICEINDEX AddTcpNetSer(const char* szIp, unsigned short nPort, FucCreateNetSink pCreateNetSink, bool IsIpV6 = false);
 	
 	//添加普通连接套接字
-	SERVICEINDEX AddTcpNetCli(const char* szIp, unsigned short nPort, CreateNetSink pCreateNetSink, bool IsIpV6 = false);
+	SERVICEINDEX AddTcpNetCli(const char* szIp, unsigned short nPort, FucCreateNetSink pCreateNetSink, bool IsIpV6 = false);
 
 	//添加websocket服务器
-	SERVICEINDEX AddWebSockSer(const char* szIp, unsigned short nPort, CreateNetSink pCreateNetSink, bool IsIpV6 = false);
+	SERVICEINDEX AddWebSockSer(const char* szIp, unsigned short nPort, FucCreateNetSink pCreateNetSink, bool IsIpV6 = false);
 
 	//添加一个UDP套接字
-	SERVICEINDEX AddUdpNet(const char* szIp, unsigned short nPort, CreateNetSink pCreateNetSink, bool IsIpV6 = false);
+	SERVICEINDEX AddUdpNet(const char* szIp, unsigned short nPort, FucCreateNetSink pCreateNetSink, bool IsIpV6 = false);
 
 	//网络引擎添加自定义套接字 自定义套接字必须继承自CSocketService
 	void AddPoller(CPoller* pPollerService,uint32 events);

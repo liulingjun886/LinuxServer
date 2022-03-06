@@ -8,6 +8,7 @@ class CNetSink
 public:
 	CNetSink();
 	virtual ~CNetSink();
+	virtual void Destroy(); 
 	//static CNetSink* CreateNetSink(CServices* pServices,int nType);
 	//static void DestroyNetSink(CNetSink* pSink);
 public:
@@ -18,6 +19,6 @@ public:
 	virtual bool HandTimeMsg(TIMEERID uTimeID) = 0;
 	virtual bool HandUserMsg(int nType, void* pData, DATASIZE uDataSize) = 0;
 	virtual void Close() = 0;
-	virtual void Destroy() = 0;
+	
 };
 
