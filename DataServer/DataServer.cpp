@@ -6,6 +6,8 @@
 #include "../include/core/Services.h"
 #include "../NetSinkObj.h"
 #include <stdio.h>
+#include "DataCliSink.h"
+#include "DataSerSink.h"
 
 CDataServer* g_pDataServer = NULL;
 
@@ -40,7 +42,7 @@ int	 CDataServer::Initialize()
 	m_pMem->SetServiceNum(8);
 	m_pData->SetServiceNum(8);
 
-	m_nCenterIndex = m_pCore->AddTcpNetCli(m_szCenterIp.c_str(),m_nCenterPort,false);
+	m_nCenterIndex = m_pCore->AddTcpNetCli(m_szCenterIp.c_str(),m_nCenterPort, CreateNetSink<CDataCliSink>,false);
 	
 	if(0 == m_nCenterIndex)
 	{
@@ -48,7 +50,7 @@ int	 CDataServer::Initialize()
 		return -1;
 	}
 
-	if(0 == m_pCore->AddTcpNetSer(m_szIp.c_str(), m_nPort, false))
+	if(0 == m_pCore->AddTcpNetSer(m_szIp.c_str(), m_nPort, CreateNetSink<CDataSerSink>, false))
 	{
 		printf("Add Tcp Server Failer\n");
 		return -1;

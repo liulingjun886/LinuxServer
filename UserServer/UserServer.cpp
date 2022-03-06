@@ -4,6 +4,8 @@
 #include "../NetSinkObj.h"
 #include "../MemDataBaseEnginer/MemDataBaseEnger.h"
 #include <stdio.h>
+#include "UserCliSink.h"
+#include "UserSerSink.h"
 
 CUserServer* g_pUserServer = NULL;
 
@@ -38,14 +40,14 @@ int	CUserServer::Initialize()
 	}
 	m_pMem->SetServiceNum(8);
 	
-	if(0 == m_pCore->AddTcpNetCli(m_szCenterIp.c_str(),m_nCenterPort,false))
+	if(0 == m_pCore->AddTcpNetCli(m_szCenterIp.c_str(),m_nCenterPort, CreateNetSink<CUserCliSink>, false))
 	{
 		printf("connect to center Failer!\n");
 		return -1;
 	}
 		
 
-	if(0 == m_pCore->AddTcpNetSer(m_szIp.c_str(), m_nPort, false))
+	if(0 == m_pCore->AddTcpNetSer(m_szIp.c_str(), m_nPort, CreateNetSink<CUserSerSink>, false))
 	{
 		printf("AddTcpNetSer Failer!\n");
 		return -1;

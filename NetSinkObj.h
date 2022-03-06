@@ -9,7 +9,7 @@ class CNetHandSink;
 class CNetSinkObj : public CNetSink
 {
 public:
-	CNetSinkObj(CServices* pServices,int nConnType);
+	CNetSinkObj(CNetHandSink* pSink);
 	~CNetSinkObj();
 	static void SendData(CServices* pService,SERVICEINDEX nIndex, void* pData,DATASIZE nDataSize);
 	static void SendData(CServices* pService,SERVICEINDEX nIndex, COutputPacket& out);

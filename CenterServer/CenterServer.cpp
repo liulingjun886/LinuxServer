@@ -1,10 +1,10 @@
 #include "CenterServer.h"
 #include "../include/core/IniFile.h"
 #include <stdio.h>
+#include "CenSerSink.h"
 
 
 CCenterServer* g_pCenterServer = NULL;
-
 
 CCenterServer::CCenterServer()
 {
@@ -47,7 +47,7 @@ int	 CCenterServer::Initialize()
 	}
 		
 	
-	if(0 == m_pCore->AddTcpNetSer(m_szIp.c_str(), m_nPort, false))
+	if(0 == m_pCore->AddTcpNetSer(m_szIp.c_str(), m_nPort, CreateNetSink<CCenSerSink>,false))
 	{
 		printf("AddTcpNetSer Failer!\n");
 		return -1;

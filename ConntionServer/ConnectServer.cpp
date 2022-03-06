@@ -2,6 +2,8 @@
 #include "../include/core/IniFile.h"
 #include <algorithm>
 #include <stdio.h>
+#include "ConnSerSink.h"
+#include "ConnCliSink.h"
 
 CConnectServer* g_pConnectServer = NULL;
 
@@ -33,20 +35,20 @@ int	 CConnectServer::Initialize()
 	if(0 != ReadConfig("./config/config.ini"))
 		return -1;
 
-	m_nCenterIndex = m_pCore->AddTcpNetCli(m_szCenterIp.c_str(), m_nCenterPort, false);
+	m_nCenterIndex = m_pCore->AddTcpNetCli(m_szCenterIp.c_str(), m_nCenterPort, CreateNetSink<CConnCliSink>, false);
 	if(0 == m_nCenterIndex)
 		return -1;
 
 	std::vector<HostConfig>::iterator it = m_vecUserSerConfig.begin();
 	for(; it != m_vecUserSerConfig.end(); it++)
 	{
-		uint16 nIndex = m_pCore->AddTcpNetCli(it->szIp.c_str(), it->nPort, false);
+		uint16 nIndex = m_pCore->AddTcpNetCli(it->szIp.c_str(), it->nPort, CreateNetSink<CConnCliSink>, false);
 		if(0 == nIndex)
 			return -1;
 		m_vecUserSerIndex.push_back(nIndex);
 	}
 
-	if(0 == m_pCore->AddTcpNetSer(m_szIp.c_str(), m_nPort, false))
+	if(0 == m_pCore->AddTcpNetSer(m_szIp.c_str(), m_nPort, CreateNetSink<CConnSerSink>, false))
 		return -1;
 	
 	return 0;

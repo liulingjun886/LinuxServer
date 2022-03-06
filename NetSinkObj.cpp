@@ -16,10 +16,10 @@
 
 extern CServer* g_pSer;
 
-CNetSinkObj::CNetSinkObj(CServices* pServices,int nConnType):
-	m_pSink(NULL)
+CNetSinkObj::CNetSinkObj(CNetHandSink* pSink):
+	m_pSink(pSink)
 {
-	switch (g_pSer->GetSerType())
+	/*switch (g_pSer->GetSerType())
 	{
 		case 1: //中心服
 		{
@@ -60,7 +60,7 @@ CNetSinkObj::CNetSinkObj(CServices* pServices,int nConnType):
 		}
 	}
 	
-	assert(m_pSink != NULL);
+	assert(m_pSink != NULL);*/
 }
 
 CNetSinkObj::~CNetSinkObj()

@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include "Room.h"
 #include "GameUserEnginer.h"
+#include "GameSerSink.h"
+#include "GameCliSink.h"
 
 CGameServer* g_pGameServer = NULL;
 
@@ -51,7 +53,7 @@ int  CGameServer::ReadConfig(const char* szConfigFile)
 		return -1;
 	}
 
-	if(0 == m_pCore->AddTcpNetSer(m_szIp.c_str(), m_nPort, false))
+	if(0 == m_pCore->AddTcpNetSer(m_szIp.c_str(), m_nPort, CreateNetSink<CGameSerSink>, false))
 		return -1;
 
 	std::string szIp = iniFile.ReadString("centerserver", "Host", "");
@@ -211,7 +213,7 @@ int	CGameServer::GetGameId() const
 
 int CGameServer::ConnectToCenterSrv(const char* szIp, uint16 nPort)
 {
-	uint16 nIndex = m_pCore->AddTcpNetCli(szIp, nPort, false);
+	uint16 nIndex = m_pCore->AddTcpNetCli(szIp, nPort, CreateNetSink<CGameCliSink>, false);
 
 	if(0 == nIndex)
 		return -1;
@@ -222,7 +224,7 @@ int CGameServer::ConnectToCenterSrv(const char* szIp, uint16 nPort)
 
 int CGameServer::ConnectToUserSrv(const char* szIp, uint16 nPort)
 {
-	uint16 nIndex = m_pCore->AddTcpNetCli(szIp, nPort, false);
+	uint16 nIndex = m_pCore->AddTcpNetCli(szIp, nPort, CreateNetSink<CGameCliSink>,false);
 
 	if(0 == nIndex)
 		return -1;
@@ -233,7 +235,7 @@ int CGameServer::ConnectToUserSrv(const char* szIp, uint16 nPort)
 
 int CGameServer::ConnectToDataSrv(const char* szIp, uint16 nPort)
 {
-	uint16 nIndex = m_pCore->AddTcpNetCli(szIp, nPort, false);
+	uint16 nIndex = m_pCore->AddTcpNetCli(szIp, nPort, CreateNetSink<CGameCliSink>, false);
 
 	if(0 == nIndex)
 		return -1;

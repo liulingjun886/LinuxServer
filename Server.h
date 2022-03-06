@@ -2,6 +2,20 @@
 #include <string>
 #include "./include/core/Core.h"
 #include "Defines.h"
+#include "NetSinkObj.h"
+
+template<class T> CNetSink* CreateNetSink(CServices* pServices)
+{
+	try
+	{
+		CNetHandSink* pNetHandSink = new T(pServices);
+		return new CNetSinkObj(pNetHandSink);
+	}
+	catch(...)
+	{
+		return NULL;
+	}
+}
 
 class CServer
 {
