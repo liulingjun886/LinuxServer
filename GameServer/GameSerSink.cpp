@@ -2,6 +2,7 @@
 #include "../commproto.h"
 #include "GameServer.h"
 #include "../include/core/Services.h"
+#include "../include/core/SingleObject.h"
 #include "../NetSinkObj.h"
 #include "GameUserEnginer.h"
 
@@ -134,7 +135,7 @@ void CGameSerSink::HandMsgFromUserToGame(CInputPacket& inPacket)
 void CGameSerSink::HandMsgFromUserForRoom(CInputPacket& inPacket)
 {
 	UID nUserId = inPacket.ReadInt32();
-	SERVICEINDEX nIndex = Single_Get(CGameUserEnginer)->GetUserManagerIndex(nUserId);
+	SERVICEINDEX nIndex = CSingleObject<CGameUserEnginer>::Instance()->GetUserManagerIndex(nUserId);
 	m_pNet->PostData(nIndex, USER_NET_MSG, inPacket.RestPacket(), inPacket.Rest_Len());
 	//m_pNet->PostData(nIndex, USER_NET_MSG, (void*)inPacket.RestPacket(), inPacket.Rest_Len());
 }
@@ -143,7 +144,7 @@ void CGameSerSink::HandMsgFromUserForHall(CInputPacket& inPacket)
 {
 	UID nUserId = inPacket.ReadInt32();
 
-	SERVICEINDEX nIndex = Single_Get(CGameUserEnginer)->GetUserManagerIndex(nUserId);
+	SERVICEINDEX nIndex = CSingleObject<CGameUserEnginer>::Instance()->GetUserManagerIndex(nUserId);
 	m_pNet->PostData(nIndex, USER_NET_MSG, inPacket.RestPacket(), inPacket.Rest_Len());
 }
 
@@ -153,7 +154,7 @@ void CGameSerSink::HandMsgFromUser(CInputPacket& inPacket)
 	SERVICEINDEX nIndex = inPacket.ReadInt16();
 
 	if(INVALID_SERIVCE_INDEX == nIndex)
-		nIndex = Single_Get(CGameUserEnginer)->GetUserManagerIndex(nUserId);
+		nIndex = CSingleObject<CGameUserEnginer>::Instance()->GetUserManagerIndex(nUserId);
 
 	m_pNet->PostData(nIndex, USER_NET_MSG, inPacket.RestPacket(), inPacket.Rest_Len());
 }

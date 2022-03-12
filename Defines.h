@@ -2,6 +2,8 @@
 
 #include "./include/core/types.h"
 #include <string>
+#include <string.h>
+
 
 #define MAX_MSG_SIZE 65536
 

@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "./include/core/Core.h"
+#include "./include/core/MemPool.h"
 #include "Defines.h"
 #include "NetSinkObj.h"
 
@@ -16,6 +17,8 @@ template<class T> CNetSink* CreateNetSink(CServices* pServices)
 		return NULL;
 	}
 }
+
+
 
 class CServer
 {

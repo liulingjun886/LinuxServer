@@ -12,10 +12,11 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <time.h>
+#include "./include/core/SingleObject.h"
 
 CServer::CServer():m_nDeamon(0)
 {
-	m_pCore = CCore::CreateSingle();
+	//m_pCore = CCore::CreateSingle();
 }
 
 int	 CServer::Init(unsigned short nSerType,unsigned short nSerNo)
@@ -26,7 +27,7 @@ int	 CServer::Init(unsigned short nSerType,unsigned short nSerNo)
 	m_nSerNo = nSerNo;
 	
 	int nCpuNum = sysconf(_SC_NPROCESSORS_ONLN);
-	m_pCore->SetThreadNum(nCpuNum*2);
+	CSingleObject<CCore>::Instance()->SetThreadNum(nCpuNum*2);
 	
 	return Initialize();
 }
@@ -40,7 +41,8 @@ void CServer::InitLogFile(const char*   pLogFile)
 		printf("%s/log/%s\n",szDir,pLogFile);
 		sprintf(szFileName,"%s/log/%s",szDir,pLogFile);
 		free(szDir);
-		m_pCore->InitLogFileName(szFileName);
+		//m_pCore->InitLogFileName(szFileName);
+		CSingleObject<CCore>::Instance()->InitLogFileName(szFileName);
 		m_nDeamon = 1;
 	}
 }
@@ -73,7 +75,7 @@ void CServer::SetDaemon()
 
 CServer::~CServer()
 {
-	m_pCore->Destroy();
+	//CSingleObject<CCore>::Instance()->Destroy();
 }
 void CServer::Run()
 {	
@@ -81,7 +83,7 @@ void CServer::Run()
 		SetDaemon();
 
 	srand(time(NULL));
-	m_pCore->Run();
+	CSingleObject<CCore>::Instance()->Run();
 }
 
 uint16 CServer::GetSerType() const

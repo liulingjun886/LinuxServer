@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string.h>
-
 typedef unsigned long long uint64;
 typedef long long int64;
 
@@ -26,39 +24,6 @@ typedef uint32 DATASIZE;
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
 #define SAFE_DELTE(p) if(p){delete p;}
 #define SAFE_DELTEARRAY(p) if(p){delete[] p;}
-
-#define Single(T) \
-private:\
-	T();\
-	~T();\
-	T(const T& t){}\
-	T& operator=(const T& t){ return *this;}\
-	static T* m_sSingle;\
-public:\
-	static T* CreateSingle(){assert(m_sSingle == NULL);m_sSingle = new T; return m_sSingle;}\
-	static T* GetInstance(){return m_sSingle;}\
-	void Destroy(){delete this; T::m_sSingle = NULL;}
-
-#define Single_Init(T) \
-	T* T::m_sSingle = NULL;
-
-#define Single_Create(T) \
-	T::CreateSingle()
-
-#define Single_Get(T) \
-	T::GetInstance()
-
-#define Single_Destroy(T) \
-	if(T::GetInstance())\
-	{\
-		T::GetInstance()->Destroy();\
-	}
-
-#define MEMPOOL_NEW(TYPE,var) \
-	TYPE* var = NULL; \
-	void* ptr = Single_Get(CCore)->Allocate(sizeof(TYPE)); \
-	if(ptr) \
-		var = new (ptr) TYPE;
 
 enum SYS_EVENTS
 {

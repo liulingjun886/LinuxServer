@@ -10,7 +10,10 @@
 
 class CGameUserEnginer : public CServices
 {
-	Single(CGameUserEnginer)
+	//Single(CGameUserEnginer)
+public:
+	CGameUserEnginer();
+	~CGameUserEnginer();
 public:
 	bool Init();
 	SERVICEINDEX GetUserManagerIndex(UID nUserId);

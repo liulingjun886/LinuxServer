@@ -1,8 +1,10 @@
 #include "GameUserEnginer.h"
 #include "GameUserManager.h"
 #include "../include/core/Core.h"
+#include "../include/core/SingleObject.h"
 
-Single_Init(CGameUserEnginer)
+
+//Single_Init(CGameUserEnginer)
 
 CGameUserEnginer::CGameUserEnginer()
 {
@@ -20,7 +22,7 @@ bool CGameUserEnginer::Init()
 	for(int i = 0; i < MAX_GAMEUSER_MANAGER; ++i)
 	{
 		CGameUserManager* pGameUser = new CGameUserManager;
-		if(!Single_Get(CCore)->AddService(pGameUser))
+		if(!CSingleObject<CCore>::Instance()->AddService(pGameUser))
 			return false;
 		m_arrIndex[i] = pGameUser->GetServiceIndex();
 	}

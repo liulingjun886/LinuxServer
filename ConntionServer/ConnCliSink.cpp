@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "../include/core/Core.h"
 #include "../include/core/Services.h"
+#include "../include/core/SingleObject.h"
 #include "../commproto.h"
 #include "../UserServer/MemDataDef.h"
 #include "../NetSinkObj.h"
@@ -123,7 +124,7 @@ void CConnCliSink::UploadSrvInfo()
 {
 	COutputPacket out;
 	out.Begin(MAIN_MSG_CONNSER, CS_SUB_MSG_UPLOADINFO);
-	out.WriteInt32(Single_Get(CCore)->GetServiceNum());
+	out.WriteInt32(CSingleObject<CCore>::Instance()->GetServiceNum());
 	out.End();
 	CNetSinkObj::SendData(m_pNet, m_pNet->GetServiceIndex(),out);
 }

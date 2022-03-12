@@ -12,7 +12,7 @@
 
 extern CGameServer* g_pGameServer;
 
-Single_Init(CRoomManager)
+//Single_Init(CRoomManager)
 CRoomManager::CRoomManager()
 {
 }

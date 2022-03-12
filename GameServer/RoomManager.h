@@ -10,7 +10,10 @@ using namespace std;
 
 class CRoomManager : public CServices
 {
-	Single(CRoomManager)
+	//Single(CRoomManager)
+public:
+	CRoomManager();
+	~CRoomManager();
 protected:
 	bool HandData(int nType, SERVICEINDEX nSrcIndex, void *pData, DATASIZE nSize);
 public:

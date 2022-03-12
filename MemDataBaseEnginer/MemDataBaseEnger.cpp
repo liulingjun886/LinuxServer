@@ -6,6 +6,8 @@
 #include "MemDataBaseService.h"
 #include <unistd.h>
 #include "../include/core/Core.h"
+#include "../include/core/SingleObject.h"
+
 #include "../NetSinkObj.h"
 
 //Single_Init(CMemDataBaseEnginer)
@@ -32,7 +34,7 @@ void CMemDataBaseEnginer::SetServiceNum(int nNum)
 	{
 		CMemDataBaseService* pService = new CMemDataBaseService;
 		assert(pService != NULL);
-		if (!Single_Get(CCore)->AddService(pService))
+		if (!CSingleObject<CCore>::Instance()->AddService(pService))
 		{
 			printf("MemDataBaseService Create Failer\n");
 			exit(0);

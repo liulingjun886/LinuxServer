@@ -8,6 +8,7 @@
 #include "../UserServer/MemDataDef.h"
 #include "../Game/BaseLogic.h"
 #include "GameServer.h"
+#include "../include/core/SingleObject.h"
 
 
 #define GAME_OVER 1
@@ -160,7 +161,7 @@ void CRoom::PreExitSelf()
 			delete m_pUsers[i];
 		}
 	}
-	Single_Get(CRoomManager)->DestroyRoom(m_nRoomId);
+	CSingleObject<CRoomManager>::Instance()->DestroyRoom(m_nRoomId);
 }
 
 bool CRoom::HandNetMsg(uint16 nSeatNo,uint16 nIndex,uint16 uMain, uint16 uSub, CInputPacket& inPacket)

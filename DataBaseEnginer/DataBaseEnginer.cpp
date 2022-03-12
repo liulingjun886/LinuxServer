@@ -3,6 +3,7 @@
 #include "../include/core/Services.h"
 #include "DataBaseService.h"
 #include "../include/core/Core.h"
+#include "../include/core/SingleObject.h"
 #include <unistd.h>
 #include <stdlib.h>
 #include "../NetSinkObj.h"
@@ -34,7 +35,7 @@ void CDataBaseEnginer::SetServiceNum(int nNum)
 			exit(0);
 		}
 
-		if(!Single_Get(CCore)->AddService(pService))
+		if(!CSingleObject<CCore>::Instance()->AddService(pService))
 		{
 			exit(0);
 		}

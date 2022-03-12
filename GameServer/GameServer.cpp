@@ -1,5 +1,6 @@
 #include "GameServer.h"
 #include "../include/core/IniFile.h"
+#include "../include/core/SingleObject.h"
 #include <algorithm>
 #include <stdio.h>
 #include "Room.h"
@@ -26,8 +27,8 @@ int	 CGameServer::Initialize()
 	sprintf(szLogFile,"GameServer_%d",GetSerNo());
 	InitLogFile(szLogFile);
 
-	Single_Create(CGameUserEnginer);
-	if(!Single_Get(CGameUserEnginer)->Init())
+	//Single_Create(CGameUserEnginer);
+	if(!CSingleObject<CGameUserEnginer>::Instance()->Init())
 		return -1;
 	
 	return ReadConfig("./config/config.ini");

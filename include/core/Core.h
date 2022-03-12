@@ -6,8 +6,9 @@
 
 class CCore
 {
-	Single(CCore)
 public:
+	CCore();
+	~CCore();
 	//运行服务
 	void Run();
 	
@@ -53,8 +54,8 @@ public:
 	//数据传递
 	bool PostSysData(SERVICEINDEX nDstIndex,int nType, void* pData, DATASIZE size);
 
-	void* Allocate(uint32 nSize);
+	//void* Allocate(uint32 nSize);
 	
-	void DeAllocate(void* pPtr);
+	//void DeAllocate(void* pPtr);
 };
 

@@ -7,8 +7,10 @@
 
 class CRobotManager : public CServices
 {
-	Single(CRobotManager)
+	//Single(CRobotManager)
 public:
+	CRobotManager();
+	~CRobotManager();
 	//void ActiveRobot(int num);
 	//void RetrieveRobot();
 public:
