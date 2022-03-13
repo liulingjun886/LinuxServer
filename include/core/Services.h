@@ -33,7 +33,7 @@ protected:
 		服务退出处理，默认是释放该服务内存
 		如果改用内存池请在子类重写此函数
 	*/
-	virtual void ExitSelf();
+	virtual void Destroy();
 public:
 	//获取当前服务索引函数
 	SERVICEINDEX GetServiceIndex() const;

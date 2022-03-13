@@ -53,9 +53,5 @@ public:
 
 	//数据传递
 	bool PostSysData(SERVICEINDEX nDstIndex,int nType, void* pData, DATASIZE size);
-
-	//void* Allocate(uint32 nSize);
-	
-	//void DeAllocate(void* pPtr);
 };
 
