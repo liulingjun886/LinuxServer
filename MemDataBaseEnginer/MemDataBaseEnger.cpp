@@ -7,10 +7,7 @@
 #include <unistd.h>
 #include "../include/core/Core.h"
 #include "../include/core/SingleObject.h"
-
 #include "../NetSinkObj.h"
-
-//Single_Init(CMemDataBaseEnginer)
 
 CMemDataBaseEnginer::CMemDataBaseEnginer() : m_nServiceNum(0), m_pIndex(NULL)
 {

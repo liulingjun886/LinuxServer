@@ -3,7 +3,7 @@ CXX = g++
 VPATH = ./MemDataBaseEnginer:./DataBaseEnginer:./CenterServer: \
 		./UserServer:./DataServer:./GameServer:./ConntionServer
 
-CFLAGS = -g -Werror -O2
+CFLAGS = -g -Werror -O0
 
 LIBS = 	-L./lib -lcore \
 		-L/usr/lib64/mysql -lmysqlclient \

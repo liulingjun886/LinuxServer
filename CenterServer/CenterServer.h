@@ -20,8 +20,8 @@ private:
 public:
 	std::map<uint16,GameInfo> m_mapGameInfo; //游戏服务器号和游戏信息的对应
 	
-	uint16 s_szConnSer[MAX_CONN_GAME_SRV_NUM];
-	uint16 s_szGameSer[MAX_CONN_GAME_SRV_NUM];
+	uint16 s_szConnSer[MAX_CONN_SRV_NUM];
+	uint16 s_szGameSer[MAX_GAME_SRV_NUM];
 	uint16 s_szUserSer[MAX_USER_DATA_SRV_NUM];
 	uint16 s_szDataSer[MAX_USER_DATA_SRV_NUM];
 	
