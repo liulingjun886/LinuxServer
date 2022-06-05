@@ -29,7 +29,7 @@ private:
 	std::map<int,std::vector<uint16> > m_mapGameSerInfo;			//GameId 与 游戏服对应
 	std::map<uint16, int> m_mapGameNoToGameId;						//游戏服与GameId对应
 
-	//对客户端开发的地址
+	//对客户端开放的地址
 	std::string m_szIp;
 	uint16 m_nPort;
 
