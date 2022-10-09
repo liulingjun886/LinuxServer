@@ -49,7 +49,7 @@ int	 CCenterServer::Initialize()
 	
 	if(0 == m_pCore->AddTcpNetSer(m_szIp.c_str(), m_nPort, CreateNetSink<CCenSerSink>, false))
 	{
-		printf("AddTcpNetSer Failer!\n");
+		printf("AddTcpNetSer Failer ip = %s, m_nPort = %d!\n",m_szIp.c_str(), m_nPort);
 		return -1;
 	}
 		
