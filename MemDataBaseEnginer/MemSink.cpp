@@ -1,7 +1,7 @@
 #include "MemSink.h"
 #include <stdlib.h>
 #include <assert.h>
-#include <hiredis/hiredis.h>
+#include "../include/hiredis/hiredis.h"
 #include "MyRedis.h"
 #include "MemDataBaseEnger.h"
 #include "../UserServer/UserRedis.h"

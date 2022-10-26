@@ -96,7 +96,7 @@ int	 CConnectServer::ConnectToGameServer(const GameInfo& info)
 
 	for(int i = 0; i < MAX_CONN_TO_GAME_LINK; i++)
 	{
-		uint16 nIndex = m_pCore->AddTcpNetCli(info.szIp.c_str(), info.nPort, false);
+		uint16 nIndex = m_pCore->AddTcpNetCli(info.szIp.c_str(), info.nPort,CreateNetSink<CConnCliSink>, false);
 		if(0 == nIndex)
 			return -1;
 		

@@ -76,7 +76,7 @@ bool CMySql::HaveNext()
 
 void CMySql::MoveNext()
 {
-	m_it++;
+	++m_it;
 }
 
 long long CMySql::GetNumValue(const char* szFild,long long nDef)
@@ -308,6 +308,7 @@ bool CMySql::GetSetResult()
 	mysql_free_result(Res);
 	return true;
 }
+
 bool CMySql::GetSingleResult()
 {
 	MYSQL_RES* Res = mysql_store_result(m_pMySql);
