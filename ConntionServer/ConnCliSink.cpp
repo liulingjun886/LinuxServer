@@ -18,6 +18,7 @@ enum TIME_ID
 
 CConnCliSink::CConnCliSink(CServices* pNet) :CNetHandSink(pNet),m_nReConnectCount(0)
 {
+	pNet->SetPri();
 	m_timer_Link.InitTimerObj(m_pNet, TIME_CONN_IS_LINK);
 	m_timer_reconnect.InitTimerObj(m_pNet, TIME_CONN_RECONNECT);
 }

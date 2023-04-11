@@ -41,6 +41,10 @@ public:
 	bool PostData(SERVICEINDEX nDstIndex,int nType, void* pData = 0, DATASIZE size = 0);
 	//日志输出
 	void Log(const char* szFormat,...);
+	//设置服务优先
+	void SetPri();
+	bool GetPri() const;
 private:
 	CMsgQueue* m_pMsg;
+	bool m_bPri;
 };

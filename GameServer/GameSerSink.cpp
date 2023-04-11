@@ -16,6 +16,7 @@ enum TIME_ID
 
 CGameSerSink::CGameSerSink(CServices* pServices):CNetHandSink(pServices)
 {
+	pServices->SetPri();
 	m_timer_Link.InitTimerObj(m_pNet, TIME_TEST_LINK);
 }
 
